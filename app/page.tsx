@@ -272,7 +272,7 @@ export default async function Home() {
             </h1>
           </div>
           <p className="max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base">
-            初期仏教の法話や講演を横断的に閲覧できる、静かな音の学びの場。
+            初期仏教の法話や講演を横断的に閲覧できる、静かな学びの場。
             場所やテーマ、記録された日時を頼りに、必要な教えを見つけてください。
           </p>
           <div className="flex flex-wrap gap-4 text-sm text-slate-300">
