@@ -21,8 +21,15 @@ export default function TalkGallery({ talks }: Props) {
 	const searchInputId = useId();
 	const [viewMode, setViewMode] = useState<ViewMode>("date");
 	const [searchQuery, setSearchQuery] = useState("");
-	const { columns, filteredTalks, sections, groups, groupCounts, flatRows } =
-		useTalkGalleryData(talks, viewMode, searchQuery);
+	const {
+		columns,
+		filteredTalks,
+		sections,
+		groups,
+		groupCounts,
+		flatRows,
+		searchTokens,
+	} = useTalkGalleryData(talks, viewMode, searchQuery);
 
 	const hasActiveQuery = searchQuery.trim().length > 0;
 	const totalMatched = filteredTalks.length;
@@ -113,6 +120,7 @@ export default function TalkGallery({ talks }: Props) {
 						return (
 							<TalkGallerySectionHeader
 								isFirst={groupIndex === 0}
+								searchTokens={searchTokens}
 								section={group.section}
 							/>
 						);
@@ -128,6 +136,7 @@ export default function TalkGallery({ talks }: Props) {
 							<TalkGalleryRow
 								columns={columns}
 								isFirstRow={row.rowIndex === 0}
+								searchTokens={searchTokens}
 								talks={row.talks}
 							/>
 						);

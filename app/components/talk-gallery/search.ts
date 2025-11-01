@@ -31,36 +31,28 @@ export function createIndexedTalks(talks: TalkForDisplay[]): IndexedTalk[] {
 	}));
 }
 
+export function tokenizeSearchQuery(query: string): string[] {
+	if (!query) {
+		return [];
+	}
+
+	const normalized = normalizeForSearch(query);
+	if (!normalized) {
+		return [];
+	}
+
+	return normalized.split(" ").filter(Boolean);
+}
+
 export function fuzzyMatch(source: string, query: string): boolean {
 	if (!query) {
 		return true;
 	}
 
-	if (source.includes(query)) {
-		return true;
-	}
-
-	let cursor = 0;
-	for (let i = 0; i < query.length; i += 1) {
-		const char = query[i];
-		const found = source.indexOf(char, cursor);
-		if (found === -1) {
-			return false;
-		}
-		cursor = found + 1;
-	}
-
-	return true;
+	return source.includes(query);
 }
 
-export function filterTalks(indexedTalks: IndexedTalk[], query: string) {
-	const trimmed = query.trim();
-	if (!trimmed) {
-		return indexedTalks.map((item) => item.data);
-	}
-
-	const tokens = normalizeForSearch(trimmed).split(" ").filter(Boolean);
-
+export function filterTalks(indexedTalks: IndexedTalk[], tokens: string[]) {
 	if (tokens.length === 0) {
 		return indexedTalks.map((item) => item.data);
 	}

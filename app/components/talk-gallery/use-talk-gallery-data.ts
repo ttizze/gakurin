@@ -5,7 +5,7 @@ import {
 	buildThemeSections,
 	chunkArray,
 } from "./grouping";
-import { createIndexedTalks, filterTalks } from "./search";
+import { createIndexedTalks, filterTalks, tokenizeSearchQuery } from "./search";
 import type { GroupedSection, IndexedTalk, ViewMode } from "./types";
 
 export type TalkGalleryVirtualRow = {
@@ -39,9 +39,14 @@ export function useTalkGalleryData(
 		[talks],
 	);
 
+	const searchTokens = useMemo(
+		() => tokenizeSearchQuery(searchQuery),
+		[searchQuery],
+	);
+
 	const filteredTalks = useMemo(
-		() => filterTalks(indexedTalks, searchQuery),
-		[indexedTalks, searchQuery],
+		() => filterTalks(indexedTalks, searchTokens),
+		[indexedTalks, searchTokens],
 	);
 
 	const sections = useMemo(() => {
@@ -90,6 +95,7 @@ export function useTalkGalleryData(
 		columns,
 		filteredTalks,
 		sections,
+		searchTokens,
 		...virtualData,
 	};
 }
