@@ -18,7 +18,8 @@ type Part = {
 	highlight: boolean;
 };
 
-const HIGHLIGHT_CLASS = "rounded bg-yellow-200 px-1 py-0.5 font-medium text-gray-900";
+const HIGHLIGHT_CLASS =
+	"rounded bg-yellow-200 px-1 py-0.5 font-medium text-gray-900";
 
 export function highlightMatches(
 	value: string | null | undefined,
@@ -67,11 +68,16 @@ export function highlightMatches(
 
 	return parts.map((part, index) =>
 		part.highlight ? (
-			<mark className={HIGHLIGHT_CLASS} key={`h-${index}-${part.text.slice(0, 10)}`}>
+			<mark
+				className={HIGHLIGHT_CLASS}
+				key={`h-${index}-${part.text.slice(0, 10)}`}
+			>
 				{part.text}
 			</mark>
 		) : (
-			<Fragment key={`t-${index}-${part.text.slice(0, 10)}`}>{part.text}</Fragment>
+			<Fragment key={`t-${index}-${part.text.slice(0, 10)}`}>
+				{part.text}
+			</Fragment>
 		),
 	);
 }

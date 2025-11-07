@@ -20,9 +20,13 @@ export function buildDecadeSections(talks: TalkForDisplay[]): GroupedSection[] {
 					? talk.recordedOnSortValue
 					: Number.POSITIVE_INFINITY;
 
-			const sortedTalks = groupedTalks
-				.slice()
-				.sort((a, b) => getSortValue(a) - getSortValue(b));
+			// 「最新」セクションの場合は新しい順（降順）、それ以外は古い順（昇順）
+			const sortedTalks = groupedTalks.slice().sort((a, b) => {
+				if (decadeLabel === "最新") {
+					return getSortValue(b) - getSortValue(a);
+				}
+				return getSortValue(a) - getSortValue(b);
+			});
 
 			const earliest = getSortValue(sortedTalks[0]);
 
@@ -31,7 +35,11 @@ export function buildDecadeSections(talks: TalkForDisplay[]): GroupedSection[] {
 				talks: sortedTalks,
 				count: groupedTalks.length,
 				sortKey:
-					decadeLabel === "年代不明" ? Number.POSITIVE_INFINITY : earliest,
+					decadeLabel === "最新"
+						? Number.NEGATIVE_INFINITY
+						: decadeLabel === "年代不明"
+							? Number.POSITIVE_INFINITY
+							: earliest,
 			};
 		})
 		.sort((a, b) => a.sortKey - b.sortKey);

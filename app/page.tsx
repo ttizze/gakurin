@@ -1,4 +1,10 @@
 import TalkGallery from "./components/talk-gallery";
+import {
+	SAMPLE_TALK_DATA,
+	SAMPLE_TALK_KEYS,
+	SAMPLE_YOUTUBE_VIDEOS,
+} from "./lib/sample-data";
+import { getYouTubeInfo } from "./lib/youtube";
 
 const SHEET_URL =
 	"https://docs.google.com/spreadsheets/d/1QMyakqH1i-W_bbK3yJl7u_Q_Jb_AoM94W6F8Gg3y3CA/export?format=csv&gid=909287277";
@@ -31,6 +37,8 @@ export type TalkForDisplay = {
 	language: string;
 	audioLink: string | null;
 	attachmentsLink: string | null;
+	youtubeUrl: string | null;
+	thumbnailUrl: string | null;
 	recordedOnRaw: string;
 	recordedOnFormatted: string;
 	recordedOnSortValue: number;
@@ -204,6 +212,26 @@ function parseCSVToTalks(text: string): Talk[] {
 		talks.push(talk);
 	}
 
+	// サンプルデータとしてYouTube動画を追加
+	const sampleTalks: Talk[] = SAMPLE_TALK_KEYS.map((key) => ({
+		key,
+		folder: "",
+		event: "サンプル講演",
+		venue: "オンライン",
+		recordedOn: "",
+		recordedOnDate: null,
+		duration: SAMPLE_TALK_DATA[key].duration,
+		title: SAMPLE_TALK_DATA[key].title,
+		description: SAMPLE_TALK_DATA[key].description,
+		speaker: "サンプル講師",
+		language: "日本語",
+		format: "動画",
+		audioLink: null,
+		attachmentsLink: null,
+	}));
+
+	talks.push(...sampleTalks);
+
 	return talks;
 }
 
@@ -250,13 +278,28 @@ async function getTalks(): Promise<Talk[]> {
 }
 
 export default async function Home() {
-	const talks = (await getTalks()).sort((a, b) => {
+	const talks = await getTalks();
+
+	// サンプルデータを分離して先頭に配置
+	const sampleTalks = talks.filter((talk) =>
+		SAMPLE_TALK_KEYS.includes(talk.key as keyof typeof SAMPLE_YOUTUBE_VIDEOS),
+	);
+	const otherTalks = talks.filter(
+		(talk) =>
+			!SAMPLE_TALK_KEYS.includes(
+				talk.key as keyof typeof SAMPLE_YOUTUBE_VIDEOS,
+			),
+	);
+
+	const sortedOtherTalks = otherTalks.sort((a, b) => {
 		const aTime = a.recordedOnDate?.getTime() ?? 0;
 		const bTime = b.recordedOnDate?.getTime() ?? 0;
 		return bTime - aTime;
 	});
 
-	const talksForDisplay: TalkForDisplay[] = talks.map((talk, index) => {
+	const allTalks = [...sampleTalks, ...sortedOtherTalks];
+
+	const talksForDisplay: TalkForDisplay[] = allTalks.map((talk, index) => {
 		const displayTitle =
 			talk.title || talk.description || talk.event || "タイトル未設定";
 		const subtitle =
@@ -265,11 +308,30 @@ export default async function Home() {
 			talk.description.trim() !== talk.title.trim()
 				? talk.description
 				: "";
+		const isSampleData = SAMPLE_TALK_KEYS.includes(
+			talk.key as keyof typeof SAMPLE_YOUTUBE_VIDEOS,
+		);
 		const year = talk.recordedOnDate?.getFullYear() ?? null;
 		const decade = year ? Math.floor(year / 10) * 10 : null;
-		const decadeLabel = decade ? `${decade}年代` : "年代不明";
+		const decadeLabel = isSampleData
+			? "最新"
+			: decade
+				? `${decade}年代`
+				: "年代不明";
 		const themeSource = (talk.description || talk.event || "").trim();
 		const themeLabel = themeSource || "テーマ未設定";
+
+		// YouTube情報を取得
+		const youtubeUrl =
+			isSampleData && talk.key in SAMPLE_YOUTUBE_VIDEOS
+				? SAMPLE_YOUTUBE_VIDEOS[talk.key as keyof typeof SAMPLE_YOUTUBE_VIDEOS]
+				: talk.audioLink;
+		const { youtubeUrl: finalYoutubeUrl, thumbnailUrl } =
+			getYouTubeInfo(youtubeUrl);
+
+		// サンプルデータ（年代不明）を一番上に表示するため、nullの場合は最大値を設定
+		const recordedOnSortValue =
+			talk.recordedOnDate?.getTime() ?? Number.MAX_SAFE_INTEGER;
 
 		return {
 			key: talk.key || `talk-${index}`,
@@ -282,12 +344,14 @@ export default async function Home() {
 			language: talk.language || "—",
 			audioLink: talk.audioLink,
 			attachmentsLink: talk.attachmentsLink,
+			youtubeUrl: finalYoutubeUrl,
+			thumbnailUrl,
 			recordedOnRaw: talk.recordedOn || "日付不明",
 			recordedOnFormatted: formatJapaneseDate(
 				talk.recordedOn,
 				talk.recordedOn || "日付不明",
 			),
-			recordedOnSortValue: talk.recordedOnDate?.getTime() ?? 0,
+			recordedOnSortValue,
 			decadeLabel,
 			themeLabel,
 		};
