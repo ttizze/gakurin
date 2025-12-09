@@ -1,3 +1,5 @@
+import ForBeginnersSection from "./components/for-beginners-section";
+import Header from "./components/header";
 import TalkGallery from "./components/talk-gallery";
 import {
 	SAMPLE_TALK_DATA,
@@ -358,53 +360,12 @@ export default async function Home() {
 	});
 
 	return (
-		<div className="min-h-screen bg-white text-gray-900">
-			<header className="border-b border-orange-700 bg-orange-600">
-				<div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-12 sm:px-8">
-					<div>
-						<span className="text-xs uppercase tracking-[0.3em] text-orange-100">
-							GAKURIN
-						</span>
-						<h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-							学林
-						</h1>
-					</div>
-					<p className="max-w-2xl text-sm leading-relaxed text-orange-50 sm:text-base">
-						初期仏教の法話や講演を横断的に閲覧できる、静かな学びの場。
-						場所やテーマ、記録された日時を頼りに、必要な教えを見つけてください。
-					</p>
-					<div className="flex flex-wrap gap-3 text-sm">
-						<div className="rounded-full bg-orange-700 px-4 py-1.5 text-white border border-orange-800">
-							収録数 {talksForDisplay.length} 件
-						</div>
-						<div className="rounded-full bg-orange-700 px-4 py-1.5 text-white border border-orange-800">
-							更新頻度 約 1 時間
-						</div>
-					</div>
-				</div>
-			</header>
+		<div className="min-h-screen">
+			<Header talkCount={talksForDisplay.length} />
 
-			<section className="border-b border-gray-200 bg-gray-50">
-				<div className="mx-auto max-w-6xl px-6 py-12 sm:px-8">
-					<h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
-						初めての方へ
-					</h2>
-					<div className="mt-6 space-y-4 text-sm leading-relaxed text-gray-700 sm:text-base">
-						<p>
-							「仏教」と聞くと「宗教でしょ？」と感じる方もいらっしゃるかもしれません。しかし、2500年以上前にお釈迦様が説かれた教えは、「自分で確かめる」「権威ある人から言われたことでも盲信しない」という、いわゆる宗教とはほど遠い、理性的で現代的な教えです。
-						</p>
-						<p>
-							お釈迦様の教えの目的は「苦しみをなくす」こと。人間の苦しみの根本的な原因は今も昔も変わりません。そのため、この教えに触れた方は「なんと現代的な教えだろう」という感想を持たれます。
-						</p>
-						<p>
-							一般的な宗教では「信じる者は救われる」という立場ですが、初期仏教では、あなた自身の「智慧」や「優しさ」をレベルアップさせて、苦しみを乗り越えることを目指します。ストレスだらけの現代社会を生きる私たちにとって、今日からでも実践できる教えがここにあります。
-						</p>
-						<p>
-							この「学林」では、そうした初期仏教の法話や講演を横断的に閲覧できます。それが本当かどうかは、ぜひ音声を聴いていただき、あなたご自身の心で確かめてみてください。
-						</p>
-					</div>
-				</div>
-			</section>
+			<div id="for-beginners">
+				<ForBeginnersSection />
+			</div>
 
 			<main className="mx-auto max-w-6xl px-6 py-12 sm:px-8">
 				<TalkGallery talks={talksForDisplay} />

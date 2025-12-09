@@ -21,7 +21,8 @@ export default async function TalkDetailPage({ params }: Props) {
 		notFound();
 	}
 
-	const youtubeUrl = SAMPLE_YOUTUBE_VIDEOS[key as keyof typeof SAMPLE_YOUTUBE_VIDEOS];
+	const youtubeUrl =
+		SAMPLE_YOUTUBE_VIDEOS[key as keyof typeof SAMPLE_YOUTUBE_VIDEOS];
 	const { thumbnailUrl } = getYouTubeInfo(youtubeUrl);
 	const talkInfo = SAMPLE_TALK_DATA[key as keyof typeof SAMPLE_TALK_DATA];
 
@@ -45,8 +46,8 @@ export default async function TalkDetailPage({ params }: Props) {
 			<header className="border-b border-orange-700 bg-orange-600">
 				<div className="mx-auto flex max-w-4xl flex-col gap-4 px-6 py-8 sm:px-8">
 					<Link
-						href="/"
 						className="text-sm text-orange-100 hover:text-white transition"
+						href="/"
 					>
 						← トークギャラリーに戻る
 					</Link>
@@ -68,10 +69,10 @@ export default async function TalkDetailPage({ params }: Props) {
 						<div className="relative w-full aspect-video bg-gray-100 overflow-hidden rounded-lg">
 							{talkData.youtubeUrl && (
 								<a
-									href={talkData.youtubeUrl}
-									target="_blank"
-									rel="noopener noreferrer"
 									className="block w-full h-full"
+									href={talkData.youtubeUrl}
+									rel="noopener noreferrer"
+									target="_blank"
 								>
 									<Image
 										alt={talkData.title}
@@ -103,15 +104,21 @@ export default async function TalkDetailPage({ params }: Props) {
 							</div>
 							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
 								<dt className="font-medium text-gray-700">収録時間</dt>
-								<dd className="text-right text-gray-600">{talkData.duration}</dd>
+								<dd className="text-right text-gray-600">
+									{talkData.duration}
+								</dd>
 							</div>
 							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
 								<dt className="font-medium text-gray-700">言語</dt>
-								<dd className="text-right text-gray-600">{talkData.language}</dd>
+								<dd className="text-right text-gray-600">
+									{talkData.language}
+								</dd>
 							</div>
 							<div className="flex justify-between gap-4">
 								<dt className="font-medium text-gray-700">収録日</dt>
-								<dd className="text-right text-gray-600">{talkData.recordedOn}</dd>
+								<dd className="text-right text-gray-600">
+									{talkData.recordedOn}
+								</dd>
 							</div>
 						</dl>
 
@@ -126,10 +133,10 @@ export default async function TalkDetailPage({ params }: Props) {
 						{talkData.youtubeUrl && (
 							<div className="mt-6 pt-6 border-t border-gray-100">
 								<a
-									href={talkData.youtubeUrl}
-									target="_blank"
-									rel="noopener noreferrer"
 									className="inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-red-700"
+									href={talkData.youtubeUrl}
+									rel="noopener noreferrer"
+									target="_blank"
 								>
 									YouTubeで見る
 									<span aria-hidden>↗</span>
@@ -162,4 +169,3 @@ export default async function TalkDetailPage({ params }: Props) {
 		</div>
 	);
 }
-

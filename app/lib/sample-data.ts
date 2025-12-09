@@ -65,4 +65,3 @@ export const SAMPLE_TRANSCRIPTS: Record<string, string> = {
 
 ぜひ、今日から始めてみてください。`,
 };
-
