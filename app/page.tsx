@@ -306,8 +306,8 @@ export default async function Home() {
 			talk.title || talk.description || talk.event || "タイトル未設定";
 		const subtitle =
 			talk.description &&
-			talk.title &&
-			talk.description.trim() !== talk.title.trim()
+				talk.title &&
+				talk.description.trim() !== talk.title.trim()
 				? talk.description
 				: "";
 		const isSampleData = SAMPLE_TALK_KEYS.includes(
@@ -360,7 +360,7 @@ export default async function Home() {
 	});
 
 	return (
-		<div className="min-h-screen">
+		<div className="min-h-screen bg-white dark:bg-gray-900">
 			<Header talkCount={talksForDisplay.length} />
 
 			<div id="for-beginners">
@@ -371,8 +371,8 @@ export default async function Home() {
 				<TalkGallery talks={talksForDisplay} />
 			</main>
 
-			<footer className="border-t border-gray-200 bg-gray-50">
-				<div className="mx-auto max-w-6xl px-6 py-6 text-center text-xs text-gray-500 sm:px-8">
+			<footer className="border-t border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
+				<div className="mx-auto max-w-6xl px-6 py-6 text-center text-xs text-gray-500 dark:text-gray-400 sm:px-8">
 					© {new Date().getFullYear()} 初期仏教塾 — 初期仏教音声アーカイブ
 				</div>
 			</footer>

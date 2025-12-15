@@ -36,7 +36,7 @@ export default function TalkGallery({ talks }: Props) {
 
 	if (talks.length === 0) {
 		return (
-			<div className="rounded-lg border border-gray-200 bg-gray-50 p-10 text-center text-sm text-gray-600">
+			<div className="rounded-lg border border-gray-200 bg-gray-50 p-10 text-center text-sm text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
 				現在表示できるデータがありません。しばらく時間をおいて再度お試しください。
 			</div>
 		);
@@ -46,10 +46,10 @@ export default function TalkGallery({ talks }: Props) {
 		<div className="flex flex-col gap-10">
 			<div className="flex flex-col gap-6">
 				<div className="flex flex-wrap items-center justify-between gap-4">
-					<h2 className="text-sm font-medium tracking-wide text-gray-700 uppercase">
+					<h2 className="text-sm font-medium tracking-wide text-gray-700 dark:text-gray-300 uppercase">
 						並び替え
 					</h2>
-					<div className="inline-flex overflow-hidden rounded-full border border-gray-300 bg-white p-1">
+					<div className="inline-flex overflow-hidden rounded-full border border-gray-300 bg-white p-1 dark:border-gray-600 dark:bg-gray-800">
 						{VIEW_MODES.map((mode) => {
 							const isActive = viewMode === mode.value;
 							return (
@@ -57,8 +57,8 @@ export default function TalkGallery({ talks }: Props) {
 									aria-pressed={isActive}
 									className={`rounded-full px-5 py-2 text-sm font-medium transition ${
 										isActive
-											? "bg-gray-900 text-white"
-											: "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+											? "bg-gray-900 text-white dark:bg-gray-600 dark:text-white"
+											: "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-gray-100"
 									}`}
 									key={mode.value}
 									onClick={() => setViewMode(mode.value)}
@@ -72,14 +72,14 @@ export default function TalkGallery({ talks }: Props) {
 				</div>
 				<div className="flex flex-col gap-2">
 					<label
-						className="text-xs font-medium uppercase tracking-wide text-gray-500"
+						className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400"
 						htmlFor={searchInputId}
 					>
 						検索
 					</label>
 					<div className="relative">
 						<input
-							className="w-full rounded-lg border border-gray-300 bg-white py-2.5 px-4 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10"
+							className="w-full rounded-lg border border-gray-300 bg-white py-2.5 px-4 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-gray-500 dark:focus:ring-gray-500/10"
 							id={searchInputId}
 							onChange={(event) => setSearchQuery(event.target.value)}
 							placeholder="キーワードで検索"
@@ -88,7 +88,7 @@ export default function TalkGallery({ talks }: Props) {
 						/>
 						{hasActiveQuery && (
 							<button
-								className="absolute inset-y-0 right-3 my-auto rounded-full px-2 text-xs font-medium text-gray-500 transition hover:text-gray-900"
+								className="absolute inset-y-0 right-3 my-auto rounded-full px-2 text-xs font-medium text-gray-500 transition hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
 								onClick={() => setSearchQuery("")}
 								type="button"
 							>
@@ -97,7 +97,7 @@ export default function TalkGallery({ talks }: Props) {
 						)}
 					</div>
 					{hasActiveQuery && (
-						<span className="text-xs text-gray-500">
+						<span className="text-xs text-gray-500 dark:text-gray-400">
 							検索結果 {totalMatched} 件
 						</span>
 					)}
@@ -105,7 +105,7 @@ export default function TalkGallery({ talks }: Props) {
 			</div>
 
 			{sections.length === 0 ? (
-				<div className="rounded-lg border border-gray-200 bg-gray-50 p-10 text-center text-sm text-gray-600">
+				<div className="rounded-lg border border-gray-200 bg-gray-50 p-10 text-center text-sm text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
 					{hasActiveQuery
 						? "検索条件に一致するデータが見つかりませんでした。条件を変えてお試しください。"
 						: "現在表示できるデータがありません。"}

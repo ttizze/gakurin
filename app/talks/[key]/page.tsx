@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ThemeToggle from "../../components/theme-toggle";
 import {
 	SAMPLE_TALK_DATA,
 	SAMPLE_TRANSCRIPTS,
@@ -45,30 +46,33 @@ export default async function TalkDetailPage({ params }: Props) {
 	};
 
 	return (
-		<div className="min-h-screen bg-white text-gray-900">
+		<div className="min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100">
 			<header className="relative w-full overflow-hidden">
 				<div className="absolute inset-0">
 					<Image
 						alt=""
-						className="object-cover object-center"
+						className="object-cover object-center dark:opacity-80"
 						fill
 						priority
 						src="/gakurin-header-base.jpg"
 						unoptimized
 					/>
 				</div>
+				<div className="absolute top-6 right-6 sm:top-8 sm:right-8">
+					<ThemeToggle />
+				</div>
 				<div className="relative mx-auto max-w-4xl flex flex-col gap-4 px-6 py-8 sm:px-8">
 					<Link
-						className="text-sm text-slate-600 hover:text-slate-800 transition"
+						className="text-sm text-slate-600 hover:text-slate-800 transition dark:text-slate-300 dark:hover:text-slate-100"
 						href="/"
 					>
 						← トークギャラリーに戻る
 					</Link>
 					<div>
-						<span className="text-xs uppercase tracking-[0.3em] text-slate-600">
+						<span className="text-xs uppercase tracking-[0.3em] text-slate-600 dark:text-slate-300">
 							— EXPOSITION OF EARLY BUDDHISM IN MODERN TERMS —
 						</span>
-						<h1 className="mt-2 text-2xl font-semibold leading-tight text-slate-800 sm:text-3xl">
+						<h1 className="mt-2 text-2xl font-semibold leading-tight text-slate-800 dark:text-slate-100 sm:text-3xl">
 							{talkData.title}
 						</h1>
 					</div>
@@ -79,7 +83,7 @@ export default async function TalkDetailPage({ params }: Props) {
 				<div className="space-y-8">
 					{/* YouTube動画埋め込み */}
 					{talkData.embedUrl && (
-						<div className="relative w-full aspect-video bg-gray-100 overflow-hidden rounded-lg">
+						<div className="relative w-full aspect-video bg-gray-100 dark:bg-gray-700 overflow-hidden rounded-lg">
 							<iframe
 								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 								allowFullScreen
@@ -91,52 +95,52 @@ export default async function TalkDetailPage({ params }: Props) {
 					)}
 
 					{/* データ情報 */}
-					<div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+					<div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
 						<dl className="space-y-4 text-sm">
-							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
-								<dt className="font-medium text-gray-700">行事名</dt>
-								<dd className="text-right text-gray-600">{talkData.event}</dd>
+							<div className="flex justify-between gap-4 border-b border-gray-100 dark:border-gray-700 pb-4">
+								<dt className="font-medium text-gray-700 dark:text-gray-300">行事名</dt>
+								<dd className="text-right text-gray-600 dark:text-gray-400">{talkData.event}</dd>
 							</div>
-							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
-								<dt className="font-medium text-gray-700">収録場所</dt>
-								<dd className="text-right text-gray-600">{talkData.venue}</dd>
+							<div className="flex justify-between gap-4 border-b border-gray-100 dark:border-gray-700 pb-4">
+								<dt className="font-medium text-gray-700 dark:text-gray-300">収録場所</dt>
+								<dd className="text-right text-gray-600 dark:text-gray-400">{talkData.venue}</dd>
 							</div>
-							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
-								<dt className="font-medium text-gray-700">講師</dt>
-								<dd className="text-right text-gray-600">{talkData.speaker}</dd>
+							<div className="flex justify-between gap-4 border-b border-gray-100 dark:border-gray-700 pb-4">
+								<dt className="font-medium text-gray-700 dark:text-gray-300">講師</dt>
+								<dd className="text-right text-gray-600 dark:text-gray-400">{talkData.speaker}</dd>
 							</div>
-							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
-								<dt className="font-medium text-gray-700">収録時間</dt>
-								<dd className="text-right text-gray-600">
+							<div className="flex justify-between gap-4 border-b border-gray-100 dark:border-gray-700 pb-4">
+								<dt className="font-medium text-gray-700 dark:text-gray-300">収録時間</dt>
+								<dd className="text-right text-gray-600 dark:text-gray-400">
 									{talkData.duration}
 								</dd>
 							</div>
-							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
-								<dt className="font-medium text-gray-700">言語</dt>
-								<dd className="text-right text-gray-600">
+							<div className="flex justify-between gap-4 border-b border-gray-100 dark:border-gray-700 pb-4">
+								<dt className="font-medium text-gray-700 dark:text-gray-300">言語</dt>
+								<dd className="text-right text-gray-600 dark:text-gray-400">
 									{talkData.language}
 								</dd>
 							</div>
 							<div className="flex justify-between gap-4">
-								<dt className="font-medium text-gray-700">収録日</dt>
-								<dd className="text-right text-gray-600">
+								<dt className="font-medium text-gray-700 dark:text-gray-300">収録日</dt>
+								<dd className="text-right text-gray-600 dark:text-gray-400">
 									{talkData.recordedOn}
 								</dd>
 							</div>
 						</dl>
 
 						{talkData.description && (
-							<div className="mt-6 pt-6 border-t border-gray-100">
-								<p className="text-sm leading-relaxed text-gray-700">
+							<div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+								<p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
 									{talkData.description}
 								</p>
 							</div>
 						)}
 
 						{talkData.youtubeUrl && (
-							<div className="mt-6 pt-6 border-t border-gray-100">
+							<div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
 								<a
-									className="inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-red-700"
+									className="inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-red-700 dark:hover:bg-red-500"
 									href={talkData.youtubeUrl}
 									rel="noopener noreferrer"
 									target="_blank"
@@ -150,12 +154,12 @@ export default async function TalkDetailPage({ params }: Props) {
 
 					{/* 全文文字起こし */}
 					{talkData.transcript && (
-						<div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-							<h2 className="mb-4 text-lg font-bold text-gray-900">
+						<div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+							<h2 className="mb-4 text-lg font-bold text-gray-900 dark:text-gray-100">
 								全文文字起こし
 							</h2>
 							<div className="prose prose-sm max-w-none">
-								<pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-gray-700">
+								<pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-gray-700 dark:text-gray-300">
 									{talkData.transcript}
 								</pre>
 							</div>
@@ -164,8 +168,8 @@ export default async function TalkDetailPage({ params }: Props) {
 				</div>
 			</main>
 
-			<footer className="border-t border-gray-200 bg-gray-50">
-				<div className="mx-auto max-w-4xl px-6 py-6 text-center text-xs text-gray-500 sm:px-8">
+			<footer className="border-t border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
+				<div className="mx-auto max-w-4xl px-6 py-6 text-center text-xs text-gray-500 dark:text-gray-400 sm:px-8">
 					© {new Date().getFullYear()} 初期仏教塾 — 初期仏教音声アーカイブ
 				</div>
 			</footer>
