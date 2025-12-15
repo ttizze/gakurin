@@ -6,7 +6,7 @@ import {
 	SAMPLE_TRANSCRIPTS,
 	SAMPLE_YOUTUBE_VIDEOS,
 } from "../../lib/sample-data";
-import { getYouTubeInfo } from "../../lib/youtube";
+import { extractYouTubeVideoId } from "../../lib/youtube";
 
 type Props = {
 	params: Promise<{ key: string }>;
@@ -23,7 +23,10 @@ export default async function TalkDetailPage({ params }: Props) {
 
 	const youtubeUrl =
 		SAMPLE_YOUTUBE_VIDEOS[key as keyof typeof SAMPLE_YOUTUBE_VIDEOS];
-	const { thumbnailUrl } = getYouTubeInfo(youtubeUrl);
+	const videoId = extractYouTubeVideoId(youtubeUrl);
+	const embedUrl = videoId
+		? `https://www.youtube.com/embed/${videoId}`
+		: null;
 	const talkInfo = SAMPLE_TALK_DATA[key as keyof typeof SAMPLE_TALK_DATA];
 
 	const talkData = {
@@ -37,25 +40,35 @@ export default async function TalkDetailPage({ params }: Props) {
 		language: "日本語",
 		recordedOn: "日付不明",
 		youtubeUrl,
-		thumbnailUrl,
+		embedUrl,
 		transcript: SAMPLE_TRANSCRIPTS[key] || "",
 	};
 
 	return (
 		<div className="min-h-screen bg-white text-gray-900">
-			<header className="border-b border-orange-700 bg-orange-600">
-				<div className="mx-auto flex max-w-4xl flex-col gap-4 px-6 py-8 sm:px-8">
+			<header className="relative w-full overflow-hidden">
+				<div className="absolute inset-0">
+					<Image
+						alt=""
+						className="object-cover object-center"
+						fill
+						priority
+						src="/gakurin-header-base.jpg"
+						unoptimized
+					/>
+				</div>
+				<div className="relative mx-auto max-w-4xl flex flex-col gap-4 px-6 py-8 sm:px-8">
 					<Link
-						className="text-sm text-orange-100 hover:text-white transition"
+						className="text-sm text-slate-600 hover:text-slate-800 transition"
 						href="/"
 					>
 						← トークギャラリーに戻る
 					</Link>
 					<div>
-						<span className="text-xs uppercase tracking-[0.3em] text-orange-100">
-							GAKURIN
+						<span className="text-xs uppercase tracking-[0.3em] text-slate-600">
+							— EXPOSITION OF EARLY BUDDHISM IN MODERN TERMS —
 						</span>
-						<h1 className="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+						<h1 className="mt-2 text-2xl font-semibold leading-tight text-slate-800 sm:text-3xl">
 							{talkData.title}
 						</h1>
 					</div>
@@ -64,26 +77,16 @@ export default async function TalkDetailPage({ params }: Props) {
 
 			<main className="mx-auto max-w-4xl px-6 py-12 sm:px-8">
 				<div className="space-y-8">
-					{/* サムネイル */}
-					{talkData.thumbnailUrl && (
+					{/* YouTube動画埋め込み */}
+					{talkData.embedUrl && (
 						<div className="relative w-full aspect-video bg-gray-100 overflow-hidden rounded-lg">
-							{talkData.youtubeUrl && (
-								<a
-									className="block w-full h-full"
-									href={talkData.youtubeUrl}
-									rel="noopener noreferrer"
-									target="_blank"
-								>
-									<Image
-										alt={talkData.title}
-										className="object-cover"
-										fill
-										sizes="100vw"
-										src={talkData.thumbnailUrl}
-										unoptimized
-									/>
-								</a>
-							)}
+							<iframe
+								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+								allowFullScreen
+								className="absolute inset-0 h-full w-full"
+								src={talkData.embedUrl}
+								title={talkData.title}
+							/>
 						</div>
 					)}
 
@@ -163,7 +166,7 @@ export default async function TalkDetailPage({ params }: Props) {
 
 			<footer className="border-t border-gray-200 bg-gray-50">
 				<div className="mx-auto max-w-4xl px-6 py-6 text-center text-xs text-gray-500 sm:px-8">
-					© {new Date().getFullYear()} 学林 — 初期仏教音声アーカイブ
+					© {new Date().getFullYear()} 初期仏教塾 — 初期仏教音声アーカイブ
 				</div>
 			</footer>
 		</div>

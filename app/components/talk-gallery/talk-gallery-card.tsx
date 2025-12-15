@@ -32,9 +32,14 @@ export default function TalkGalleryCard({ talk, searchTokens }: Props) {
 						<span className="text-xs font-medium uppercase tracking-wide text-gray-500">
 							{highlightMatches(talk.event, searchTokens)}
 						</span>
-						<span className="text-xs text-gray-400">
-							{highlightMatches(talk.recordedOnFormatted, searchTokens)}
-						</span>
+						<div className="flex items-baseline gap-2">
+							<span className="text-xs text-gray-400">
+								{highlightMatches(talk.recordedOnFormatted, searchTokens)}
+							</span>
+							<span className="text-xs text-gray-400">
+								{highlightMatches(talk.duration, searchTokens)}
+							</span>
+						</div>
 					</div>
 
 					<h2 className="mt-4 text-lg font-bold text-gray-900 sm:text-xl">
@@ -45,33 +50,6 @@ export default function TalkGalleryCard({ talk, searchTokens }: Props) {
 							{highlightMatches(talk.subtitle, searchTokens)}
 						</p>
 					)}
-
-					<dl className="mt-5 space-y-2.5 text-xs text-gray-600 sm:text-sm">
-						<div className="flex justify-between gap-4">
-							<dt className="font-medium text-gray-700">収録場所</dt>
-							<dd className="text-right text-gray-600">
-								{highlightMatches(talk.venue, searchTokens)}
-							</dd>
-						</div>
-						<div className="flex justify-between gap-4">
-							<dt className="font-medium text-gray-700">講師</dt>
-							<dd className="text-right text-gray-600">
-								{highlightMatches(talk.speaker, searchTokens)}
-							</dd>
-						</div>
-						<div className="flex justify-between gap-4">
-							<dt className="font-medium text-gray-700">収録時間</dt>
-							<dd className="text-right text-gray-600">
-								{highlightMatches(talk.duration, searchTokens)}
-							</dd>
-						</div>
-						<div className="flex justify-between gap-4">
-							<dt className="font-medium text-gray-700">言語</dt>
-							<dd className="text-right text-gray-600">
-								{highlightMatches(talk.language, searchTokens)}
-							</dd>
-						</div>
-					</dl>
 
 					<div className="mt-6 flex flex-wrap gap-3">
 						{talk.youtubeUrl && (

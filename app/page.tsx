@@ -373,7 +373,7 @@ export default async function Home() {
 
 			<footer className="border-t border-gray-200 bg-gray-50">
 				<div className="mx-auto max-w-6xl px-6 py-6 text-center text-xs text-gray-500 sm:px-8">
-					© {new Date().getFullYear()} 学林 — 初期仏教音声アーカイブ
+					© {new Date().getFullYear()} 初期仏教塾 — 初期仏教音声アーカイブ
 				</div>
 			</footer>
 		</div>

@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-	title: "学林",
+	title: "初期仏教塾",
 	description: "初期仏教の法話を静かに味わうアーカイブ",
 };
 

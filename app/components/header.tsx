@@ -22,8 +22,11 @@ export default function Header({ talkCount }: Props) {
 					<div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
 						<div className="max-w-2xl">
 							<h1 className="text-4xl font-semibold leading-tight text-slate-800 sm:text-5xl">
-								学林
+								初期仏教塾
 							</h1>
+							<p className="mt-1 text-xs font-medium text-slate-600 sm:text-sm">
+								— exposition of early buddhism in modern terms —
+							</p>
 							<p className="mt-3 text-sm leading-relaxed text-slate-700 sm:text-base">
 								初期仏教の法話や講演を横断的に閲覧できる、静かな学びの場。場所やテーマ、記録された日時を頼りに、必要な教えを見つけてください。
 							</p>
