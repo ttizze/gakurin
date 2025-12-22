@@ -45,17 +45,12 @@ export default async function TalkDetailPage({ params }: Props) {
 		<div className="min-h-screen bg-white text-gray-900">
 			<header className="bg-amber-50 px-6 py-8 sm:px-8">
 				<div className="mx-auto max-w-4xl">
-					<div className="flex items-center justify-between gap-4">
-						<Link
-							className="text-sm text-slate-600 hover:text-slate-800 transition"
-							href="/"
-						>
-							← トークギャラリーに戻る
-						</Link>
-						<h1 className="text-2xl font-semibold leading-tight text-slate-800 sm:text-3xl text-right">
-							{talkData.title}
-						</h1>
-					</div>
+					<Link
+						className="text-sm text-slate-600 hover:text-slate-800 transition"
+						href="/"
+					>
+						← トークギャラリーに戻る
+					</Link>
 				</div>
 			</header>
 
@@ -77,6 +72,10 @@ export default async function TalkDetailPage({ params }: Props) {
 					{/* データ情報 */}
 					<div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
 						<dl className="space-y-4 text-sm">
+							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
+								<dt className="font-medium text-gray-700">タイトル</dt>
+								<dd className="text-right text-gray-600">{talkData.title}</dd>
+							</div>
 							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
 								<dt className="font-medium text-gray-700">行事名</dt>
 								<dd className="text-right text-gray-600">{talkData.event}</dd>
@@ -118,7 +117,6 @@ export default async function TalkDetailPage({ params }: Props) {
 						)}
 						{talkData.summary && (
 							<div className="mt-6 pt-6 border-t border-gray-100">
-								<h3 className="mb-2 text-sm font-medium text-gray-700">概要</h3>
 								<p className="text-sm leading-relaxed text-gray-700 whitespace-pre-wrap">
 									{talkData.summary}
 								</p>
