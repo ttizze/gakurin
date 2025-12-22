@@ -43,17 +43,19 @@ export default async function TalkDetailPage({ params }: Props) {
 
 	return (
 		<div className="min-h-screen bg-white text-gray-900">
-			<header className="mx-auto max-w-4xl px-6 py-8 sm:px-8">
-				<div className="flex items-center justify-between gap-4">
-					<Link
-						className="text-sm text-slate-600 hover:text-slate-800 transition"
-						href="/"
-					>
-						← トークギャラリーに戻る
-					</Link>
-					<h1 className="text-2xl font-semibold leading-tight text-slate-800 sm:text-3xl text-right">
-						{talkData.title}
-					</h1>
+			<header className="bg-amber-50 px-6 py-8 sm:px-8">
+				<div className="mx-auto max-w-4xl">
+					<div className="flex items-center justify-between gap-4">
+						<Link
+							className="text-sm text-slate-600 hover:text-slate-800 transition"
+							href="/"
+						>
+							← トークギャラリーに戻る
+						</Link>
+						<h1 className="text-2xl font-semibold leading-tight text-slate-800 sm:text-3xl text-right">
+							{talkData.title}
+						</h1>
+					</div>
 				</div>
 			</header>
 
@@ -166,7 +168,7 @@ export default async function TalkDetailPage({ params }: Props) {
 				</div>
 			</main>
 
-			<footer className="border-t border-gray-200 bg-gray-50">
+			<footer className="border-t border-gray-200 bg-amber-50">
 				<div className="mx-auto max-w-4xl px-6 py-6 text-center text-xs text-gray-500 sm:px-8">
 					© {new Date().getFullYear()} 初期仏教塾 — 初期仏教音声アーカイブ
 				</div>

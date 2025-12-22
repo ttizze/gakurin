@@ -51,11 +51,13 @@ export default async function Home() {
 				<main className="px-6 py-12 sm:px-8">
 					<TalkGallery talks={talksForDisplay} />
 				</main>
-
-				<footer className="border-t border-gray-200 bg-gray-50 px-6 py-6 text-center text-xs text-gray-500 sm:px-8">
-					© {new Date().getFullYear()} 初期仏教塾 — 初期仏教音声アーカイブ
-				</footer>
 			</div>
+
+			<footer className="border-t border-gray-200 bg-amber-50">
+				<div className="mx-auto max-w-7xl px-6 py-6 text-center text-xs text-gray-500 sm:px-8">
+					© {new Date().getFullYear()} 初期仏教塾 — 初期仏教音声アーカイブ
+				</div>
+			</footer>
 		</div>
 	);
 }

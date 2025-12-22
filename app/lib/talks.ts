@@ -99,11 +99,59 @@ function sanitizeLink(value: string): string | null {
 	return trimmed;
 }
 
+// CSVテキストを行に分割（引用符内の改行を考慮）
+function splitCSVLines(text: string): string[] {
+	const lines: string[] = [];
+	let current = "";
+	let insideQuotes = false;
+
+	for (let i = 0; i < text.length; i += 1) {
+		const char = text[i];
+		const nextChar = text[i + 1];
+
+		if (char === '"') {
+			if (insideQuotes && nextChar === '"') {
+				// エスケープされた引用符
+				current += '"';
+				i += 1;
+			} else {
+				// 引用符の開始/終了
+				insideQuotes = !insideQuotes;
+				current += char;
+			}
+			continue;
+		}
+
+		if (
+			(char === "\n" || (char === "\r" && nextChar === "\n")) &&
+			!insideQuotes
+		) {
+			// 引用符の外での改行のみ行の区切りとして扱う
+			if (char === "\r" && nextChar === "\n") {
+				i += 1; // \r\nをスキップ
+			}
+			const trimmed = current.trim();
+			if (trimmed.length > 0) {
+				lines.push(trimmed);
+			}
+			current = "";
+			continue;
+		}
+
+		current += char;
+	}
+
+	// 最後の行を追加
+	const trimmed = current.trim();
+	if (trimmed.length > 0) {
+		lines.push(trimmed);
+	}
+
+	return lines;
+}
+
 function parseCSVToTalks(text: string): Talk[] {
-	const lines = text
-		.split(/\r?\n/)
-		.map((line) => line.trim())
-		.filter((line) => line.length > 0);
+	const lines = splitCSVLines(text);
 
 	if (lines.length === 0) {
 		return [];
@@ -162,13 +210,73 @@ function parseCSVToTalks(text: string): Talk[] {
 		}
 
 		// 収録日1と収録日2がある場合は結合、なければ単一の収録日を使用
-		const recordedOn1 = getValue(cells, "収録日1");
-		const recordedOn2 = getValue(cells, "収録日2");
-		const recordedOnSingle = getValue(cells, "収録日");
-		const recordedOn = recordedOn1 && recordedOn2
-			? `${recordedOn1} / ${recordedOn2}`
-			: recordedOn1 || recordedOn2 || recordedOnSingle;
-		const baseKey = getValue(cells, "ID") || `${i}-${event || "event"}-${recordedOn || "date"}`;
+		// ヘッダー名のバリエーション（スペース、全角半角の違いなど）に対応
+		const recordedOn1 = getValueFromHeaders(cells, [
+			"収録日1",
+			"収録日 1",
+			"収録日１",
+			"収録日 １",
+		]);
+		const recordedOn2 = getValueFromHeaders(cells, [
+			"収録日2",
+			"収録日 2",
+			"収録日２",
+			"収録日 ２",
+		]);
+		const recordedOnSingle = getValueFromHeaders(cells, ["収録日", "収録日 "]);
+
+		// デバッグ: 日付が取得できていない場合にログを出力
+		if (!recordedOn1 && !recordedOn2 && !recordedOnSingle) {
+			const id = getValue(cells, "ID");
+			const title = getValue(cells, "タイトル");
+			console.warn(
+				`[Talks] 日付が取得できませんでした。行 ${i + 1}, ID: ${id}, タイトル: ${title?.substring(0, 50)}...`,
+			);
+			const dateHeaders = Object.keys(headerIndex).filter(
+				(h) => h.includes("収録") || h.includes("日"),
+			);
+			console.warn(`[Talks] 日付関連ヘッダー:`, dateHeaders);
+			// 実際のセルの値を確認（日付関連のヘッダーのインデックスに対応するセル）
+			dateHeaders.forEach((header) => {
+				const idx = headerIndex[header];
+				if (idx !== undefined && cells[idx]) {
+					console.warn(
+						`[Talks]   ${header} (インデックス ${idx}): "${cells[idx]}"`,
+					);
+				}
+			});
+		}
+
+		const recordedOn =
+			recordedOn1 && recordedOn2
+				? `${recordedOn1} / ${recordedOn2}`
+				: recordedOn1 || recordedOn2 || recordedOnSingle;
+
+		// IDフィールドの取得（ヘッダー名のバリエーションに対応）
+		const id = getValueFromHeaders(cells, ["ID", "id", "Id", "ＩＤ", "ｉｄ"]);
+		const baseKey = id || `${i}-${event || "event"}-${recordedOn || "date"}`;
+
+		// デバッグ: IDが取得できていない場合にログを出力
+		if (!id) {
+			console.warn(
+				`[Talks] IDが取得できませんでした。行 ${i + 1}, event: ${event}, タイトル: ${title?.substring(0, 50)}...`,
+			);
+			const idHeaders = Object.keys(headerIndex).filter(
+				(h) =>
+					h.toUpperCase().includes("ID") ||
+					h.includes("ｉｄ") ||
+					h.includes("ＩＤ"),
+			);
+			console.warn(`[Talks] ID関連ヘッダー:`, idHeaders);
+			idHeaders.forEach((header) => {
+				const idx = headerIndex[header];
+				if (idx !== undefined && cells[idx]) {
+					console.warn(
+						`[Talks]   ${header} (インデックス ${idx}): "${cells[idx]}"`,
+					);
+				}
+			});
+		}
 
 		// 重複キーを防ぐ
 		let uniqueKey = baseKey;
@@ -185,7 +293,10 @@ function parseCSVToTalks(text: string): Talk[] {
 			event,
 			venue: getValue(cells, "収録場所"),
 			recordedOn,
-			recordedOnDate: parseDate(recordedOn1 || recordedOnSingle) || parseDate(recordedOn2) || null,
+			recordedOnDate:
+				parseDate(recordedOn1 || recordedOnSingle) ||
+				parseDate(recordedOn2) ||
+				null,
 			duration: getValue(cells, "収録時間"),
 			title,
 			description,
@@ -206,7 +317,7 @@ function parseCSVToTalks(text: string): Talk[] {
 			),
 			youtubeLink: sanitizeLink(
 				getValueFromHeaders(cells, ["YouTube", "YouTubeリンク", "youtube"]) ||
-				(cells[12] ? cells[12].trim() : ""), // m列（13列目、0-indexedで12）を直接取得
+					(cells[12] ? cells[12].trim() : ""), // m列（13列目、0-indexedで12）を直接取得
 			),
 			summary: getValue(cells, "概要") || (cells[8] ? cells[8].trim() : ""), // I列（9列目、0-indexedで8）を直接取得
 		};

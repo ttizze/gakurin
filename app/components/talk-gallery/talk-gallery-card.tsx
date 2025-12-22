@@ -50,9 +50,6 @@ export default function TalkGalleryCard({ talk, searchTokens }: Props) {
 					<span className="text-xs text-gray-400">
 						{highlightMatches(talk.recordedOnFormatted, searchTokens)}
 					</span>
-					<span className="text-xs text-gray-400">
-						{highlightMatches(talk.duration, searchTokens)}
-					</span>
 				</div>
 				{talk.youtubeUrl && (
 					<a

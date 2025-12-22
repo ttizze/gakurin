@@ -42,7 +42,7 @@ export default function ForBeginnersSection() {
 			</div>
 			{isOpen && (
 				<div className="text-sm leading-relaxed py-10 text-amber-900 bg-amber-50 sm:text-base">
-					<div className="mx-auto max-w-7xl">
+					<div className="mx-auto max-w-7xl px-12 sm:px-16">
 						<p>
 							「仏教」と聞くと「宗教でしょ？」と感じる方もいらっしゃるかもしれません。しかし、2500年以上前にお釈迦様が説かれた教えは、「自分で確かめる」「権威ある人から言われたことでも盲信しない」という、いわゆる宗教とはほど遠い、理性的で現代的な教えです。
 						</p>
