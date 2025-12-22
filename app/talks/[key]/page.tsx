@@ -1,4 +1,5 @@
 import { ExternalLink, Youtube } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatJapaneseDate } from "../../lib/date";
@@ -8,6 +9,30 @@ import { extractYouTubeVideoId } from "../../lib/youtube";
 type Props = {
 	params: Promise<{ key: string }>;
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const { key } = await params;
+	const talks = await getTalks();
+	const talk = talks.find((t) => t.key === key);
+
+	if (!talk) {
+		return {
+			title: "トークが見つかりません | 初期仏教塾",
+		};
+	}
+
+	const title =
+		talk.title || talk.description || talk.event || "タイトル未設定";
+	const description =
+		talk.summary ||
+		talk.description ||
+		"初期仏教の法話を静かに味わうアーカイブ";
+
+	return {
+		title: `${title} | 初期仏教塾`,
+		description,
+	};
+}
 
 export default async function TalkDetailPage({ params }: Props) {
 	const { key } = await params;

@@ -1,14 +1,32 @@
+import Image from "next/image";
+
 export default function Header() {
 	return (
 		<header className="relative w-full">
-			<picture>
-				<source media="(max-width: 640px)" srcSet="/hero_smp_3rd_02.jpg" />
-				<img
+			{/* モバイル用画像 */}
+			<div className="relative w-full sm:hidden">
+				<Image
 					alt=""
 					className="w-full h-auto object-contain"
-					src="/hero_pc_3rd_02.jpg"
+					height={400}
+					priority
+					sizes="100vw"
+					src="/hero_smp_3rd_02.jpg"
+					width={640}
 				/>
-			</picture>
+			</div>
+			{/* PC用画像 */}
+			<div className="relative hidden w-full sm:block">
+				<Image
+					alt=""
+					className="w-full h-auto object-contain"
+					height={800}
+					priority
+					sizes="100vw"
+					src="/hero_pc_3rd_02.jpg"
+					width={1280}
+				/>
+			</div>
 		</header>
 	);
 }
