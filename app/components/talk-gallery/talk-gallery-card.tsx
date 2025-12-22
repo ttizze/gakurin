@@ -1,4 +1,4 @@
-import { Youtube } from "lucide-react";
+import { ExternalLink, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { TalkForDisplay } from "../../page";
@@ -60,6 +60,7 @@ export default function TalkGalleryCard({ talk, searchTokens }: Props) {
 					>
 						<Youtube className="h-4 w-4" />
 						<span>YouTube</span>
+						<ExternalLink className="h-3 w-3" />
 					</a>
 				)}
 			</div>

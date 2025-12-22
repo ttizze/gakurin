@@ -1,4 +1,4 @@
-import { Youtube } from "lucide-react";
+import { ExternalLink, Youtube } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatJapaneseDate } from "../../lib/date";
@@ -161,6 +161,7 @@ export default async function TalkDetailPage({ params }: Props) {
 								>
 									<Youtube className="h-5 w-5" />
 									<span>YouTube</span>
+									<ExternalLink className="h-4 w-4" />
 								</a>
 							</div>
 						)}
