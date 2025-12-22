@@ -18,6 +18,7 @@ export function buildSearchText(talk: TalkForDisplay): string {
 			talk.recordedOnRaw,
 			talk.decadeLabel,
 			talk.themeLabel,
+			talk.summary,
 		]
 			.filter(Boolean)
 			.join(" "),
