@@ -335,7 +335,7 @@ export async function getTalks(): Promise<Talk[]> {
 				Accept: "text/csv",
 			},
 			next: {
-				revalidate: 60 * 60,
+				revalidate: 60 * 60 * 24, // 1日（24時間）ごとに更新
 			},
 		});
 
