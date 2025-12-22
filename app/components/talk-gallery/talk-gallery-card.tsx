@@ -10,8 +10,8 @@ type Props = {
 
 export default function TalkGalleryCard({ talk, searchTokens }: Props) {
 	return (
-		<Link href={`/talks/${talk.key}`}>
-			<article className="group flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm transition duration-200 ease-out hover:shadow-md overflow-hidden cursor-pointer">
+		<div className="flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm transition duration-200 ease-out hover:shadow-md overflow-hidden">
+			<Link className="group flex flex-col flex-1" href={`/talks/${talk.key}`}>
 				{/* 上半分: サムネイル */}
 				{talk.thumbnailUrl && (
 					<div className="relative w-full aspect-video bg-gray-100 overflow-hidden">
@@ -28,21 +28,7 @@ export default function TalkGalleryCard({ talk, searchTokens }: Props) {
 
 				{/* 下半分: データ */}
 				<div className="flex flex-col flex-1 p-6">
-					<div className="flex items-baseline justify-between gap-3">
-						<span className="text-xs font-medium uppercase tracking-wide text-gray-500">
-							{highlightMatches(talk.event, searchTokens)}
-						</span>
-						<div className="flex items-baseline gap-2">
-							<span className="text-xs text-gray-400">
-								{highlightMatches(talk.recordedOnFormatted, searchTokens)}
-							</span>
-							<span className="text-xs text-gray-400">
-								{highlightMatches(talk.duration, searchTokens)}
-							</span>
-						</div>
-					</div>
-
-					<h2 className="mt-4 text-lg font-bold text-gray-900 sm:text-xl">
+					<h2 className="text-lg font-bold text-gray-900 sm:text-xl">
 						{highlightMatches(talk.title, searchTokens)}
 					</h2>
 					{talk.subtitle && (
@@ -50,47 +36,57 @@ export default function TalkGalleryCard({ talk, searchTokens }: Props) {
 							{highlightMatches(talk.subtitle, searchTokens)}
 						</p>
 					)}
-
-					<div className="mt-6 flex flex-wrap gap-3">
-						{talk.youtubeUrl && (
-							<a
-								className="inline-flex items-center gap-2 rounded-full bg-red-600 px-5 py-2.5 text-xs font-medium text-white transition hover:bg-red-700 sm:text-sm"
-								href={talk.youtubeUrl}
-								onClick={(e) => e.stopPropagation()}
-								rel="noopener noreferrer"
-								target="_blank"
-							>
-								YouTubeで見る
-								<span aria-hidden>↗</span>
-							</a>
-						)}
-						{talk.audioLink && (
-							<a
-								className="inline-flex items-center gap-2 rounded-full bg-gray-900 px-5 py-2.5 text-xs font-medium text-white transition hover:bg-gray-800 sm:text-sm"
-								href={talk.audioLink}
-								onClick={(e) => e.stopPropagation()}
-								rel="noopener noreferrer"
-								target="_blank"
-							>
-								音声を聴く
-								<span aria-hidden>↗</span>
-							</a>
-						)}
-						{talk.attachmentsLink && (
-							<a
-								className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-5 py-2.5 text-xs font-medium text-gray-700 transition hover:bg-gray-50 sm:text-sm"
-								href={talk.attachmentsLink}
-								onClick={(e) => e.stopPropagation()}
-								rel="noopener noreferrer"
-								target="_blank"
-							>
-								資料を見る
-								<span aria-hidden>↗</span>
-							</a>
-						)}
-					</div>
 				</div>
-			</article>
-		</Link>
+			</Link>
+
+			<div className="px-6 pb-6 flex items-center justify-between gap-3">
+				<div className="flex items-baseline gap-2">
+					<span className="text-xs text-gray-400">
+						{highlightMatches(talk.recordedOnFormatted, searchTokens)}
+					</span>
+					<span className="text-xs text-gray-400">
+						{highlightMatches(talk.duration, searchTokens)}
+					</span>
+				</div>
+				{talk.youtubeUrl && (
+					<a
+						className="inline-flex items-center gap-2 rounded-full bg-red-600 px-5 py-2.5 text-xs font-medium text-white transition hover:bg-red-700 sm:text-sm"
+						href={talk.youtubeUrl}
+						rel="noopener noreferrer"
+						target="_blank"
+					>
+						YouTubeで見る
+						<span aria-hidden>↗</span>
+					</a>
+				)}
+			</div>
+
+			{(talk.audioLink || talk.attachmentsLink) && (
+				<div className="px-6 pb-6 flex flex-wrap gap-3">
+					{talk.audioLink && (
+						<a
+							className="inline-flex items-center gap-2 rounded-full bg-gray-900 px-5 py-2.5 text-xs font-medium text-white transition hover:bg-gray-800 sm:text-sm"
+							href={talk.audioLink}
+							rel="noopener noreferrer"
+							target="_blank"
+						>
+							音声を聴く
+							<span aria-hidden>↗</span>
+						</a>
+					)}
+					{talk.attachmentsLink && (
+						<a
+							className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-5 py-2.5 text-xs font-medium text-gray-700 transition hover:bg-gray-50 sm:text-sm"
+							href={talk.attachmentsLink}
+							rel="noopener noreferrer"
+							target="_blank"
+						>
+							資料を見る
+							<span aria-hidden>↗</span>
+						</a>
+					)}
+				</div>
+			)}
+		</div>
 	);
 }

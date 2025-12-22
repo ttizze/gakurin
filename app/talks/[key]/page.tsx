@@ -1,11 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-	SAMPLE_TALK_DATA,
-	SAMPLE_TRANSCRIPTS,
-	SAMPLE_YOUTUBE_VIDEOS,
-} from "../../lib/sample-data";
+import { formatJapaneseDate } from "../../lib/date";
+import { getTalks } from "../../lib/talks";
 import { extractYouTubeVideoId } from "../../lib/youtube";
 
 type Props = {
@@ -15,63 +11,47 @@ type Props = {
 export default async function TalkDetailPage({ params }: Props) {
 	const { key } = await params;
 
-	// サンプルデータの情報を取得
-	const isSample = key in SAMPLE_YOUTUBE_VIDEOS;
-	if (!isSample) {
+	const talks = await getTalks();
+	const talk = talks.find((t) => t.key === key);
+
+	if (!talk) {
 		notFound();
 	}
 
-	const youtubeUrl =
-		SAMPLE_YOUTUBE_VIDEOS[key as keyof typeof SAMPLE_YOUTUBE_VIDEOS];
-	const videoId = extractYouTubeVideoId(youtubeUrl);
-	const embedUrl = videoId
-		? `https://www.youtube.com/embed/${videoId}`
-		: null;
-	const talkInfo = SAMPLE_TALK_DATA[key as keyof typeof SAMPLE_TALK_DATA];
+	const youtubeUrl = talk.youtubeLink || talk.audioLink;
+	const videoId = youtubeUrl ? extractYouTubeVideoId(youtubeUrl) : null;
+	const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+	const recordedOnRaw = talk.recordedOn || "日付不明";
 
 	const talkData = {
-		key,
-		title: talkInfo.title,
-		description: talkInfo.description,
-		event: "サンプル講演",
-		venue: "オンライン",
-		speaker: "サンプル講師",
-		duration: talkInfo.duration,
-		language: "日本語",
-		recordedOn: "日付不明",
+		key: talk.key,
+		title: talk.title || talk.description || talk.event || "タイトル未設定",
+		description: talk.description,
+		event: talk.event || "未分類",
+		venue: talk.venue || "—",
+		speaker: talk.speaker || "—",
+		duration: talk.duration || "—",
+		language: talk.language || "—",
+		recordedOn: formatJapaneseDate(talk.recordedOnDate, recordedOnRaw),
 		youtubeUrl,
 		embedUrl,
-		transcript: SAMPLE_TRANSCRIPTS[key] || "",
+		audioLink: talk.audioLink,
+		attachmentsLink: talk.attachmentsLink,
 	};
 
 	return (
 		<div className="min-h-screen bg-white text-gray-900">
-			<header className="relative w-full overflow-hidden">
-				<div className="absolute inset-0">
-					<Image
-						alt=""
-						className="object-cover object-center"
-						fill
-						priority
-						src="/gakurin-header-base.jpg"
-						unoptimized
-					/>
-				</div>
-				<div className="relative mx-auto max-w-4xl flex flex-col gap-4 px-6 py-8 sm:px-8">
+			<header className="mx-auto max-w-4xl px-6 py-8 sm:px-8">
+				<div className="flex items-center justify-between gap-4">
 					<Link
 						className="text-sm text-slate-600 hover:text-slate-800 transition"
 						href="/"
 					>
 						← トークギャラリーに戻る
 					</Link>
-					<div>
-						<span className="text-xs uppercase tracking-[0.3em] text-slate-600">
-							— EXPOSITION OF EARLY BUDDHISM IN MODERN TERMS —
-						</span>
-						<h1 className="mt-2 text-2xl font-semibold leading-tight text-slate-800 sm:text-3xl">
-							{talkData.title}
-						</h1>
-					</div>
+					<h1 className="text-2xl font-semibold leading-tight text-slate-800 sm:text-3xl text-right">
+						{talkData.title}
+					</h1>
 				</div>
 			</header>
 
@@ -133,8 +113,34 @@ export default async function TalkDetailPage({ params }: Props) {
 							</div>
 						)}
 
+						{(talkData.audioLink || talkData.attachmentsLink) && (
+							<div className="mt-6 pt-6 border-t border-gray-100 flex flex-wrap gap-3">
+								{talkData.audioLink && (
+									<a
+										className="inline-flex items-center gap-2 rounded-full bg-gray-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-gray-700"
+										href={talkData.audioLink}
+										rel="noopener noreferrer"
+										target="_blank"
+									>
+										音源を聞く
+										<span aria-hidden>↗</span>
+									</a>
+								)}
+								{talkData.attachmentsLink && (
+									<a
+										className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-blue-700"
+										href={talkData.attachmentsLink}
+										rel="noopener noreferrer"
+										target="_blank"
+									>
+										添付データ
+										<span aria-hidden>↗</span>
+									</a>
+								)}
+							</div>
+						)}
 						{talkData.youtubeUrl && (
-							<div className="mt-6 pt-6 border-t border-gray-100">
+							<div className="mt-6 pt-6 border-t border-gray-100 flex justify-end">
 								<a
 									className="inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-red-700"
 									href={talkData.youtubeUrl}
@@ -147,20 +153,6 @@ export default async function TalkDetailPage({ params }: Props) {
 							</div>
 						)}
 					</div>
-
-					{/* 全文文字起こし */}
-					{talkData.transcript && (
-						<div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-							<h2 className="mb-4 text-lg font-bold text-gray-900">
-								全文文字起こし
-							</h2>
-							<div className="prose prose-sm max-w-none">
-								<pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-gray-700">
-									{talkData.transcript}
-								</pre>
-							</div>
-						</div>
-					)}
 				</div>
 			</main>
 

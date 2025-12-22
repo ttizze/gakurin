@@ -10,7 +10,14 @@ export function extractYouTubeVideoId(url: string): string | null {
 		return shortMatch[1];
 	}
 
+	// https://www.youtube.com/embed/VIDEO_ID
+	const embedMatch = trimmed.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/);
+	if (embedMatch) {
+		return embedMatch[1];
+	}
+
 	// https://www.youtube.com/watch?v=VIDEO_ID または https://youtube.com/watch?v=VIDEO_ID
+	// https://m.youtube.com/watch?v=VIDEO_ID なども対応
 	const watchMatch = trimmed.match(/[?&]v=([a-zA-Z0-9_-]+)/);
 	if (watchMatch) {
 		return watchMatch[1];
