@@ -13,7 +13,7 @@ export default function TalkGallerySectionHeader({
 	searchTokens,
 }: Props) {
 	return (
-		<div className={isFirst ? "" : "pt-12"}>
+		<div className={`${isFirst ? "" : "pt-12"} bg-white px-6 sm:px-8`}>
 			<div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-gray-200 pb-3">
 				<h3 className="text-xl font-bold text-gray-900 sm:text-2xl">
 					{highlightMatches(section.label, searchTokens)}

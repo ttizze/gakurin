@@ -22,6 +22,8 @@ export type TalkForDisplay = {
 	recordedOnSortValue: number;
 	decadeLabel: string;
 	themeLabel: string;
+	summary: string;
+	summaryPreview: string;
 };
 
 export default async function Home() {
@@ -39,21 +41,21 @@ export default async function Home() {
 
 	return (
 		<div className="min-h-screen">
-			<Header />
+			<div className="mx-auto max-w-7xl">
+				<Header />
 
-			<div id="for-beginners">
-				<ForBeginnersSection />
-			</div>
-
-			<main className="mx-auto max-w-6xl px-6 py-12 sm:px-8">
-				<TalkGallery talks={talksForDisplay} />
-			</main>
-
-			<footer className="border-t border-gray-200 bg-gray-50">
-				<div className="mx-auto max-w-6xl px-6 py-6 text-center text-xs text-gray-500 sm:px-8">
-					© {new Date().getFullYear()} 初期仏教塾 — 初期仏教音声アーカイブ
+				<div id="for-beginners">
+					<ForBeginnersSection />
 				</div>
-			</footer>
+
+				<main className="px-6 py-12 sm:px-8">
+					<TalkGallery talks={talksForDisplay} />
+				</main>
+
+				<footer className="border-t border-gray-200 bg-gray-50 px-6 py-6 text-center text-xs text-gray-500 sm:px-8">
+					© {new Date().getFullYear()} 初期仏教塾 — 初期仏教音声アーカイブ
+				</footer>
+			</div>
 		</div>
 	);
 }

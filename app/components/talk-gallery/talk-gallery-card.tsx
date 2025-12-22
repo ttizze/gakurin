@@ -1,3 +1,4 @@
+import { Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { TalkForDisplay } from "../../page";
@@ -36,6 +37,11 @@ export default function TalkGalleryCard({ talk, searchTokens }: Props) {
 							{highlightMatches(talk.subtitle, searchTokens)}
 						</p>
 					)}
+					{talk.summaryPreview && (
+						<p className="mt-3 text-sm leading-relaxed text-gray-600">
+							{highlightMatches(talk.summaryPreview, searchTokens)}
+						</p>
+					)}
 				</div>
 			</Link>
 
@@ -55,8 +61,8 @@ export default function TalkGalleryCard({ talk, searchTokens }: Props) {
 						rel="noopener noreferrer"
 						target="_blank"
 					>
-						YouTubeで見る
-						<span aria-hidden>↗</span>
+						<Youtube className="h-4 w-4" />
+						<span>YouTube</span>
 					</a>
 				)}
 			</div>

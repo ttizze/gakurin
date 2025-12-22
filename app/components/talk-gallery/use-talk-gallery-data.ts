@@ -23,14 +23,26 @@ export function useTalkGalleryData(
 	const [columns, setColumns] = useState(1);
 
 	useEffect(() => {
-		const mediaQuery = window.matchMedia("(min-width: 640px)");
-		const updateColumns = () => setColumns(mediaQuery.matches ? 2 : 1);
+		const updateColumns = () => {
+			if (window.matchMedia("(min-width: 1024px)").matches) {
+				setColumns(3);
+			} else if (window.matchMedia("(min-width: 640px)").matches) {
+				setColumns(2);
+			} else {
+				setColumns(1);
+			}
+		};
+
+		const mediaQuerySm = window.matchMedia("(min-width: 640px)");
+		const mediaQueryLg = window.matchMedia("(min-width: 1024px)");
 
 		updateColumns();
-		mediaQuery.addEventListener("change", updateColumns);
+		mediaQuerySm.addEventListener("change", updateColumns);
+		mediaQueryLg.addEventListener("change", updateColumns);
 
 		return () => {
-			mediaQuery.removeEventListener("change", updateColumns);
+			mediaQuerySm.removeEventListener("change", updateColumns);
+			mediaQueryLg.removeEventListener("change", updateColumns);
 		};
 	}, []);
 

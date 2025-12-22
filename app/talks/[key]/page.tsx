@@ -1,3 +1,4 @@
+import { Youtube } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatJapaneseDate } from "../../lib/date";
@@ -27,6 +28,7 @@ export default async function TalkDetailPage({ params }: Props) {
 		key: talk.key,
 		title: talk.title || talk.description || talk.event || "タイトル未設定",
 		description: talk.description,
+		summary: talk.summary,
 		event: talk.event || "未分類",
 		venue: talk.venue || "—",
 		speaker: talk.speaker || "—",
@@ -112,6 +114,14 @@ export default async function TalkDetailPage({ params }: Props) {
 								</p>
 							</div>
 						)}
+						{talkData.summary && (
+							<div className="mt-6 pt-6 border-t border-gray-100">
+								<h3 className="mb-2 text-sm font-medium text-gray-700">概要</h3>
+								<p className="text-sm leading-relaxed text-gray-700 whitespace-pre-wrap">
+									{talkData.summary}
+								</p>
+							</div>
+						)}
 
 						{(talkData.audioLink || talkData.attachmentsLink) && (
 							<div className="mt-6 pt-6 border-t border-gray-100 flex flex-wrap gap-3">
@@ -147,8 +157,8 @@ export default async function TalkDetailPage({ params }: Props) {
 									rel="noopener noreferrer"
 									target="_blank"
 								>
-									YouTubeで見る
-									<span aria-hidden>↗</span>
+									<Youtube className="h-5 w-5" />
+									<span>YouTube</span>
 								</a>
 							</div>
 						)}

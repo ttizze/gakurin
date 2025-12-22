@@ -5,13 +5,7 @@ import { GroupedVirtuoso } from "react-virtuoso";
 import type { TalkForDisplay } from "../page";
 import TalkGalleryRow from "./talk-gallery/talk-gallery-row";
 import TalkGallerySectionHeader from "./talk-gallery/talk-gallery-section-header";
-import type { ViewMode } from "./talk-gallery/types";
 import { useTalkGalleryData } from "./talk-gallery/use-talk-gallery-data";
-
-const VIEW_MODES: { value: ViewMode; label: string }[] = [
-	{ value: "date", label: "年代順" },
-	{ value: "theme", label: "テーマ順" },
-];
 
 type Props = {
 	talks: TalkForDisplay[];
@@ -19,7 +13,6 @@ type Props = {
 
 export default function TalkGallery({ talks }: Props) {
 	const searchInputId = useId();
-	const [viewMode, setViewMode] = useState<ViewMode>("date");
 	const [searchQuery, setSearchQuery] = useState("");
 	const {
 		columns,
@@ -29,7 +22,7 @@ export default function TalkGallery({ talks }: Props) {
 		groupCounts,
 		flatRows,
 		searchTokens,
-	} = useTalkGalleryData(talks, viewMode, searchQuery);
+	} = useTalkGalleryData(talks, "date", searchQuery);
 
 	const hasActiveQuery = searchQuery.trim().length > 0;
 	const totalMatched = filteredTalks.length;
@@ -45,31 +38,6 @@ export default function TalkGallery({ talks }: Props) {
 	return (
 		<div className="flex flex-col gap-10">
 			<div className="flex flex-col gap-6">
-				<div className="flex flex-wrap items-center justify-between gap-4">
-					<h2 className="text-sm font-medium tracking-wide text-gray-700 uppercase">
-						並び替え
-					</h2>
-					<div className="inline-flex overflow-hidden rounded-full border border-gray-300 bg-white p-1">
-						{VIEW_MODES.map((mode) => {
-							const isActive = viewMode === mode.value;
-							return (
-								<button
-									aria-pressed={isActive}
-									className={`rounded-full px-5 py-2 text-sm font-medium transition ${
-										isActive
-											? "bg-gray-900 text-white"
-											: "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-									}`}
-									key={mode.value}
-									onClick={() => setViewMode(mode.value)}
-									type="button"
-								>
-									{mode.label}
-								</button>
-							);
-						})}
-					</div>
-				</div>
 				<div className="flex flex-col gap-2">
 					<label
 						className="text-xs font-medium uppercase tracking-wide text-gray-500"

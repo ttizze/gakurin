@@ -21,19 +21,19 @@ export default function ForBeginnersSection() {
 	}, []);
 
 	return (
-		<section className=" bg-slate-300 ">
-			<div className=" mx-auto max-w-6xl  py-3">
+		<section className="bg-amber-50">
+			<div className="mx-auto max-w-7xl py-3">
 				<button
 					aria-expanded={isOpen}
-					className="flex w-full items-center justify-center gap-2 text-center transition"
+					className="flex w-full items-center justify-center gap-2 text-center transition cursor-pointer"
 					data-for-beginners-toggle
 					onClick={() => setIsOpen(!isOpen)}
 					type="button"
 				>
-					<h2 className="text-slate-800">初めての方へ</h2>
-					<div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-500">
+					<h2 className="text-amber-900">初めての方へ</h2>
+					<div className="flex h-6 w-6 items-center justify-center rounded-full bg-amber-700">
 						<ChevronDown
-							className={`h-4 w-4 text-slate-200 transition-transform ${
+							className={`h-4 w-4 text-amber-50 transition-transform ${
 								isOpen ? "rotate-180" : ""
 							}`}
 						/>
@@ -41,8 +41,8 @@ export default function ForBeginnersSection() {
 				</button>
 			</div>
 			{isOpen && (
-				<div className="text-sm leading-relaxed py-10 text-slate-700 bg-slate-100 sm:text-base">
-					<div className="mx-auto max-w-6xl">
+				<div className="text-sm leading-relaxed py-10 text-amber-900 bg-amber-50 sm:text-base">
+					<div className="mx-auto max-w-7xl">
 						<p>
 							「仏教」と聞くと「宗教でしょ？」と感じる方もいらっしゃるかもしれません。しかし、2500年以上前にお釈迦様が説かれた教えは、「自分で確かめる」「権威ある人から言われたことでも盲信しない」という、いわゆる宗教とはほど遠い、理性的で現代的な教えです。
 						</p>

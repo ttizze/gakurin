@@ -17,6 +17,7 @@ export type Talk = {
 	audioLink: string | null;
 	attachmentsLink: string | null;
 	youtubeLink: string | null;
+	summary: string;
 };
 
 function splitCSVLine(line: string): string[] {
@@ -207,6 +208,7 @@ function parseCSVToTalks(text: string): Talk[] {
 				getValueFromHeaders(cells, ["YouTube", "YouTubeリンク", "youtube"]) ||
 				(cells[12] ? cells[12].trim() : ""), // m列（13列目、0-indexedで12）を直接取得
 			),
+			summary: getValue(cells, "概要") || (cells[8] ? cells[8].trim() : ""), // I列（9列目、0-indexedで8）を直接取得
 		};
 
 		talks.push(talk);
