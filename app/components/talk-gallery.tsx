@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { GroupedVirtuoso } from "react-virtuoso";
 import type { TalkForDisplay } from "../page";
 import TalkGalleryRow from "./talk-gallery/talk-gallery-row";
@@ -10,6 +10,9 @@ import { useTalkGalleryData } from "./talk-gallery/use-talk-gallery-data";
 type Props = {
 	talks: TalkForDisplay[];
 };
+
+const SCROLL_Y_STORAGE_KEY = "talkGallery:scrollY";
+const SHOULD_RESTORE_STORAGE_KEY = "talkGallery:restore";
 
 export default function TalkGallery({ talks }: Props) {
 	const searchInputId = useId();
@@ -23,6 +26,38 @@ export default function TalkGallery({ talks }: Props) {
 		flatRows,
 		searchTokens,
 	} = useTalkGalleryData(talks, "date", searchQuery);
+
+	useEffect(() => {
+		try {
+			const shouldRestore =
+				sessionStorage.getItem(SHOULD_RESTORE_STORAGE_KEY) === "1";
+
+			if (shouldRestore) {
+				const storedScrollY = sessionStorage.getItem(SCROLL_Y_STORAGE_KEY);
+				const scrollY = storedScrollY ? Number.parseInt(storedScrollY, 10) : 0;
+
+				if (Number.isFinite(scrollY) && scrollY > 0) {
+					requestAnimationFrame(() => {
+						requestAnimationFrame(() => {
+							window.scrollTo({ top: scrollY, left: 0, behavior: "auto" });
+						});
+					});
+				}
+
+				sessionStorage.removeItem(SHOULD_RESTORE_STORAGE_KEY);
+			}
+		} catch {
+			// Ignore storage failures (private mode, blocked storage, etc).
+		}
+
+		return () => {
+			try {
+				sessionStorage.setItem(SCROLL_Y_STORAGE_KEY, String(window.scrollY));
+			} catch {
+				// Ignore storage failures (private mode, blocked storage, etc).
+			}
+		};
+	}, []);
 
 	const hasActiveQuery = searchQuery.trim().length > 0;
 	const totalMatched = filteredTalks.length;
