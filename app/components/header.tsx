@@ -8,7 +8,7 @@ export default function Header() {
 				<div className="flex items-center justify-between gap-2 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:gap-4">
 					<div aria-hidden className="hidden sm:block" />
 
-					<div className="flex-shrink-0 sm:justify-self-center">
+					<div className="shrink-0 sm:justify-self-center">
 						<div className="sm:hidden">
 							<Image
 								alt="初期仏教塾"
@@ -33,7 +33,7 @@ export default function Header() {
 						</div>
 					</div>
 
-					<div className="flex-shrink-0 sm:justify-self-end">
+					<div className="shrink-0 sm:justify-self-end">
 						<div className="sm:hidden">
 							<Image
 								alt="スマナサーラ長老の珠玉の法話で学ぶ"
