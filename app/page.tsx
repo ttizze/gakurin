@@ -41,13 +41,12 @@ export default async function Home() {
 
 	return (
 		<div className="min-h-screen">
+			<Header />
+			<div id="for-beginners">
+				<ForBeginnersSection />
+			</div>
+
 			<div className="mx-auto max-w-7xl">
-				<Header />
-
-				<div id="for-beginners">
-					<ForBeginnersSection />
-				</div>
-
 				<main className="px-6 py-12 sm:px-8">
 					<TalkGallery talks={talksForDisplay} />
 				</main>

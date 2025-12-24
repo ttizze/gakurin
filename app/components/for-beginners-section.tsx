@@ -22,7 +22,7 @@ export default function ForBeginnersSection() {
 
 	return (
 		<section className="bg-amber-50">
-			<div className="mx-auto max-w-7xl py-3">
+			<div className="mx-auto max-w-7xl px-6 py-3 sm:px-8">
 				<button
 					aria-expanded={isOpen}
 					className="flex w-full items-center justify-center gap-2 text-center transition cursor-pointer"
