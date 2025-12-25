@@ -12,6 +12,7 @@
 		"biome": "biome check --write"
 	},
 	"dependencies": {
+		"@next/third-parties": "^16.1.1",
 		"babel-plugin-react-compiler": "^1.0.0",
 		"lucide-react": "^0.562.0",
 		"next": "16.1.1",
