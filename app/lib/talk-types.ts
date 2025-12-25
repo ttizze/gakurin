@@ -1,5 +1,6 @@
 export type Talk = {
 	id: string;
+	dvdId: string;
 	folder: string;
 	event: string;
 	venue: string;

@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { normalizeTalkId } from "./talk-id";
 import type { Talk } from "./talk-types";
 
@@ -81,6 +82,22 @@ function sanitizeLink(value: string): string | null {
 		return null;
 	}
 	return trimmed;
+}
+
+function normalizeFingerprintPart(value: string): string {
+	return value
+		.replace(/\uFEFF/g, "")
+		.normalize("NFKC")
+		.replace(/\s+/g, " ")
+		.trim();
+}
+
+function hashTalkKey(fingerprint: string): string {
+	return createHash("sha256")
+		.update(fingerprint, "utf8")
+		.digest("hex")
+		.slice(0, 12)
+		.toUpperCase();
 }
 
 // CSVテキストを行に分割（引用符内の改行を考慮）
@@ -215,7 +232,7 @@ export function parseCSVToTalks(text: string): Talk[] {
 				? `${recordedOn1} / ${recordedOn2}`
 				: recordedOn1 || recordedOn2 || recordedOnSingle;
 
-		// IDフィールドの取得（ヘッダー名のバリエーションに対応）
+		// IDフィールドは「DVD番号」想定（URLの主キーには使わない）
 		const idRaw = getValueFromHeaders(cells, [
 			"ID",
 			"id",
@@ -223,51 +240,83 @@ export function parseCSVToTalks(text: string): Talk[] {
 			"ＩＤ",
 			"ｉｄ",
 		]);
-		const id = idRaw ? normalizeTalkId(idRaw) : "";
-		const baseId = id || `${i}-${event || "event"}-${recordedOn || "date"}`;
+		const dvdId = idRaw ? normalizeTalkId(idRaw) : "";
 
-		// 重複キーを防ぐ
-		let uniqueId = baseId;
+		const venue = getValue(cells, "収録場所");
+		const duration = getValue(cells, "収録時間");
+		const speaker = getValue(cells, "講師");
+		const language = getValue(cells, "言語");
+		const format = getValueFromHeaders(cells, [
+			"音声フォーマット",
+			"ファイルのフォーマット",
+		]);
+		const audioLink = sanitizeLink(
+			getValueFromHeaders(cells, ["リンク", "音源リンク"]),
+		);
+		const attachmentsLink = sanitizeLink(
+			getValueFromHeaders(cells, [
+				"添付データ（スライド、サマリー等）",
+				"添付データ",
+			]),
+		);
+		const youtubeLink = sanitizeLink(
+			getValueFromHeaders(cells, ["YouTube", "YouTubeリンク", "youtube"]) ||
+				(cells[12] ? cells[12].trim() : ""),
+		);
+		const summary =
+			getValue(cells, "概要") || (cells[8] ? cells[8].trim() : "");
+
+		const fingerprint = [
+			`dvdId:${dvdId}`,
+			`event:${event}`,
+			`title:${title}`,
+			`description:${description}`,
+			`recordedOn:${recordedOn}`,
+			`venue:${venue}`,
+			`speaker:${speaker}`,
+			`duration:${duration}`,
+			`language:${language}`,
+			`format:${format}`,
+			`audioLink:${audioLink ?? ""}`,
+			`attachmentsLink:${attachmentsLink ?? ""}`,
+			`youtubeLink:${youtubeLink ?? ""}`,
+			`summary:${summary}`,
+		]
+			.map(normalizeFingerprintPart)
+			.join("\n");
+
+		const hash = hashTalkKey(fingerprint);
+		const baseTalkId = dvdId ? `TALK-${dvdId}-${hash}` : `TALK-${hash}`;
+
+		let uniqueId = baseTalkId;
 		let suffix = 1;
 		while (usedIds.has(uniqueId)) {
-			uniqueId = `${baseId}-${suffix}`;
+			uniqueId = `${baseTalkId}-${suffix}`;
 			suffix += 1;
 		}
 		usedIds.add(uniqueId);
 
 		const talk: Talk = {
 			id: uniqueId,
+			dvdId,
 			folder: getValueFromHeaders(cells, ["Dropboxフォルダー名"]),
 			event,
-			venue: getValue(cells, "収録場所"),
+			venue,
 			recordedOn,
 			recordedOnDate:
 				parseDate(recordedOn1 || recordedOnSingle) ||
 				parseDate(recordedOn2) ||
 				null,
-			duration: getValue(cells, "収録時間"),
+			duration,
 			title,
 			description,
-			speaker: getValue(cells, "講師"),
-			language: getValue(cells, "言語"),
-			format: getValueFromHeaders(cells, [
-				"音声フォーマット",
-				"ファイルのフォーマット",
-			]),
-			audioLink: sanitizeLink(
-				getValueFromHeaders(cells, ["リンク", "音源リンク"]),
-			),
-			attachmentsLink: sanitizeLink(
-				getValueFromHeaders(cells, [
-					"添付データ（スライド、サマリー等）",
-					"添付データ",
-				]),
-			),
-			youtubeLink: sanitizeLink(
-				getValueFromHeaders(cells, ["YouTube", "YouTubeリンク", "youtube"]) ||
-					(cells[12] ? cells[12].trim() : ""), // m列（13列目、0-indexedで12）を直接取得
-			),
-			summary: getValue(cells, "概要") || (cells[8] ? cells[8].trim() : ""), // I列（9列目、0-indexedで8）を直接取得
+			speaker,
+			language,
+			format,
+			audioLink,
+			attachmentsLink,
+			youtubeLink,
+			summary,
 		};
 
 		talks.push(talk);

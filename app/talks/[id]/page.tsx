@@ -49,6 +49,7 @@ export default async function TalkDetailPage({ params }: Props) {
 
 	const talkData = {
 		id: talk.id,
+		dvdId: talk.dvdId,
 		title: talk.title || talk.description || talk.event || "タイトル未設定",
 		description: talk.description,
 		summary: talk.summary,
@@ -68,9 +69,7 @@ export default async function TalkDetailPage({ params }: Props) {
 		<div className="min-h-screen bg-white text-gray-900">
 			<header className="bg-amber-50 px-6 py-8 sm:px-8">
 				<div className="mx-auto max-w-4xl">
-					<BackToGalleryLink
-						className="text-sm text-slate-600 hover:text-slate-800 transition"
-					>
+					<BackToGalleryLink className="text-sm text-slate-600 hover:text-slate-800 transition">
 						← トークギャラリーに戻る
 					</BackToGalleryLink>
 				</div>
@@ -95,8 +94,10 @@ export default async function TalkDetailPage({ params }: Props) {
 					<div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
 						<dl className="space-y-4 text-sm">
 							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
-								<dt className="font-medium text-gray-700">ID</dt>
-								<dd className="text-right text-gray-600">{talkData.id}</dd>
+								<dt className="font-medium text-gray-700">DVD番号</dt>
+								<dd className="text-right text-gray-600">
+									{talkData.dvdId || "—"}
+								</dd>
 							</div>
 							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
 								<dt className="font-medium text-gray-700">タイトル</dt>

@@ -15,11 +15,11 @@ export default function BackToGalleryLink({ className, children }: Props) {
 		<Link
 			className={className}
 			href="/"
-			scroll={false}
 			onClick={(event) => {
 				if (event.defaultPrevented) return;
 				if (event.button !== 0) return;
-				if (event.metaKey || event.altKey || event.ctrlKey || event.shiftKey) return;
+				if (event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)
+					return;
 
 				try {
 					const referrer = document.referrer;
@@ -33,9 +33,9 @@ export default function BackToGalleryLink({ className, children }: Props) {
 					// Fall back to normal navigation.
 				}
 			}}
+			scroll={false}
 		>
 			{children}
 		</Link>
 	);
 }
-

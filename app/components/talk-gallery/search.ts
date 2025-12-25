@@ -8,6 +8,7 @@ function normalizeForSearch(value: string): string {
 function buildSearchText(talk: TalkForDisplay): string {
 	return normalizeForSearch(
 		[
+			talk.dvdId,
 			talk.title,
 			talk.subtitle,
 			talk.event,

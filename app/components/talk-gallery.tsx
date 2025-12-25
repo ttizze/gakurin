@@ -1,8 +1,8 @@
 "use client";
 
 import { useId, useMemo, useRef, useState } from "react";
-import { GroupedVirtuoso } from "react-virtuoso";
 import type { GroupedVirtuosoHandle, StateSnapshot } from "react-virtuoso";
+import { GroupedVirtuoso } from "react-virtuoso";
 import type { TalkForDisplay } from "../page";
 import TalkGalleryRow from "./talk-gallery/talk-gallery-row";
 import TalkGallerySectionHeader from "./talk-gallery/talk-gallery-section-header";

@@ -47,6 +47,7 @@ export function transformTalkToDisplay(
 
 	return {
 		id: talk.id || `talk-${index}`,
+		dvdId: talk.dvdId || "",
 		event: talk.event || "未分類",
 		title: displayTitle,
 		subtitle,

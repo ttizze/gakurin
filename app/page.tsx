@@ -6,6 +6,7 @@ import { getTalks } from "./lib/talks";
 
 export type TalkForDisplay = {
 	id: string;
+	dvdId: string;
 	event: string;
 	title: string;
 	subtitle: string;
