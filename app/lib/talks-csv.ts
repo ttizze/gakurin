@@ -1,5 +1,5 @@
-import type { Talk } from "./talk-types";
 import { normalizeTalkId } from "./talk-id";
+import type { Talk } from "./talk-types";
 
 export const SHEET_URL =
 	"https://docs.google.com/spreadsheets/d/1QMyakqH1i-W_bbK3yJl7u_Q_Jb_AoM94W6F8Gg3y3CA/export?format=csv&gid=909287277";
@@ -216,7 +216,13 @@ export function parseCSVToTalks(text: string): Talk[] {
 				: recordedOn1 || recordedOn2 || recordedOnSingle;
 
 		// IDフィールドの取得（ヘッダー名のバリエーションに対応）
-		const idRaw = getValueFromHeaders(cells, ["ID", "id", "Id", "ＩＤ", "ｉｄ"]);
+		const idRaw = getValueFromHeaders(cells, [
+			"ID",
+			"id",
+			"Id",
+			"ＩＤ",
+			"ｉｄ",
+		]);
 		const id = idRaw ? normalizeTalkId(idRaw) : "";
 		const baseId = id || `${i}-${event || "event"}-${recordedOn || "date"}`;
 

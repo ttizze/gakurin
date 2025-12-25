@@ -1,11 +1,11 @@
 import type { TalkForDisplay } from "../../page";
 import type { IndexedTalk } from "./types";
 
-export function normalizeForSearch(value: string): string {
+function normalizeForSearch(value: string): string {
 	return value.normalize("NFKC").toLowerCase().replace(/\s+/g, " ").trim();
 }
 
-export function buildSearchText(talk: TalkForDisplay): string {
+function buildSearchText(talk: TalkForDisplay): string {
 	return normalizeForSearch(
 		[
 			talk.title,
@@ -45,7 +45,7 @@ export function tokenizeSearchQuery(query: string): string[] {
 	return normalized.split(" ").filter(Boolean);
 }
 
-export function fuzzyMatch(source: string, query: string): boolean {
+function fuzzyMatch(source: string, query: string): boolean {
 	if (!query) {
 		return true;
 	}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
+import ScrollRestoration from "./components/scroll-restoration";
 import "./globals.css";
 
 const inter = Inter({
@@ -11,7 +12,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
 	title: "初期仏教塾",
-	description: "初期仏教の法話を静かに味わうアーカイブ",
+	description: "スマナサーラ長老の珠玉の法話で学ぶ。",
 };
 
 export default function RootLayout({
@@ -28,6 +29,7 @@ export default function RootLayout({
 					height={3}
 					showSpinner={false}
 				/>
+				<ScrollRestoration />
 				{children}
 			</body>
 		</html>

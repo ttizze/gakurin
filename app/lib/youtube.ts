@@ -26,7 +26,7 @@ export function extractYouTubeVideoId(url: string): string | null {
 	return null;
 }
 
-export function getYouTubeThumbnailUrl(videoId: string): string {
+function getYouTubeThumbnailUrl(videoId: string): string {
 	return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 }
 

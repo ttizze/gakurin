@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
-import { SHEET_URL, parseCSVToTalks } from "../app/lib/talks-csv";
 import type { Talk } from "../app/lib/talk-types";
+import { parseCSVToTalks, SHEET_URL } from "../app/lib/talks-csv";
 
 type SerializedTalk = Omit<Talk, "recordedOnDate"> & {
 	recordedOnDate: string | null;
@@ -32,10 +32,13 @@ async function main() {
 
 	const outPath = resolve(process.cwd(), "app/generated/talks.json");
 	await mkdir(dirname(outPath), { recursive: true });
-	await writeFile(outPath, `${JSON.stringify(serialized, null, "\t")}\n`, "utf8");
+	await writeFile(
+		outPath,
+		`${JSON.stringify(serialized, null, "\t")}\n`,
+		"utf8",
+	);
 
 	console.log(`Wrote ${serialized.length} talks to ${outPath}`);
 }
 
 await main();
-

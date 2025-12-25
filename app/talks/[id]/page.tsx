@@ -1,7 +1,7 @@
 import { ExternalLink, Youtube } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import BackToGalleryLink from "../../components/back-to-gallery-link";
 import { formatJapaneseDate } from "../../lib/date";
 import { getTalkById } from "../../lib/talks";
 import { extractYouTubeVideoId } from "../../lib/youtube";
@@ -68,12 +68,11 @@ export default async function TalkDetailPage({ params }: Props) {
 		<div className="min-h-screen bg-white text-gray-900">
 			<header className="bg-amber-50 px-6 py-8 sm:px-8">
 				<div className="mx-auto max-w-4xl">
-					<Link
+					<BackToGalleryLink
 						className="text-sm text-slate-600 hover:text-slate-800 transition"
-						href="/"
 					>
 						← トークギャラリーに戻る
-					</Link>
+					</BackToGalleryLink>
 				</div>
 			</header>
 

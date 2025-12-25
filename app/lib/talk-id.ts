@@ -6,4 +6,3 @@ export function normalizeTalkId(value: string): string {
 		.replace(/\s+/g, "")
 		.toUpperCase();
 }
-

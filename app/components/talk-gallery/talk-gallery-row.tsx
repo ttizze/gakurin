@@ -6,6 +6,7 @@ type Props = {
 	isFirstRow: boolean;
 	columns: number;
 	searchTokens: string[];
+	onNavigateToTalk: () => void;
 };
 
 export default function TalkGalleryRow({
@@ -13,6 +14,7 @@ export default function TalkGalleryRow({
 	isFirstRow,
 	columns,
 	searchTokens,
+	onNavigateToTalk,
 }: Props) {
 	const gridClass =
 		columns === 3
@@ -27,6 +29,7 @@ export default function TalkGalleryRow({
 				{talks.map((talk) => (
 					<TalkGalleryCard
 						key={talk.id}
+						onNavigateToTalk={onNavigateToTalk}
 						searchTokens={searchTokens}
 						talk={talk}
 					/>

@@ -8,7 +8,7 @@ import {
 import { createIndexedTalks, filterTalks, tokenizeSearchQuery } from "./search";
 import type { GroupedSection, IndexedTalk, ViewMode } from "./types";
 
-export type TalkGalleryVirtualRow = {
+type TalkGalleryVirtualRow = {
 	section: GroupedSection;
 	groupIndex: number;
 	rowIndex: number;

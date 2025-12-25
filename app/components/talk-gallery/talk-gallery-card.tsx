@@ -7,28 +7,20 @@ import { highlightMatches } from "./highlight";
 type Props = {
 	talk: TalkForDisplay;
 	searchTokens: string[];
+	onNavigateToTalk: () => void;
 };
 
-const SCROLL_Y_STORAGE_KEY = "talkGallery:scrollY";
-const SHOULD_RESTORE_STORAGE_KEY = "talkGallery:restore";
-
-export default function TalkGalleryCard({ talk, searchTokens }: Props) {
+export default function TalkGalleryCard({
+	talk,
+	searchTokens,
+	onNavigateToTalk,
+}: Props) {
 	return (
 		<div className="flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm transition duration-200 ease-out hover:shadow-md overflow-hidden">
 			<Link
 				className="group flex flex-col flex-1"
 				href={`/talks/${encodeURIComponent(talk.id)}`}
-				onClick={() => {
-					try {
-						sessionStorage.setItem(
-							SCROLL_Y_STORAGE_KEY,
-							String(window.scrollY),
-						);
-						sessionStorage.setItem(SHOULD_RESTORE_STORAGE_KEY, "1");
-					} catch {
-						// Ignore storage failures (private mode, blocked storage, etc).
-					}
-				}}
+				onClick={onNavigateToTalk}
 			>
 				{/* 上半分: サムネイル */}
 				{talk.thumbnailUrl && (

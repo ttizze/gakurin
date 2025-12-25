@@ -16,4 +16,3 @@ export type Talk = {
 	youtubeLink: string | null;
 	summary: string;
 };
-

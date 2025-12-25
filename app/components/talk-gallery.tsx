@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import { GroupedVirtuoso } from "react-virtuoso";
+import type { GroupedVirtuosoHandle, StateSnapshot } from "react-virtuoso";
 import type { TalkForDisplay } from "../page";
 import TalkGalleryRow from "./talk-gallery/talk-gallery-row";
 import TalkGallerySectionHeader from "./talk-gallery/talk-gallery-section-header";
@@ -11,12 +12,42 @@ type Props = {
 	talks: TalkForDisplay[];
 };
 
-const SCROLL_Y_STORAGE_KEY = "talkGallery:scrollY";
-const SHOULD_RESTORE_STORAGE_KEY = "talkGallery:restore";
+const VIRTUOSO_STATE_KEY = "talkGallery:virtuosoState:v1";
+const RESTORE_PENDING_KEY = "talkGallery:restorePending:v1";
+const SEARCH_QUERY_KEY = "talkGallery:searchQuery:v1";
+
+function readAndConsumeRestoreSnapshot(): StateSnapshot | undefined {
+	try {
+		const pending = sessionStorage.getItem(RESTORE_PENDING_KEY) === "1";
+		if (!pending) return undefined;
+
+		sessionStorage.removeItem(RESTORE_PENDING_KEY);
+
+		const raw = sessionStorage.getItem(VIRTUOSO_STATE_KEY);
+		sessionStorage.removeItem(VIRTUOSO_STATE_KEY);
+		if (!raw) return undefined;
+
+		return JSON.parse(raw) as StateSnapshot;
+	} catch {
+		return undefined;
+	}
+}
+
+function readStoredSearchQuery(): string {
+	try {
+		return sessionStorage.getItem(SEARCH_QUERY_KEY) ?? "";
+	} catch {
+		return "";
+	}
+}
 
 export default function TalkGallery({ talks }: Props) {
 	const searchInputId = useId();
-	const [searchQuery, setSearchQuery] = useState("");
+	const virtuosoRef = useRef<GroupedVirtuosoHandle>(null);
+
+	const [searchQuery, setSearchQuery] = useState(() => readStoredSearchQuery());
+	const restoreStateFrom = useMemo(() => readAndConsumeRestoreSnapshot(), []);
+
 	const {
 		columns,
 		filteredTalks,
@@ -27,37 +58,22 @@ export default function TalkGallery({ talks }: Props) {
 		searchTokens,
 	} = useTalkGalleryData(talks, "date", searchQuery);
 
-	useEffect(() => {
+	const handleNavigateToTalk = () => {
 		try {
-			const shouldRestore =
-				sessionStorage.getItem(SHOULD_RESTORE_STORAGE_KEY) === "1";
-
-			if (shouldRestore) {
-				const storedScrollY = sessionStorage.getItem(SCROLL_Y_STORAGE_KEY);
-				const scrollY = storedScrollY ? Number.parseInt(storedScrollY, 10) : 0;
-
-				if (Number.isFinite(scrollY) && scrollY > 0) {
-					requestAnimationFrame(() => {
-						requestAnimationFrame(() => {
-							window.scrollTo({ top: scrollY, left: 0, behavior: "auto" });
-						});
-					});
-				}
-
-				sessionStorage.removeItem(SHOULD_RESTORE_STORAGE_KEY);
-			}
+			sessionStorage.setItem(RESTORE_PENDING_KEY, "1");
+			sessionStorage.setItem(SEARCH_QUERY_KEY, searchQuery);
 		} catch {
-			// Ignore storage failures (private mode, blocked storage, etc).
+			// Ignore storage failures.
 		}
 
-		return () => {
+		virtuosoRef.current?.getState((snapshot) => {
 			try {
-				sessionStorage.setItem(SCROLL_Y_STORAGE_KEY, String(window.scrollY));
+				sessionStorage.setItem(VIRTUOSO_STATE_KEY, JSON.stringify(snapshot));
 			} catch {
-				// Ignore storage failures (private mode, blocked storage, etc).
+				// Ignore storage failures.
 			}
-		};
-	}, []);
+		});
+	};
 
 	const hasActiveQuery = searchQuery.trim().length > 0;
 	const totalMatched = filteredTalks.length;
@@ -84,7 +100,15 @@ export default function TalkGallery({ talks }: Props) {
 						<input
 							className="w-full rounded-lg border border-gray-300 bg-white py-2.5 px-4 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10"
 							id={searchInputId}
-							onChange={(event) => setSearchQuery(event.target.value)}
+							onChange={(event) => {
+								const next = event.target.value;
+								setSearchQuery(next);
+								try {
+									sessionStorage.setItem(SEARCH_QUERY_KEY, next);
+								} catch {
+									// Ignore storage failures.
+								}
+							}}
 							placeholder="キーワードで検索"
 							type="search"
 							value={searchQuery}
@@ -139,11 +163,14 @@ export default function TalkGallery({ talks }: Props) {
 							<TalkGalleryRow
 								columns={columns}
 								isFirstRow={row.rowIndex === 0}
+								onNavigateToTalk={handleNavigateToTalk}
 								searchTokens={searchTokens}
 								talks={row.talks}
 							/>
 						);
 					}}
+					ref={virtuosoRef}
+					restoreStateFrom={restoreStateFrom}
 					useWindowScroll
 				/>
 			)}
