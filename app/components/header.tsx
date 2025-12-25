@@ -4,7 +4,7 @@ export default function Header() {
 	return (
 		<header className="w-full">
 			{/* 1段目：ロゴ（中央）＋キャッチ（右） */}
-			<div className="mx-auto w-full max-w-7xl flex-none px-6 pt-6 sm:px-8 sm:pt-8">
+			<div className="w-full flex-none px-6 pt-6 sm:px-8 sm:pt-8">
 				<div className="flex items-center justify-between gap-2 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:gap-4">
 					<div aria-hidden className="hidden sm:block" />
 
@@ -23,10 +23,10 @@ export default function Header() {
 						<div className="hidden sm:block">
 							<Image
 								alt="初期仏教塾"
-								className="h-auto w-[360px]"
+								className="h-auto w-[260px]"
 								height={206}
 								priority
-								sizes="360px"
+								sizes="260px"
 								src="/logo_pc.png"
 								width={536}
 							/>
