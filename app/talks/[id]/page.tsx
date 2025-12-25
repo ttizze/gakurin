@@ -3,17 +3,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatJapaneseDate } from "../../lib/date";
-import { getTalks } from "../../lib/talks";
+import { getTalkById } from "../../lib/talks";
 import { extractYouTubeVideoId } from "../../lib/youtube";
 
 type Props = {
-	params: Promise<{ key: string }>;
+	params: Promise<{ id: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-	const { key } = await params;
-	const talks = await getTalks();
-	const talk = talks.find((t) => t.key === key);
+	const { id } = await params;
+	const talk = await getTalkById(id);
 
 	if (!talk) {
 		return {
@@ -35,10 +34,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function TalkDetailPage({ params }: Props) {
-	const { key } = await params;
+	const { id } = await params;
 
-	const talks = await getTalks();
-	const talk = talks.find((t) => t.key === key);
+	const talk = await getTalkById(id);
 
 	if (!talk) {
 		notFound();
@@ -50,7 +48,7 @@ export default async function TalkDetailPage({ params }: Props) {
 	const recordedOnRaw = talk.recordedOn || "日付不明";
 
 	const talkData = {
-		key: talk.key,
+		id: talk.id,
 		title: talk.title || talk.description || talk.event || "タイトル未設定",
 		description: talk.description,
 		summary: talk.summary,
@@ -97,6 +95,10 @@ export default async function TalkDetailPage({ params }: Props) {
 					{/* データ情報 */}
 					<div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
 						<dl className="space-y-4 text-sm">
+							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
+								<dt className="font-medium text-gray-700">ID</dt>
+								<dd className="text-right text-gray-600">{talkData.id}</dd>
+							</div>
 							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
 								<dt className="font-medium text-gray-700">タイトル</dt>
 								<dd className="text-right text-gray-600">{talkData.title}</dd>

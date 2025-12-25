@@ -1,6 +1,6 @@
 import type { TalkForDisplay } from "../page";
 import { formatJapaneseDate } from "./date";
-import type { Talk } from "./talks";
+import type { Talk } from "./talk-types";
 import { getYouTubeInfo } from "./youtube";
 
 // 改行文字をスペースに置き換えて連結する
@@ -46,7 +46,7 @@ export function transformTalkToDisplay(
 		summary.length > 100 ? `${summary.slice(0, 100)}...` : summary;
 
 	return {
-		key: talk.key || `talk-${index}`,
+		id: talk.id || `talk-${index}`,
 		event: talk.event || "未分類",
 		title: displayTitle,
 		subtitle,

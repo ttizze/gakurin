@@ -26,7 +26,7 @@ export default function TalkGalleryRow({
 			<div className={`grid gap-8 ${gridClass}`}>
 				{talks.map((talk) => (
 					<TalkGalleryCard
-						key={talk.key}
+						key={talk.id}
 						searchTokens={searchTokens}
 						talk={talk}
 					/>

@@ -4,6 +4,8 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
+		"generate-talks": "bun run scripts/generate-talks-json.ts",
+		"prebuild": "bun run generate-talks",
 		"build": "next build",
 		"start": "next start",
 		"lint": "eslint",

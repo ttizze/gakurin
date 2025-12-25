@@ -5,7 +5,7 @@ import { transformTalkToDisplay } from "./lib/talk-transform";
 import { getTalks } from "./lib/talks";
 
 export type TalkForDisplay = {
-	key: string;
+	id: string;
 	event: string;
 	title: string;
 	subtitle: string;

@@ -17,7 +17,7 @@ export default function TalkGalleryCard({ talk, searchTokens }: Props) {
 		<div className="flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm transition duration-200 ease-out hover:shadow-md overflow-hidden">
 			<Link
 				className="group flex flex-col flex-1"
-				href={`/talks/${talk.key}`}
+				href={`/talks/${encodeURIComponent(talk.id)}`}
 				onClick={() => {
 					try {
 						sessionStorage.setItem(
