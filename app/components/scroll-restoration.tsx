@@ -1,7 +1,7 @@
 "use client";
 
-import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
 
 type ScrollPositions = Record<string, number>;
 
@@ -67,12 +67,7 @@ function attemptRestoreScroll(targetY: number) {
 
 export default function ScrollRestoration() {
 	const pathname = usePathname();
-	const searchParams = useSearchParams();
-
-	const key = useMemo(() => {
-		const query = searchParams?.toString();
-		return query ? `${pathname}?${query}` : pathname;
-	}, [pathname, searchParams]);
+	const key = pathname;
 
 	const currentKeyRef = useRef<string>(key);
 	const scrollYRef = useRef(0);
