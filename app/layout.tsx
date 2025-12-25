@@ -13,6 +13,9 @@ const inter = Inter({
 export const metadata: Metadata = {
 	title: "初期仏教塾",
 	description: "スマナサーラ長老の珠玉の法話で学ぶ。",
+	icons: {
+		icon: [{ url: "/jtba-mark.png", type: "image/png" }],
+	},
 };
 
 export default function RootLayout({
