@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 import ScrollRestoration from "./components/scroll-restoration";

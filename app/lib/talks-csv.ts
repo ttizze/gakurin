@@ -5,6 +5,21 @@ import type { Talk } from "./talk-types";
 export const SHEET_URL =
 	"https://docs.google.com/spreadsheets/d/1QMyakqH1i-W_bbK3yJl7u_Q_Jb_AoM94W6F8Gg3y3CA/export?format=csv&gid=909287277";
 
+function parseChapterNumber(value: string): string {
+	const normalized = value
+		.replace(/\uFEFF/g, "")
+		.normalize("NFKC")
+		.trim();
+	if (!normalized) {
+		return "";
+	}
+	const match = normalized.match(/\d+/);
+	if (!match) {
+		return "";
+	}
+	return String(Number(match[0]));
+}
+
 function splitCSVLine(line: string): string[] {
 	const result: string[] = [];
 	let current = "";
@@ -162,7 +177,9 @@ export function parseCSVToTalks(text: string): Talk[] {
 	const headerIndex = headerCells.reduce<Record<string, number>>(
 		(accumulator, header, index) => {
 			const normalizedHeader = header.trim().replace(/^\uFEFF/, "");
-			accumulator[normalizedHeader] = index;
+			if (accumulator[normalizedHeader] === undefined) {
+				accumulator[normalizedHeader] = index;
+			}
 			return accumulator;
 		},
 		{},
@@ -188,6 +205,43 @@ export function parseCSVToTalks(text: string): Talk[] {
 
 	const talks: Talk[] = [];
 	const usedIds = new Set<string>();
+	const dvdIdCounts = new Map<string, number>();
+
+	for (let i = 1; i < lines.length; i += 1) {
+		const line = lines[i];
+		if (!line) {
+			continue;
+		}
+
+		const cells = splitCSVLine(line);
+
+		const isPrivate = getValue(cells, "非公開");
+		if (isPrivate === "FALSE") {
+			continue;
+		}
+
+		const event = getValue(cells, "行事名");
+		const title = getValue(cells, "タイトル");
+		const description = getValue(cells, "内容");
+
+		if (!event && !title && !description) {
+			continue;
+		}
+
+		const idRaw = getValueFromHeaders(cells, [
+			"ID",
+			"id",
+			"Id",
+			"ＩＤ",
+			"ｉｄ",
+		]);
+		const dvdId = idRaw ? normalizeTalkId(idRaw) : "";
+		if (!dvdId) {
+			continue;
+		}
+
+		dvdIdCounts.set(dvdId, (dvdIdCounts.get(dvdId) ?? 0) + 1);
+	}
 
 	for (let i = 1; i < lines.length; i += 1) {
 		const line = lines[i];
@@ -232,7 +286,6 @@ export function parseCSVToTalks(text: string): Talk[] {
 				? `${recordedOn1} / ${recordedOn2}`
 				: recordedOn1 || recordedOn2 || recordedOnSingle;
 
-		// IDフィールドは「DVD番号」想定（URLの主キーには使わない）
 		const idRaw = getValueFromHeaders(cells, [
 			"ID",
 			"id",
@@ -241,6 +294,17 @@ export function parseCSVToTalks(text: string): Talk[] {
 			"ｉｄ",
 		]);
 		const dvdId = idRaw ? normalizeTalkId(idRaw) : "";
+
+		const chapterRaw = getValueFromHeaders(cells, [
+			"章番号",
+			"章",
+			"chapter",
+			"Chapter",
+		]);
+		const chapterNumber = parseChapterNumber(chapterRaw);
+
+		const dvdIdKey =
+			dvdId && chapterNumber ? `${dvdId}-${chapterNumber}` : dvdId;
 
 		const venue = getValue(cells, "収録場所");
 		const duration = getValue(cells, "収録時間");
@@ -267,7 +331,7 @@ export function parseCSVToTalks(text: string): Talk[] {
 			getValue(cells, "概要") || (cells[8] ? cells[8].trim() : "");
 
 		const fingerprint = [
-			`dvdId:${dvdId}`,
+			`dvdId:${dvdIdKey}`,
 			`event:${event}`,
 			`title:${title}`,
 			`description:${description}`,
@@ -286,7 +350,7 @@ export function parseCSVToTalks(text: string): Talk[] {
 			.join("\n");
 
 		const hash = hashTalkKey(fingerprint);
-		const baseTalkId = dvdId ? `TALK-${dvdId}-${hash}` : `TALK-${hash}`;
+		const baseTalkId = dvdIdKey ? `TALK-${dvdIdKey}-${hash}` : `TALK-${hash}`;
 
 		let uniqueId = baseTalkId;
 		let suffix = 1;
@@ -295,6 +359,17 @@ export function parseCSVToTalks(text: string): Talk[] {
 			suffix += 1;
 		}
 		usedIds.add(uniqueId);
+
+		const shouldAppendChapter =
+			Boolean(dvdId) &&
+			(dvdIdCounts.get(dvdId) ?? 0) > 1 &&
+			Boolean(chapterNumber);
+		const titleWithChapter =
+			shouldAppendChapter &&
+			title &&
+			!title.trim().endsWith(` ${chapterNumber}`)
+				? `${title} ${chapterNumber}`
+				: title;
 
 		const talk: Talk = {
 			id: uniqueId,
@@ -308,7 +383,7 @@ export function parseCSVToTalks(text: string): Talk[] {
 				parseDate(recordedOn2) ||
 				null,
 			duration,
-			title,
+			title: titleWithChapter,
 			description,
 			speaker,
 			language,
