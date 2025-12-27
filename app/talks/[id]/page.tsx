@@ -2,6 +2,7 @@ import { ExternalLink, Youtube } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import BackToGalleryLink from "../../components/back-to-gallery-link";
+import Footer from "../../components/footer";
 import { formatJapaneseDate } from "../../lib/date";
 import { getTalkById } from "../../lib/talks";
 import { extractYouTubeVideoId } from "../../lib/youtube";
@@ -194,11 +195,7 @@ export default async function TalkDetailPage({ params }: Props) {
 				</div>
 			</main>
 
-			<footer className="border-t border-gray-200 bg-amber-50">
-				<div className="mx-auto max-w-4xl px-6 py-6 text-center text-xs text-gray-500 sm:px-8">
-					© {new Date().getFullYear()} 初期仏教塾 — 初期仏教音声アーカイブ
-				</div>
-			</footer>
+			<Footer maxWidth="4xl" />
 		</div>
 	);
 }

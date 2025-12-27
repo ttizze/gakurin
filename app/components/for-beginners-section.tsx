@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ExternalLink } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function ForBeginnersSection() {
@@ -22,23 +22,34 @@ export default function ForBeginnersSection() {
 
 	return (
 		<section className="bg-amber-50">
-			<div className="mx-auto max-w-7xl px-6 py-3 sm:px-8">
-				<button
-					aria-expanded={isOpen}
-					className="flex w-full items-center justify-center gap-2 text-center transition cursor-pointer"
-					data-for-beginners-toggle
-					onClick={() => setIsOpen(!isOpen)}
-					type="button"
+			<div className="mx-auto max-w-7xl px-6 py-3 sm:px-8 relative">
+				<div className="flex items-center justify-center">
+					<button
+						aria-expanded={isOpen}
+						className="flex items-center justify-center gap-2 text-center transition cursor-pointer"
+						data-for-beginners-toggle
+						onClick={() => setIsOpen(!isOpen)}
+						type="button"
+					>
+						<h2 className="text-amber-900">初めての方へ</h2>
+						<div className="flex h-6 w-6 items-center justify-center rounded-full bg-amber-700">
+							<ChevronDown
+								className={`h-4 w-4 text-amber-50 transition-transform ${
+									isOpen ? "rotate-180" : ""
+								}`}
+							/>
+						</div>
+					</button>
+				</div>
+				<a
+					className="absolute right-6 top-1/2 -translate-y-1/2 inline-flex items-center gap-1 text-amber-900 hover:text-amber-700 underline transition text-xs whitespace-nowrap sm:right-8"
+					href="https://www.j-theravada.net/"
+					rel="noopener noreferrer"
+					target="_blank"
 				>
-					<h2 className="text-amber-900">初めての方へ</h2>
-					<div className="flex h-6 w-6 items-center justify-center rounded-full bg-amber-700">
-						<ChevronDown
-							className={`h-4 w-4 text-amber-50 transition-transform ${
-								isOpen ? "rotate-180" : ""
-							}`}
-						/>
-					</div>
-				</button>
+					日本テーラワーダ仏教協会
+					<ExternalLink className="h-3 w-3" />
+				</a>
 			</div>
 			{isOpen && (
 				<div className="text-sm leading-relaxed py-10 text-amber-900 bg-amber-50 sm:text-base">
