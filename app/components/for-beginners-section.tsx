@@ -22,8 +22,8 @@ export default function ForBeginnersSection() {
 
 	return (
 		<section className="bg-amber-50">
-			<div className="mx-auto max-w-7xl px-6 py-3 sm:px-8 relative">
-				<div className="flex items-center justify-center">
+			<div className="mx-auto max-w-7xl px-6 py-3 sm:px-8">
+				<div className="flex flex-col items-center gap-2">
 					<button
 						aria-expanded={isOpen}
 						className="flex items-center justify-center gap-2 text-center transition cursor-pointer"
@@ -40,16 +40,16 @@ export default function ForBeginnersSection() {
 							/>
 						</div>
 					</button>
+					<a
+						className="inline-flex items-center gap-1 text-amber-900 hover:text-amber-700 underline transition text-xs whitespace-nowrap"
+						href="https://www.j-theravada.net/"
+						rel="noopener noreferrer"
+						target="_blank"
+					>
+						日本テーラワーダ仏教協会
+						<ExternalLink className="h-3 w-3" />
+					</a>
 				</div>
-				<a
-					className="absolute right-6 top-1/2 -translate-y-1/2 inline-flex items-center gap-1 text-amber-900 hover:text-amber-700 underline transition text-xs whitespace-nowrap sm:right-8"
-					href="https://www.j-theravada.net/"
-					rel="noopener noreferrer"
-					target="_blank"
-				>
-					日本テーラワーダ仏教協会
-					<ExternalLink className="h-3 w-3" />
-				</a>
 			</div>
 			{isOpen && (
 				<div className="text-sm leading-relaxed py-10 text-amber-900 bg-amber-50 sm:text-base">
