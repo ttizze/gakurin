@@ -23,7 +23,7 @@ export default function ForBeginnersSection() {
 	return (
 		<section className="bg-amber-50">
 			<div className="mx-auto max-w-7xl px-6 py-3 sm:px-8">
-				<div className="flex flex-col items-center gap-2">
+				<div className="flex flex-col items-center gap-4">
 					<a
 						className="inline-flex items-center gap-1 text-amber-900 hover:text-amber-700 underline transition text-xs whitespace-nowrap"
 						href="https://www.j-theravada.net/"
