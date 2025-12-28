@@ -24,6 +24,15 @@ export default function ForBeginnersSection() {
 		<section className="bg-amber-50">
 			<div className="mx-auto max-w-7xl px-6 py-3 sm:px-8">
 				<div className="flex flex-col items-center gap-2">
+					<a
+						className="inline-flex items-center gap-1 text-amber-900 hover:text-amber-700 underline transition text-xs whitespace-nowrap"
+						href="https://www.j-theravada.net/"
+						rel="noopener noreferrer"
+						target="_blank"
+					>
+						日本テーラワーダ仏教協会
+						<ExternalLink className="h-3 w-3" />
+					</a>
 					<button
 						aria-expanded={isOpen}
 						className="flex items-center justify-center gap-2 text-center transition cursor-pointer"
@@ -40,15 +49,6 @@ export default function ForBeginnersSection() {
 							/>
 						</div>
 					</button>
-					<a
-						className="inline-flex items-center gap-1 text-amber-900 hover:text-amber-700 underline transition text-xs whitespace-nowrap"
-						href="https://www.j-theravada.net/"
-						rel="noopener noreferrer"
-						target="_blank"
-					>
-						日本テーラワーダ仏教協会
-						<ExternalLink className="h-3 w-3" />
-					</a>
 				</div>
 			</div>
 			{isOpen && (
