@@ -1,6 +1,7 @@
 import Footer from "./components/footer";
 import ForBeginnersSection from "./components/for-beginners-section";
 import Header from "./components/header";
+import ScrollToTopButton from "./components/scroll-to-top-button";
 import TalkGallery from "./components/talk-gallery";
 import { transformTalkToDisplay } from "./lib/talk-transform";
 import { getTalks } from "./lib/talks";
@@ -54,6 +55,7 @@ export default async function Home() {
 				</main>
 			</div>
 
+			<ScrollToTopButton />
 			<Footer />
 		</div>
 	);

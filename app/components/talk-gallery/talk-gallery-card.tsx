@@ -62,7 +62,7 @@ export default function TalkGalleryCard({
 				</div>
 				{talk.youtubeUrl && (
 					<a
-						className="inline-flex items-center gap-2 rounded-full bg-red-600 px-5 py-2.5 text-xs font-medium text-white transition hover:bg-red-700 sm:text-sm"
+						className="inline-flex items-center gap-2 rounded-full border border-red-500 bg-white px-5 py-2.5 text-xs font-medium text-red-600 transition hover:bg-red-50 hover:text-red-700 sm:text-sm"
 						href={talk.youtubeUrl}
 						rel="noopener noreferrer"
 						target="_blank"

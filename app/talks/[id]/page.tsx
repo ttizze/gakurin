@@ -180,7 +180,7 @@ export default async function TalkDetailPage({ params }: Props) {
 						{talkData.youtubeUrl && (
 							<div className="mt-6 pt-6 border-t border-gray-100 flex justify-end">
 								<a
-									className="inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-red-700"
+									className="inline-flex items-center gap-2 rounded-full border border-red-500 bg-white px-6 py-3 text-sm font-medium text-red-600 transition hover:bg-red-50 hover:text-red-700"
 									href={talkData.youtubeUrl}
 									rel="noopener noreferrer"
 									target="_blank"
