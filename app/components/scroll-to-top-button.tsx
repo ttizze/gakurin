@@ -45,7 +45,7 @@ export default function ScrollToTopButton() {
 				rel="noopener noreferrer"
 				target="_blank"
 			>
-				不具合報告はこちらから
+				ご意見・不具合はこちら
 			</a>
 			<button
 				aria-label="一番上へ"
