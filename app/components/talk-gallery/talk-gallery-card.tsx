@@ -16,9 +16,14 @@ export default function TalkGalleryCard({
 	onNavigateToTalk,
 }: Props) {
 	return (
-		<div className="flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm transition duration-200 ease-out hover:shadow-md overflow-hidden">
+		<div className="group relative flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm transition duration-200 ease-out hover:shadow-md overflow-hidden">
+			{talk.dvdId && (
+				<div className="pointer-events-none absolute right-3 top-3 z-10 rounded-full border border-gray-300 bg-white/90 px-2.5 py-1 text-[11px] font-semibold text-gray-700 opacity-0 shadow-sm backdrop-blur-sm transition duration-150 group-hover:opacity-100">
+					DVD ID: {talk.dvdId}
+				</div>
+			)}
 			<Link
-				className="group flex flex-col flex-1"
+				className="flex flex-col flex-1"
 				href={`/talks/${encodeURIComponent(talk.id)}`}
 				onClick={onNavigateToTalk}
 			>
