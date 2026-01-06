@@ -5,6 +5,7 @@ import ScrollToTopButton from "./components/scroll-to-top-button";
 import TalkGallery from "./components/talk-gallery";
 import { transformTalkToDisplay } from "./lib/talk-transform";
 import { getTalks } from "./lib/talks";
+import type { Metadata } from "next";
 
 export type TalkForDisplay = {
 	id: string;
@@ -28,6 +29,21 @@ export type TalkForDisplay = {
 	summary: string;
 	summaryPreview: string;
 };
+
+export function generateMetadata(): Metadata {
+	return {
+		title: "初期仏教塾",
+		description: "スマナサーラ長老の珠玉の法話で学ぶ。",
+		openGraph: {
+			title: "初期仏教塾",
+			description: "スマナサーラ長老の珠玉の法話で学ぶ。",
+		},
+		twitter: {
+			title: "初期仏教塾",
+			description: "スマナサーラ長老の珠玉の法話で学ぶ。",
+		},
+	};
+}
 
 export default async function Home() {
 	const talks = await getTalks();
