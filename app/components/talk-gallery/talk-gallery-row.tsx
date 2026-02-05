@@ -1,4 +1,4 @@
-import type { TalkForDisplay } from "../../page";
+import type { TalkForDisplay } from "../../lib/talk-display";
 import TalkGalleryCard from "./talk-gallery-card";
 
 type Props = {
