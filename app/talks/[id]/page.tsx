@@ -67,7 +67,7 @@ export default async function TalkDetailPage({ params }: Props) {
 	};
 
 	return (
-		<div className="min-h-screen bg-white text-gray-900">
+		<div className="min-h-screen bg-white text-gray-900 flex flex-col">
 			<header className="bg-amber-50 px-6 py-8 sm:px-8">
 				<div className="mx-auto max-w-4xl">
 					<BackToGalleryLink className="text-sm text-slate-600 hover:text-slate-800 transition">
@@ -76,7 +76,7 @@ export default async function TalkDetailPage({ params }: Props) {
 				</div>
 			</header>
 
-			<main className="mx-auto max-w-4xl px-6 py-12 sm:px-8">
+			<main className="mx-auto max-w-4xl px-6 py-12 sm:px-8 flex-1">
 				<div className="space-y-8">
 					{/* YouTube動画埋め込み */}
 					{talkData.embedUrl && (

@@ -1,14 +1,19 @@
 import Image from "next/image";
+import Link from "next/link";
+
+const navLinks = [
+	{ href: "/about/early-buddhism", label: "初期仏教とは何か" },
+	{ href: "/about/vipassana", label: "ヴィパッサナー瞑想とは何か" },
+	{ href: "/about/sumanasara", label: "スマナサーラ長老のプロフィール" },
+];
 
 export default function Header() {
 	return (
 		<header className="w-full">
-			{/* 1段目：ロゴ（中央）＋キャッチ（右） */}
+			{/* 1段目：ロゴ（左）＋リンク（右） */}
 			<div className="w-full flex-none px-6 pt-6 sm:px-8 sm:pt-8">
-				<div className="flex items-center justify-between gap-2 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:gap-4">
-					<div aria-hidden className="hidden sm:block" />
-
-					<div className="shrink-0 sm:justify-self-center">
+				<div className="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+					<div className="shrink-0">
 						<div className="sm:hidden">
 							<Image
 								alt="初期仏教塾"
@@ -33,30 +38,20 @@ export default function Header() {
 						</div>
 					</div>
 
-					<div className="shrink-0 sm:justify-self-end">
-						<div className="sm:hidden">
-							<Image
-								alt="スマナサーラ長老の珠玉の法話で学ぶ"
-								className="h-auto w-[min(150px,46vw)]"
-								height={84}
-								priority
-								sizes="(max-width: 640px) 46vw, 320px"
-								src="/catch_smp.png"
-								width={306}
-							/>
-						</div>
-						<div className="hidden sm:block">
-							<Image
-								alt="スマナサーラ長老の珠玉の法話で学ぶ"
-								className="h-auto w-[320px]"
-								height={30}
-								priority
-								sizes="320px"
-								src="/catch_pc.png"
-								width={522}
-							/>
-						</div>
-					</div>
+					<nav
+						aria-label="初期仏教塾の基本情報"
+						className="flex flex-wrap items-center gap-3 text-sm sm:text-base lg:text-lg"
+					>
+						{navLinks.map((link) => (
+							<Link
+								className="text-amber-900 transition hover:text-amber-700 hover:underline"
+								href={link.href}
+								key={link.href}
+							>
+								{link.label}
+							</Link>
+						))}
+					</nav>
 				</div>
 			</div>
 

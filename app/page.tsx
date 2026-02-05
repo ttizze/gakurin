@@ -59,16 +59,18 @@ export default async function Home() {
 	);
 
 	return (
-		<div className="min-h-screen">
-			<Header />
-			<div id="for-beginners">
-				<ForBeginnersSection />
-			</div>
+		<div className="min-h-screen flex flex-col">
+			<div className="flex-1">
+				<Header />
+				<div id="for-beginners">
+					<ForBeginnersSection />
+				</div>
 
-			<div className="mx-auto max-w-7xl">
-				<main className="px-6 py-12 sm:px-8">
-					<TalkGallery talks={talksForDisplay} />
-				</main>
+				<div className="mx-auto max-w-7xl">
+					<main className="px-6 py-12 sm:px-8">
+						<TalkGallery talks={talksForDisplay} />
+					</main>
+				</div>
 			</div>
 
 			<ScrollToTopButton />
