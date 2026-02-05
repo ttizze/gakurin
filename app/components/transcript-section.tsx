@@ -107,55 +107,50 @@ export default function TranscriptSection({ transcript, embedUrlPrefix }: Props)
 				</div>
 			</div>
 
-			<div className="mt-4 w-[min(56rem,100%)]">
-				{mode === "timeline" ? (
-					<div className="space-y-4">
-						{transcript.map((cue) => {
-							const startSeconds = Math.max(0, Math.floor(cue.start));
-							const timeHref = embedUrlPrefix
-								? `${embedUrlPrefix}start=${startSeconds}&autoplay=1`
-								: null;
-							return (
-								<div
-									className="grid gap-2 sm:grid-cols-[96px_1fr]"
-									key={`${cue.index}-${cue.start}`}
-								>
-									{timeHref ? (
-										<a
-											className="text-xs font-semibold text-amber-700 underline transition hover:text-amber-900 sm:text-sm"
-											href={timeHref}
-											target="talk-player"
-										>
-											{cue.startLabel}
-										</a>
-									) : (
-										<span className="text-xs font-semibold text-amber-700 sm:text-sm">
-											{cue.startLabel}
-										</span>
-									)}
-									<p className="whitespace-pre-line text-sm leading-relaxed text-gray-700">
-										{cue.text}
-									</p>
-								</div>
-							);
-						})}
-					</div>
-				) : (
-					<div className="space-y-4">
-						{paragraphs.map((paragraph, index) => (
+			{mode === "timeline" ? (
+				<div className="mt-4 space-y-4">
+					{transcript.map((cue) => {
+						const startSeconds = Math.max(0, Math.floor(cue.start));
+						const timeHref = embedUrlPrefix
+							? `${embedUrlPrefix}start=${startSeconds}&autoplay=1`
+							: null;
+						return (
 							<div
 								className="grid gap-2 sm:grid-cols-[96px_1fr]"
-								key={`${index}-${paragraph.slice(0, 12)}`}
+								key={`${cue.index}-${cue.start}`}
 							>
-								<span aria-hidden className="hidden sm:block" />
-								<p className="text-sm leading-relaxed text-gray-700">
-									{paragraph}
+								{timeHref ? (
+									<a
+										className="text-xs font-semibold text-amber-700 underline transition hover:text-amber-900 sm:text-sm"
+										href={timeHref}
+										target="talk-player"
+									>
+										{cue.startLabel}
+									</a>
+								) : (
+									<span className="text-xs font-semibold text-amber-700 sm:text-sm">
+										{cue.startLabel}
+									</span>
+								)}
+								<p className="whitespace-pre-line text-sm leading-relaxed text-gray-700">
+									{cue.text}
 								</p>
 							</div>
-						))}
-					</div>
-				)}
-			</div>
+						);
+					})}
+				</div>
+			) : (
+				<div className="mt-4 space-y-4">
+					{paragraphs.map((paragraph, index) => (
+						<p
+							className="text-sm leading-relaxed text-gray-700"
+							key={`${index}-${paragraph.slice(0, 12)}`}
+						>
+							{paragraph}
+						</p>
+					))}
+				</div>
+			)}
 		</div>
 	);
 }
