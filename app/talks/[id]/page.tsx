@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import BackToGalleryLink from "../../components/back-to-gallery-link";
 import Footer from "../../components/footer";
 import { formatJapaneseDate } from "../../lib/date";
+import { FEEDBACK_FORM_URL } from "../../lib/site-links";
 import { getTalkById } from "../../lib/talks";
+import { getTranscriptByTalkId } from "../../lib/transcripts";
 import { extractYouTubeVideoId } from "../../lib/youtube";
 
 type Props = {
@@ -65,6 +67,10 @@ export default async function TalkDetailPage({ params }: Props) {
 		audioLink: talk.audioLink,
 		attachmentsLink: talk.attachmentsLink,
 	};
+	const transcript = await getTranscriptByTalkId(talk.id);
+	const embedUrlPrefix = talkData.embedUrl
+		? `${talkData.embedUrl}${talkData.embedUrl.includes("?") ? "&" : "?"}`
+		: null;
 
 	return (
 		<div className="min-h-screen bg-white text-gray-900 flex flex-col">
@@ -85,6 +91,7 @@ export default async function TalkDetailPage({ params }: Props) {
 								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 								allowFullScreen
 								className="absolute inset-0 h-full w-full"
+								name="talk-player"
 								src={talkData.embedUrl}
 								title={talkData.title}
 							/>
@@ -148,6 +155,54 @@ export default async function TalkDetailPage({ params }: Props) {
 								<p className="text-sm leading-relaxed text-gray-700 whitespace-pre-wrap">
 									{talkData.summary}
 								</p>
+							</div>
+						)}
+
+						{transcript && transcript.length > 0 && (
+							<div className="mt-6 pt-6 border-t border-gray-100">
+								<div className="rounded-lg bg-amber-50/70 px-4 py-3 text-xs text-amber-900 sm:text-sm">
+									これはAIの文字起こしを元にしたものです。間違いがある場合は
+									<a
+										className="ml-1 font-medium underline hover:text-amber-700"
+										href={FEEDBACK_FORM_URL}
+										rel="noopener noreferrer"
+										target="_blank"
+									>
+										こちら
+									</a>
+									にご連絡ください。
+								</div>
+								<div className="mt-4 space-y-4">
+									{transcript.map((cue) => {
+										const startSeconds = Math.max(0, Math.floor(cue.start));
+										const timeHref = embedUrlPrefix
+											? `${embedUrlPrefix}start=${startSeconds}&autoplay=1`
+											: null;
+										return (
+											<div
+												className="grid gap-2 sm:grid-cols-[96px_1fr]"
+												key={`${cue.index}-${cue.start}`}
+											>
+												{timeHref ? (
+													<a
+														className="text-xs font-semibold text-amber-700 underline transition hover:text-amber-900 sm:text-sm"
+														href={timeHref}
+														target="talk-player"
+													>
+														{cue.startLabel}
+													</a>
+												) : (
+													<span className="text-xs font-semibold text-amber-700 sm:text-sm">
+														{cue.startLabel}
+													</span>
+												)}
+												<p className="whitespace-pre-line text-sm leading-relaxed text-gray-700">
+													{cue.text}
+												</p>
+											</div>
+										);
+									})}
+								</div>
 							</div>
 						)}
 
