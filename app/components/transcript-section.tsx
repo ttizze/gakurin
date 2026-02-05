@@ -140,7 +140,7 @@ export default function TranscriptSection({ transcript, embedUrlPrefix }: Props)
 					})}
 				</div>
 			) : (
-				<div className="mt-4 space-y-4 sm:pl-[104px]">
+				<div className="mt-4 space-y-4 sm:pr-[104px]">
 					{paragraphs.map((paragraph, index) => (
 						<p
 							className="text-sm leading-relaxed text-gray-700"
