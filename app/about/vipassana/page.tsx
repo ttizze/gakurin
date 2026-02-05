@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import ContentCard from "../../components/content-card";
+import SectionHeading from "../../components/section-heading";
 import SimplePageLayout from "../../components/simple-page-layout";
 
 export const metadata: Metadata = {
@@ -10,7 +12,7 @@ export const metadata: Metadata = {
 export default function VipassanaPage() {
 	return (
 		<SimplePageLayout title="ヴィパッサナー瞑想">
-			<section className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+			<ContentCard>
 				<div className="space-y-4 text-sm leading-relaxed text-gray-700">
 					<p>
 						比丘たちよ、この道は、もろもろの生けるものが清まり、愁いと悲しみを乗り越え、 苦しみと憂いが消え、正理を得、涅槃を目のあたり見るための唯一の方法です。
@@ -20,12 +22,10 @@ export default function VipassanaPage() {
 					</p>
 					<p>本来の『仏教』とは、自ら覚醒するための実践法なのです。</p>
 				</div>
-			</section>
+			</ContentCard>
 
-			<section className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-				<h2 className="text-base font-semibold text-amber-900">
-					ありのままに観る
-				</h2>
+			<ContentCard>
+				<SectionHeading>ありのままに観る</SectionHeading>
 				<div className="mt-4 space-y-4 text-sm leading-relaxed text-gray-700">
 					<p>
 						ヴィパッサナーの実践法は、とてもシンプルです。ただ、今の自分に気づく。そこに、深遠な世界が広がってくるのです。パーリ語でvi ヴィとは「ありのままに・明瞭に・客観的に」、passanā パッサナーとは「観察する・観る・心の目で見る」という意味です。「今この瞬間の自分自身をよく観る」ということです。瞬間瞬間に起こる、思い込みやしがらみを理解できるvipassanā ヴィパッサナーは、「気づきの瞑想」や「洞察の瞑想」ともいえるでしょう。
@@ -40,12 +40,10 @@ export default function VipassanaPage() {
 						今ここの一つ一つの瞬間に意識を向ける。心地よいことでも不快なことでも、ありのままの体験を価値判断しないで、そのまま観るのです。葛藤をシャットアウトしたり、コントロールしようとして新たな問題を作るのではなく、ただ気づくだけ。それが観るということです。それが苦悩を超える道です。安らぎが訪れ、心と体を癒すことになるのです。波立っている水面が穏やかになってすべてを映し出すように、深い智慧と洞察力が生まれてくるのです。
 					</p>
 				</div>
-			</section>
+			</ContentCard>
 
-			<section className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-				<h2 className="text-base font-semibold text-amber-900">
-					頭の中のガラクタを片づける
-				</h2>
+			<ContentCard>
+				<SectionHeading>頭の中のガラクタを片づける</SectionHeading>
 				<div className="mt-4 space-y-4 text-sm leading-relaxed text-gray-700">
 					<p>
 						私たちの日常生活のあり方は、すぐ評価を下したり、防御や攻撃をしたり、落ち込んだり舞い上がったり、無意識のうちに自動的に反応しています。私たちは、その自動反応に莫大なエネルギーを使い、心はあちこちさ迷って思考や幻想の中を漂っています。
@@ -60,12 +58,10 @@ export default function VipassanaPage() {
 						希望や期待や願望などのガラクタはひとまず置いて、自由で柔軟な心、子供の無邪気さに戻って始めることが大切です。
 					</p>
 				</div>
-			</section>
+			</ContentCard>
 
-			<section className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-				<h2 className="text-base font-semibold text-amber-900">
-					自分の世界に徹底的に戻る
-				</h2>
+			<ContentCard>
+				<SectionHeading>自分の世界に徹底的に戻る</SectionHeading>
 				<div className="mt-4 space-y-4 text-sm leading-relaxed text-gray-700">
 					<p>
 						ヴィパッサナーはいつでもどこでも実践できます。今ここの動作、行動、感情に気づいているかどうか、それだけのことです。
@@ -80,12 +76,10 @@ export default function VipassanaPage() {
 						ヴィパッサナーをしていると、人からなんと言われようと、誉められようとけなされようと、心の中に感情の波は起こらない。そういう落ち着いた心が出てきます。そしてヴィパッサナーがさらに進んでいきます。こうして心が成長していくのです。
 					</p>
 				</div>
-			</section>
+			</ContentCard>
 
-			<section className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-				<h2 className="text-base font-semibold text-amber-900">
-					ヴィパッサナー実践の三原則
-				</h2>
+			<ContentCard>
+				<SectionHeading>ヴィパッサナー実践の三原則</SectionHeading>
 				<div className="mt-4 space-y-4 text-sm leading-relaxed text-gray-700">
 					<p>まずヴィパッサナー瞑想実践法の三原則を覚えておきましょう。</p>
 					<div className="space-y-2">
@@ -112,12 +106,10 @@ export default function VipassanaPage() {
 						何を気づいてもかまわないのですが、楽に実践できるように『歩くこと』『立つこと』『座ること』という簡単な動作で実践をします。そのうち日常生活の中でも気づきが実践できるようになります。
 					</p>
 				</div>
-			</section>
+			</ContentCard>
 
-			<section className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-				<h2 className="text-base font-semibold text-amber-900">
-					歩くヴィパッサナー実践法
-				</h2>
+			<ContentCard>
+				<SectionHeading>歩くヴィパッサナー実践法</SectionHeading>
 				<div className="mt-4 space-y-4 text-sm leading-relaxed text-gray-700">
 					<p>
 						歩く瞑想は、30分～１時間くらい時間を決めて集中的に実践する方法もありますし、日常生活の中で歩く度に実践するという方法もあります。どちらでも、自分の生活にあわせて実践すればよいのです。日常生活の中で歩くときは、「左足、右足、左足、右足…」と足の動きを感じて頭の中で言葉で確認しながらふつうに歩きます。
@@ -144,12 +136,10 @@ export default function VipassanaPage() {
 						初心者には歩く瞑想が入りやすいでしょう。ブッダの時代から、悟りを開いた人は、坐る瞑想より長い時間歩く実践をすることによって成長しました。歩く瞑想は、眠くならないし、早く落ち着くし、体と心の調和が速やかに実現できる実践方法なのです。
 					</p>
 				</div>
-			</section>
+			</ContentCard>
 
-			<section className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-				<h2 className="text-base font-semibold text-amber-900">
-					立つヴィパッサナー実践法
-				</h2>
+			<ContentCard>
+				<SectionHeading>立つヴィパッサナー実践法</SectionHeading>
 				<div className="mt-4 space-y-4 text-sm leading-relaxed text-gray-700">
 					<p>
 						いま座っているということにして、「立つ」実践の方法を説明してみましょう。
@@ -161,12 +151,10 @@ export default function VipassanaPage() {
 						何も考えず、単純に、「立ってます、感じてます、立ってます、感じてます……」と足の裏に集中して、実況中継をつづけてください。立つ瞑想実践は10分間くらいで十分です。
 					</p>
 				</div>
-			</section>
+			</ContentCard>
 
-			<section className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-				<h2 className="text-base font-semibold text-amber-900">
-					座るヴィパッサナー実践法
-				</h2>
+			<ContentCard>
+				<SectionHeading>座るヴィパッサナー実践法</SectionHeading>
 				<div className="mt-4 space-y-4 text-sm leading-relaxed text-gray-700">
 					<p>座布団か椅子を用意します。</p>
 					<p>
@@ -183,7 +171,7 @@ export default function VipassanaPage() {
 						坐る瞑想は、自分のペースで、15分～45分間くらいすればいいでしょう。無理にがんばって長く座る必要はありません。瞑想を終了するときは、ひとつひとつの動作を丁寧に実況しながら「終わります」としっかり確認してから終えてください。
 					</p>
 				</div>
-			</section>
+			</ContentCard>
 		</SimplePageLayout>
 	);
 }

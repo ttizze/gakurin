@@ -2,9 +2,11 @@ import { ExternalLink, Youtube } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import BackToGalleryLink from "../../components/back-to-gallery-link";
+import ContentCard from "../../components/content-card";
 import Footer from "../../components/footer";
 import TranscriptSection from "../../components/transcript-section";
 import { formatJapaneseDate } from "../../lib/date";
+import { getPrimaryTalkMediaUrl, getTalkTitle } from "../../lib/talk-display";
 import { getTalkById } from "../../lib/talks";
 import { getTranscriptByTalkId } from "../../lib/transcripts";
 import { extractYouTubeVideoId } from "../../lib/youtube";
@@ -23,8 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 		};
 	}
 
-	const title =
-		talk.title || talk.description || talk.event || "タイトル未設定";
+	const title = getTalkTitle(talk);
 	const description =
 		talk.summary ||
 		talk.description ||
@@ -45,7 +46,7 @@ export default async function TalkDetailPage({ params }: Props) {
 		notFound();
 	}
 
-	const youtubeUrl = talk.youtubeLink || talk.audioLink;
+	const youtubeUrl = getPrimaryTalkMediaUrl(talk);
 	const videoId = youtubeUrl ? extractYouTubeVideoId(youtubeUrl) : null;
 	const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : null;
 	const recordedOnRaw = talk.recordedOn || "日付不明";
@@ -53,7 +54,7 @@ export default async function TalkDetailPage({ params }: Props) {
 	const talkData = {
 		id: talk.id,
 		dvdId: talk.dvdId,
-		title: talk.title || talk.description || talk.event || "タイトル未設定",
+		title: getTalkTitle(talk),
 		description: talk.description,
 		summary: talk.summary,
 		event: talk.event || "未分類",
@@ -99,7 +100,7 @@ export default async function TalkDetailPage({ params }: Props) {
 					)}
 
 					{/* データ情報 */}
-					<div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+					<ContentCard as="div">
 						<dl className="space-y-4 text-sm">
 							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
 								<dt className="font-medium text-gray-700">DVD番号</dt>
@@ -205,7 +206,7 @@ export default async function TalkDetailPage({ params }: Props) {
 								</a>
 							</div>
 						)}
-					</div>
+					</ContentCard>
 				</div>
 			</main>
 

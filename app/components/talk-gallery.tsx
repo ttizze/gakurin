@@ -3,7 +3,7 @@
 import { useId, useMemo, useRef, useState } from "react";
 import type { GroupedVirtuosoHandle, StateSnapshot } from "react-virtuoso";
 import { GroupedVirtuoso } from "react-virtuoso";
-import type { TalkForDisplay } from "../page";
+import type { TalkForDisplay } from "../lib/talk-display";
 import TalkGalleryRow from "./talk-gallery/talk-gallery-row";
 import TalkGallerySectionHeader from "./talk-gallery/talk-gallery-section-header";
 import { useTalkGalleryData } from "./talk-gallery/use-talk-gallery-data";

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import type { TalkForDisplay } from "../../page";
+import type { TalkForDisplay } from "../../lib/talk-display";
 import {
 	buildDecadeSections,
 	buildThemeSections,

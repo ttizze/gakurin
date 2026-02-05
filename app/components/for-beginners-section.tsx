@@ -2,6 +2,7 @@
 
 import { ChevronDown, ExternalLink } from "lucide-react";
 import { useEffect, useState } from "react";
+import { THERAVADA_ASSOCIATION_URL } from "../lib/site-links";
 
 export default function ForBeginnersSection() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +27,7 @@ export default function ForBeginnersSection() {
 				<div className="flex flex-col items-center gap-4">
 					<a
 						className="inline-flex items-center gap-1 text-amber-900 hover:text-amber-700 underline transition text-xs whitespace-nowrap"
-						href="https://www.j-theravada.net/"
+						href={THERAVADA_ASSOCIATION_URL}
 						rel="noopener noreferrer"
 						target="_blank"
 					>

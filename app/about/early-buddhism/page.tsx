@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import ContentCard from "../../components/content-card";
+import SectionHeading from "../../components/section-heading";
 import SimplePageLayout from "../../components/simple-page-layout";
 
 export const metadata: Metadata = {
@@ -10,10 +12,10 @@ export const metadata: Metadata = {
 export default function EarlyBuddhismPage() {
 	return (
 		<SimplePageLayout title="初期仏教とは何か">
-			<section className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-				<h2 className="text-base font-semibold text-amber-900">
+			<ContentCard>
+				<SectionHeading>
 					上座部仏教（テーラワーダ仏教）
-				</h2>
+				</SectionHeading>
 				<div className="mt-4 space-y-4 text-sm leading-relaxed text-gray-700">
 					<p>
 						今からおよそ2500年前、インド亜大陸の北東部（現在のネパール南部）に、カーシ国と呼ばれる比較的小さな王国があり、そこに一人の王子が誕生しました。その名はシッダッタ・ゴータマです。人類の苦しみを根本から取り除く道を求め、彼は28歳で出家しました。その後6年間にわたり、複数の師のもとでさまざまな宗教的修行を学び実践しましたが、それらはいずれも真の解脱には至らないことを見極めました。35歳のとき、苦の問題に対する全く新しい道を自ら発見し、それを「中道」と名づけ、完全な悟りを成就しました。それ以来、彼は「悟れる者」を意味するブッダ、または「真理を体得した者」を意味するタターガタと自らを称しました。入滅（一般に般涅槃と呼ばれる）に至るまでの45年間、ブッダはその生涯のすべてを、人々を究極の苦の解放へ導くための教えと指導に捧げました。本来、仏教とはブッダの教えと実践そのものを意味します。
@@ -43,7 +45,7 @@ export default function EarlyBuddhismPage() {
 						日本テーラワーダ仏教協会は、日本の人々に上座部仏教を直接体験してもらうため、精力的に活動しています。1990年以来、この協会は公開講演、討論会、瞑想リトリートを開催してきました。ブッダの原初の教えが持つ合理性と簡素さ、そして人間の問題に対する実践的なアプローチこそが、日本人の間で上座部仏教が支持される主な理由です。協会はスリランカやミャンマーから熟練した上座部仏教の比丘を招き、日本でブッダの原初の教えを弘めています。門戸は開かれています。今や、すべての日本人がブッダの原初の教えを学び、実践することができます。協会の尊敬すべき比丘たちは日本各地を巡り、慈悲と智慧のメッセージを伝えています。苦しみと心の悩みに終止符を打ちましょう。心を開き、心の汚れを手放してください。ヴィパッサナー瞑想は、誰をも静けさと安らぎへと導くでしょう。
 					</p>
 				</div>
-			</section>
+			</ContentCard>
 		</SimplePageLayout>
 	);
 }
