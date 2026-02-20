@@ -2,9 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 const navLinks = [
-	{ href: "/about/early-buddhism", label: "初期仏教とは何か" },
-	{ href: "/about/vipassana", label: "ヴィパッサナー瞑想とは何か" },
-	{ href: "/about/sumanasara", label: "スマナサーラ長老のプロフィール" },
+	{ href: "/about/early-buddhism", label: "初期仏教とは" },
+	{ href: "/about/vipassana", label: "ヴィパッサナーとは" },
+	{ href: "/about/sumanasara", label: "スマナサーラ長老について" },
 ];
 
 export default function Header() {
@@ -40,7 +40,7 @@ export default function Header() {
 
 					<nav
 						aria-label="初期仏教塾の基本情報"
-						className="flex flex-wrap items-center gap-3 text-sm sm:text-base lg:text-lg"
+						className="flex flex-wrap items-center gap-3 text-lg font-medium sm:text-xl lg:text-2xl"
 					>
 						{navLinks.map((link) => (
 							<Link
