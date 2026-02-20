@@ -40,11 +40,11 @@ export default function Header() {
 
 					<nav
 						aria-label="初期仏教塾の基本情報"
-						className="flex flex-wrap items-center gap-3 text-lg font-medium sm:text-xl lg:text-2xl"
+						className="flex flex-wrap items-center gap-2 text-lg font-medium sm:gap-3 sm:text-xl lg:text-2xl"
 					>
 						{navLinks.map((link) => (
 							<Link
-								className="text-amber-900 transition hover:text-amber-700 hover:underline"
+								className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50/70 px-4 py-1.5 text-amber-900 shadow-sm transition hover:-translate-y-px hover:border-amber-300 hover:bg-amber-100 hover:text-amber-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
 								href={link.href}
 								key={link.href}
 							>
