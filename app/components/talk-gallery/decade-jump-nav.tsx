@@ -1,12 +1,7 @@
-import type { GroupedSection } from "./types";
-
-type Group = {
-	section: GroupedSection;
-	rows: unknown[];
-};
+import type { TalkGalleryGroup } from "./types";
 
 type Props = {
-	groups: Group[];
+	groups: TalkGalleryGroup[];
 	onJumpToGroup: (groupIndex: number) => void;
 };
 

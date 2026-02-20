@@ -1,11 +1,18 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import type { GroupedVirtuosoHandle, StateSnapshot } from "react-virtuoso";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { GroupedVirtuosoHandle } from "react-virtuoso";
 import { GroupedVirtuoso } from "react-virtuoso";
 import type { TalkForDisplay } from "../lib/talk-display";
 import DecadeJumpNav from "./talk-gallery/decade-jump-nav";
 import PresetSearchTags from "./talk-gallery/preset-search-tags";
+import {
+	markTalkGalleryRestorePending,
+	readAndConsumeTalkGalleryRestoreSnapshot,
+	readTalkGallerySearchQuery,
+	writeTalkGallerySearchQuery,
+	writeTalkGalleryVirtuosoState,
+} from "./talk-gallery/storage";
 import TalkGalleryRow from "./talk-gallery/talk-gallery-row";
 import TalkGallerySectionHeader from "./talk-gallery/talk-gallery-section-header";
 import { useTalkGalleryData } from "./talk-gallery/use-talk-gallery-data";
@@ -14,41 +21,19 @@ type Props = {
 	talks: TalkForDisplay[];
 };
 
-const VIRTUOSO_STATE_KEY = "talkGallery:virtuosoState:v1";
-const RESTORE_PENDING_KEY = "talkGallery:restorePending:v1";
-const SEARCH_QUERY_KEY = "talkGallery:searchQuery:v1";
-
-function readAndConsumeRestoreSnapshot(): StateSnapshot | undefined {
-	try {
-		const pending = sessionStorage.getItem(RESTORE_PENDING_KEY) === "1";
-		if (!pending) return undefined;
-
-		sessionStorage.removeItem(RESTORE_PENDING_KEY);
-
-		const raw = sessionStorage.getItem(VIRTUOSO_STATE_KEY);
-		sessionStorage.removeItem(VIRTUOSO_STATE_KEY);
-		if (!raw) return undefined;
-
-		return JSON.parse(raw) as StateSnapshot;
-	} catch {
-		return undefined;
-	}
-}
-
-function readStoredSearchQuery(): string {
-	try {
-		return sessionStorage.getItem(SEARCH_QUERY_KEY) ?? "";
-	} catch {
-		return "";
-	}
-}
+const SEARCH_BLUR_DELAY_MS = 150;
 
 export default function TalkGallery({ talks }: Props) {
 	const virtuosoRef = useRef<GroupedVirtuosoHandle>(null);
 
-	const [searchQuery, setSearchQuery] = useState(() => readStoredSearchQuery());
+	const [searchQuery, setSearchQuery] = useState(() =>
+		readTalkGallerySearchQuery(),
+	);
 	const [isSearchFocused, setIsSearchFocused] = useState(false);
-	const restoreStateFrom = useMemo(() => readAndConsumeRestoreSnapshot(), []);
+	const restoreStateFrom = useMemo(
+		() => readAndConsumeTalkGalleryRestoreSnapshot(),
+		[],
+	);
 
 	useEffect(() => {
 		const handleScrollToTop = () => {
@@ -73,24 +58,20 @@ export default function TalkGallery({ talks }: Props) {
 		searchTokens,
 	} = useTalkGalleryData(talks, "date", searchQuery);
 
-	const handleNavigateToTalk = () => {
-		try {
-			sessionStorage.setItem(RESTORE_PENDING_KEY, "1");
-			sessionStorage.setItem(SEARCH_QUERY_KEY, searchQuery);
-		} catch {
-			// Ignore storage failures.
-		}
+	const updateSearchQuery = useCallback((nextQuery: string) => {
+		setSearchQuery(nextQuery);
+		writeTalkGallerySearchQuery(nextQuery);
+	}, []);
 
+	const handleNavigateToTalk = useCallback(() => {
+		markTalkGalleryRestorePending();
+		writeTalkGallerySearchQuery(searchQuery);
 		virtuosoRef.current?.getState((snapshot) => {
-			try {
-				sessionStorage.setItem(VIRTUOSO_STATE_KEY, JSON.stringify(snapshot));
-			} catch {
-				// Ignore storage failures.
-			}
+			writeTalkGalleryVirtuosoState(snapshot);
 		});
-	};
+	}, [searchQuery]);
 
-	const handleJumpToGroup = (groupIndex: number) => {
+	const handleJumpToGroup = useCallback((groupIndex: number) => {
 		if (groupIndex === 0) {
 			window.scrollTo({ top: 0, behavior: "smooth" });
 			return;
@@ -100,16 +81,14 @@ export default function TalkGallery({ talks }: Props) {
 			align: "start",
 			behavior: "smooth",
 		});
-	};
+	}, []);
 
-	const handleSelectTag = (keyword: string) => {
-		setSearchQuery(keyword);
-		try {
-			sessionStorage.setItem(SEARCH_QUERY_KEY, keyword);
-		} catch {
-			// Ignore storage failures.
-		}
-	};
+	const handleSelectTag = useCallback(
+		(keyword: string) => {
+			updateSearchQuery(keyword);
+		},
+		[updateSearchQuery],
+	);
 
 	const hasActiveQuery = searchQuery.trim().length > 0;
 	const totalMatched = filteredTalks.length;
@@ -132,16 +111,13 @@ export default function TalkGallery({ talks }: Props) {
 							className="search-cancel-none w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-4 pr-10 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10"
 							onBlur={() => {
 								// Delay to allow tag click to fire before hiding
-								setTimeout(() => setIsSearchFocused(false), 150);
+								setTimeout(
+									() => setIsSearchFocused(false),
+									SEARCH_BLUR_DELAY_MS,
+								);
 							}}
 							onChange={(event) => {
-								const next = event.target.value;
-								setSearchQuery(next);
-								try {
-									sessionStorage.setItem(SEARCH_QUERY_KEY, next);
-								} catch {
-									// Ignore storage failures.
-								}
+								updateSearchQuery(event.target.value);
 							}}
 							onFocus={() => setIsSearchFocused(true)}
 							placeholder="キーワードで検索"
@@ -153,12 +129,7 @@ export default function TalkGallery({ talks }: Props) {
 								aria-label="検索をクリア"
 								className="absolute inset-y-0 right-3 my-auto flex h-5 w-5 items-center justify-center rounded-full text-gray-400 transition hover:text-gray-900"
 								onClick={() => {
-									setSearchQuery("");
-									try {
-										sessionStorage.removeItem(SEARCH_QUERY_KEY);
-									} catch {
-										// Ignore storage failures.
-									}
+									updateSearchQuery("");
 								}}
 								type="button"
 							>

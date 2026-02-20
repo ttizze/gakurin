@@ -9,8 +9,14 @@ type Props = {
 	embedUrlPrefix?: string | null;
 };
 
+type TranscriptMode = "timeline" | "plain";
+
 const GAP_THRESHOLD_SECONDS = 2.5;
 const MAX_PARAGRAPH_CHARS = 220;
+const MODE_OPTIONS: Array<{ mode: TranscriptMode; label: string }> = [
+	{ mode: "timeline", label: "タイムライン付き" },
+	{ mode: "plain", label: "読みやすく" },
+];
 
 function normalizeText(text: string) {
 	return text.replace(/\s*\n\s*/g, " ").replace(/\s{2,}/g, " ").trim();
@@ -50,8 +56,26 @@ function buildParagraphs(cues: TranscriptCue[]) {
 	return paragraphs;
 }
 
+function getModeButtonClass(isActive: boolean): string {
+	return `rounded-full px-3 py-1 transition sm:px-4 sm:py-1.5 ${
+		isActive
+			? "bg-amber-100 text-amber-900"
+			: "text-amber-700 hover:text-amber-900"
+	}`;
+}
+
+function buildCueTimeHref(
+	embedUrlPrefix: string | null | undefined,
+	startSeconds: number,
+): string | null {
+	if (!embedUrlPrefix) {
+		return null;
+	}
+	return `${embedUrlPrefix}start=${startSeconds}&autoplay=1`;
+}
+
 export default function TranscriptSection({ transcript, embedUrlPrefix }: Props) {
-	const [mode, setMode] = useState<"timeline" | "plain">("timeline");
+	const [mode, setMode] = useState<TranscriptMode>("timeline");
 	const paragraphs = useMemo(() => buildParagraphs(transcript), [transcript]);
 
 	return (
@@ -78,32 +102,18 @@ export default function TranscriptSection({ transcript, embedUrlPrefix }: Props)
 					className="inline-flex rounded-full border border-amber-200 bg-white text-xs font-medium text-amber-900 shadow-sm sm:text-sm"
 					role="tablist"
 				>
-					<button
-						aria-selected={mode === "timeline"}
-						className={`rounded-full px-3 py-1 transition sm:px-4 sm:py-1.5 ${
-							mode === "timeline"
-								? "bg-amber-100 text-amber-900"
-								: "text-amber-700 hover:text-amber-900"
-						}`}
-						onClick={() => setMode("timeline")}
-						role="tab"
-						type="button"
-					>
-						タイムライン付き
-					</button>
-					<button
-						aria-selected={mode === "plain"}
-						className={`rounded-full px-3 py-1 transition sm:px-4 sm:py-1.5 ${
-							mode === "plain"
-								? "bg-amber-100 text-amber-900"
-								: "text-amber-700 hover:text-amber-900"
-						}`}
-						onClick={() => setMode("plain")}
-						role="tab"
-						type="button"
-					>
-						読みやすく
-					</button>
+					{MODE_OPTIONS.map((option) => (
+						<button
+							aria-selected={mode === option.mode}
+							className={getModeButtonClass(mode === option.mode)}
+							key={option.mode}
+							onClick={() => setMode(option.mode)}
+							role="tab"
+							type="button"
+						>
+							{option.label}
+						</button>
+					))}
 				</div>
 			</div>
 
@@ -111,9 +121,7 @@ export default function TranscriptSection({ transcript, embedUrlPrefix }: Props)
 				<div className="mt-4 space-y-4">
 					{transcript.map((cue) => {
 						const startSeconds = Math.max(0, Math.floor(cue.start));
-						const timeHref = embedUrlPrefix
-							? `${embedUrlPrefix}start=${startSeconds}&autoplay=1`
-							: null;
+						const timeHref = buildCueTimeHref(embedUrlPrefix, startSeconds);
 						return (
 							<div
 								className="grid gap-2 sm:grid-cols-[96px_1fr]"

@@ -7,6 +7,11 @@ export type GroupedSection = {
 	talks: TalkForDisplay[];
 };
 
+export type TalkGalleryGroup = {
+	section: GroupedSection;
+	rows: TalkForDisplay[][];
+};
+
 export type IndexedTalk = {
 	data: TalkForDisplay;
 	searchText: string;

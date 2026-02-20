@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { filterTalks, tokenizeSearchQuery } from "./search";
+import { tokenizeSearchQuery } from "./search";
 import type { IndexedTalk } from "./types";
 
 const PRESET_TAGS = [
@@ -25,7 +25,9 @@ export default function PresetSearchTags({ indexedTalks, onSelectTag }: Props) {
 		() =>
 			PRESET_TAGS.filter((tag) => {
 				const tokens = tokenizeSearchQuery(tag);
-				return filterTalks(indexedTalks, tokens).length > 0;
+				return indexedTalks.some(({ searchText }) =>
+					tokens.every((token) => searchText.includes(token)),
+				);
 			}),
 		[indexedTalks],
 	);

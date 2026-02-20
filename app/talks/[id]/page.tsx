@@ -68,6 +68,39 @@ export default async function TalkDetailPage({ params }: Props) {
 		audioLink: talk.audioLink,
 		attachmentsLink: talk.attachmentsLink,
 	};
+	const detailRows = [
+		{ label: "DVD番号", value: talkData.dvdId || "—" },
+		{ label: "タイトル", value: talkData.title },
+		{ label: "行事名", value: talkData.event },
+		{ label: "収録場所", value: talkData.venue },
+		{ label: "講師", value: talkData.speaker },
+		{ label: "収録時間", value: talkData.duration },
+		{ label: "言語", value: talkData.language },
+		{ label: "収録日", value: talkData.recordedOn },
+	];
+	const resourceLinks = [
+		talkData.audioLink
+			? {
+					label: "音源を聞く",
+					href: talkData.audioLink,
+					className:
+						"inline-flex items-center gap-2 rounded-full bg-gray-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-gray-700",
+				}
+			: null,
+		talkData.attachmentsLink
+			? {
+					label: "添付データ",
+					href: talkData.attachmentsLink,
+					className:
+						"inline-flex items-center gap-2 rounded-full bg-blue-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-blue-700",
+				}
+			: null,
+	].filter(
+		(
+			link,
+		): link is { label: string; href: string; className: string } =>
+			link !== null,
+	);
 	const transcript = await getTranscriptByTalkId(talk.id);
 	const embedUrlPrefix = talkData.embedUrl
 		? `${talkData.embedUrl}${talkData.embedUrl.includes("?") ? "&" : "?"}`
@@ -102,46 +135,18 @@ export default async function TalkDetailPage({ params }: Props) {
 					{/* データ情報 */}
 					<ContentCard as="div">
 						<dl className="space-y-4 text-sm">
-							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
-								<dt className="font-medium text-gray-700">DVD番号</dt>
-								<dd className="text-right text-gray-600">
-									{talkData.dvdId || "—"}
-								</dd>
-							</div>
-							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
-								<dt className="font-medium text-gray-700">タイトル</dt>
-								<dd className="text-right text-gray-600">{talkData.title}</dd>
-							</div>
-							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
-								<dt className="font-medium text-gray-700">行事名</dt>
-								<dd className="text-right text-gray-600">{talkData.event}</dd>
-							</div>
-							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
-								<dt className="font-medium text-gray-700">収録場所</dt>
-								<dd className="text-right text-gray-600">{talkData.venue}</dd>
-							</div>
-							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
-								<dt className="font-medium text-gray-700">講師</dt>
-								<dd className="text-right text-gray-600">{talkData.speaker}</dd>
-							</div>
-							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
-								<dt className="font-medium text-gray-700">収録時間</dt>
-								<dd className="text-right text-gray-600">
-									{talkData.duration}
-								</dd>
-							</div>
-							<div className="flex justify-between gap-4 border-b border-gray-100 pb-4">
-								<dt className="font-medium text-gray-700">言語</dt>
-								<dd className="text-right text-gray-600">
-									{talkData.language}
-								</dd>
-							</div>
-							<div className="flex justify-between gap-4">
-								<dt className="font-medium text-gray-700">収録日</dt>
-								<dd className="text-right text-gray-600">
-									{talkData.recordedOn}
-								</dd>
-							</div>
+							{detailRows.map((row, index) => {
+								const isLast = index === detailRows.length - 1;
+								return (
+									<div
+										className={`flex justify-between gap-4 ${isLast ? "" : "border-b border-gray-100 pb-4"}`}
+										key={row.label}
+									>
+										<dt className="font-medium text-gray-700">{row.label}</dt>
+										<dd className="text-right text-gray-600">{row.value}</dd>
+									</div>
+								);
+							})}
 						</dl>
 
 						{talkData.description && (
@@ -166,30 +171,20 @@ export default async function TalkDetailPage({ params }: Props) {
 							/>
 						)}
 
-						{(talkData.audioLink || talkData.attachmentsLink) && (
+						{resourceLinks.length > 0 && (
 							<div className="mt-6 pt-6 border-t border-gray-100 flex flex-wrap gap-3">
-								{talkData.audioLink && (
+								{resourceLinks.map((link) => (
 									<a
-										className="inline-flex items-center gap-2 rounded-full bg-gray-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-gray-700"
-										href={talkData.audioLink}
+										className={link.className}
+										href={link.href}
+										key={link.label}
 										rel="noopener noreferrer"
 										target="_blank"
 									>
-										音源を聞く
+										{link.label}
 										<span aria-hidden>↗</span>
 									</a>
-								)}
-								{talkData.attachmentsLink && (
-									<a
-										className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-blue-700"
-										href={talkData.attachmentsLink}
-										rel="noopener noreferrer"
-										target="_blank"
-									>
-										添付データ
-										<span aria-hidden>↗</span>
-									</a>
-								)}
+								))}
 							</div>
 						)}
 						{talkData.youtubeUrl && (

@@ -26,7 +26,7 @@ export function generateMetadata(): Metadata {
 export default async function Home() {
 	const talks = await getTalks();
 
-	const sortedTalks = talks.sort((a, b) => {
+	const sortedTalks = [...talks].sort((a, b) => {
 		const aTime = a.recordedOnDate?.getTime() ?? 0;
 		const bTime = b.recordedOnDate?.getTime() ?? 0;
 		return bTime - aTime;
