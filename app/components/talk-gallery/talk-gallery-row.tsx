@@ -1,5 +1,11 @@
-import type { TalkForDisplay } from "../../page";
+import type { TalkForDisplay } from "../../lib/talk-display";
 import TalkGalleryCard from "./talk-gallery-card";
+
+const GRID_CLASS_BY_COLUMNS: Record<number, string> = {
+	1: "grid-cols-1",
+	2: "grid-cols-1 sm:grid-cols-2",
+	3: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+};
 
 type Props = {
 	talks: TalkForDisplay[];
@@ -16,12 +22,7 @@ export default function TalkGalleryRow({
 	searchTokens,
 	onNavigateToTalk,
 }: Props) {
-	const gridClass =
-		columns === 3
-			? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-			: columns === 2
-				? "grid-cols-1 sm:grid-cols-2"
-				: "grid-cols-1";
+	const gridClass = GRID_CLASS_BY_COLUMNS[columns] ?? GRID_CLASS_BY_COLUMNS[1];
 
 	return (
 		<div className={isFirstRow ? "pt-6" : "pt-8"}>

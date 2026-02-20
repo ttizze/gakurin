@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
+import { isTalkGalleryRestorePending } from "./talk-gallery/storage";
 
 type ScrollPositions = Record<string, number>;
 
@@ -166,13 +167,8 @@ export default function ScrollRestoration() {
 
 		if (!shouldRestore) return;
 
-		if (pathname === "/") {
-			try {
-				const pending = sessionStorage.getItem("talkGallery:restorePending:v1");
-				if (pending === "1") return;
-			} catch {
-				// Ignore.
-			}
+		if (pathname === "/" && isTalkGalleryRestorePending()) {
+			return;
 		}
 
 		const saved = loadScroll(key);

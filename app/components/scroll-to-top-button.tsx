@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { FEEDBACK_FORM_URL } from "../lib/site-links";
 
 const SHOW_AFTER_PX = 400;
 
@@ -41,7 +42,7 @@ export default function ScrollToTopButton() {
 		>
 			<a
 				className="rounded-full border border-amber-600/30 bg-amber-50 px-3 py-1 text-[11px] font-medium text-amber-900 shadow-sm shadow-amber-900/10 transition hover:border-amber-700/50 hover:bg-amber-100/70 hover:text-amber-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2"
-				href="https://docs.google.com/forms/d/e/1FAIpQLSeisb1rR-qiokkmDrJ52Ef_vteXcVL4Y3_lXEuSsqa75bPhiA/viewform?usp=header"
+				href={FEEDBACK_FORM_URL}
 				rel="noopener noreferrer"
 				target="_blank"
 			>
@@ -51,6 +52,7 @@ export default function ScrollToTopButton() {
 				aria-label="一番上へ"
 				className="inline-flex items-center gap-2 rounded-full border border-amber-700/40 bg-amber-600 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-amber-900/20 transition hover:bg-amber-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2"
 				onClick={() => {
+					window.dispatchEvent(new CustomEvent("app:scroll-to-top"));
 					window.scrollTo({
 						top: 0,
 						behavior: prefersReducedMotion ? "auto" : "smooth",

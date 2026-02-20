@@ -1,4 +1,4 @@
-import type { TalkForDisplay } from "../../page";
+import type { TalkForDisplay } from "../../lib/talk-display";
 import type { IndexedTalk } from "./types";
 
 function normalizeForSearch(value: string): string {
