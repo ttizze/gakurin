@@ -1,9 +1,11 @@
 "use client";
 
-import { useId, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { GroupedVirtuosoHandle, StateSnapshot } from "react-virtuoso";
 import { GroupedVirtuoso } from "react-virtuoso";
 import type { TalkForDisplay } from "../lib/talk-display";
+import DecadeJumpNav from "./talk-gallery/decade-jump-nav";
+import PresetSearchTags from "./talk-gallery/preset-search-tags";
 import TalkGalleryRow from "./talk-gallery/talk-gallery-row";
 import TalkGallerySectionHeader from "./talk-gallery/talk-gallery-section-header";
 import { useTalkGalleryData } from "./talk-gallery/use-talk-gallery-data";
@@ -42,15 +44,28 @@ function readStoredSearchQuery(): string {
 }
 
 export default function TalkGallery({ talks }: Props) {
-	const searchInputId = useId();
 	const virtuosoRef = useRef<GroupedVirtuosoHandle>(null);
 
 	const [searchQuery, setSearchQuery] = useState(() => readStoredSearchQuery());
+	const [isSearchFocused, setIsSearchFocused] = useState(false);
 	const restoreStateFrom = useMemo(() => readAndConsumeRestoreSnapshot(), []);
+
+	useEffect(() => {
+		const handleScrollToTop = () => {
+			virtuosoRef.current?.scrollToIndex({
+				index: 0,
+				align: "start",
+			});
+		};
+		window.addEventListener("app:scroll-to-top", handleScrollToTop);
+		return () =>
+			window.removeEventListener("app:scroll-to-top", handleScrollToTop);
+	}, []);
 
 	const {
 		columns,
 		filteredTalks,
+		indexedTalks,
 		sections,
 		groups,
 		groupCounts,
@@ -75,8 +90,30 @@ export default function TalkGallery({ talks }: Props) {
 		});
 	};
 
+	const handleJumpToGroup = (groupIndex: number) => {
+		if (groupIndex === 0) {
+			window.scrollTo({ top: 0, behavior: "smooth" });
+			return;
+		}
+		virtuosoRef.current?.scrollToIndex({
+			groupIndex,
+			align: "start",
+			behavior: "smooth",
+		});
+	};
+
+	const handleSelectTag = (keyword: string) => {
+		setSearchQuery(keyword);
+		try {
+			sessionStorage.setItem(SEARCH_QUERY_KEY, keyword);
+		} catch {
+			// Ignore storage failures.
+		}
+	};
+
 	const hasActiveQuery = searchQuery.trim().length > 0;
 	const totalMatched = filteredTalks.length;
+	const showPresetTags = isSearchFocused && !hasActiveQuery;
 
 	if (talks.length === 0) {
 		return (
@@ -88,18 +125,15 @@ export default function TalkGallery({ talks }: Props) {
 
 	return (
 		<div className="flex flex-col gap-10">
-			<div className="flex flex-col gap-6">
+			<div className="sticky top-0 z-10 -mx-6 bg-white/95 px-6 py-4 backdrop-blur sm:-mx-8 sm:px-8">
 				<div className="flex flex-col gap-2">
-					<label
-						className="text-xs font-medium uppercase tracking-wide text-gray-500"
-						htmlFor={searchInputId}
-					>
-						検索
-					</label>
 					<div className="relative">
 						<input
-							className="w-full rounded-lg border border-gray-300 bg-white py-2.5 px-4 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10"
-							id={searchInputId}
+							className="search-cancel-none w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-4 pr-10 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10"
+							onBlur={() => {
+								// Delay to allow tag click to fire before hiding
+								setTimeout(() => setIsSearchFocused(false), 150);
+							}}
 							onChange={(event) => {
 								const next = event.target.value;
 								setSearchQuery(next);
@@ -109,17 +143,39 @@ export default function TalkGallery({ talks }: Props) {
 									// Ignore storage failures.
 								}
 							}}
+							onFocus={() => setIsSearchFocused(true)}
 							placeholder="キーワードで検索"
 							type="search"
 							value={searchQuery}
 						/>
 						{hasActiveQuery && (
 							<button
-								className="absolute inset-y-0 right-3 my-auto rounded-full px-2 text-xs font-medium text-gray-500 transition hover:text-gray-900"
-								onClick={() => setSearchQuery("")}
+								aria-label="検索をクリア"
+								className="absolute inset-y-0 right-3 my-auto flex h-5 w-5 items-center justify-center rounded-full text-gray-400 transition hover:text-gray-900"
+								onClick={() => {
+									setSearchQuery("");
+									try {
+										sessionStorage.removeItem(SEARCH_QUERY_KEY);
+									} catch {
+										// Ignore storage failures.
+									}
+								}}
 								type="button"
 							>
-								クリア
+								<svg
+									aria-hidden="true"
+									className="h-4 w-4"
+									fill="none"
+									stroke="currentColor"
+									strokeWidth={2}
+									viewBox="0 0 24 24"
+								>
+									<path
+										d="M6 6l12 12M6 18L18 6"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+									/>
+								</svg>
 							</button>
 						)}
 					</div>
@@ -127,6 +183,18 @@ export default function TalkGallery({ talks }: Props) {
 						<span className="text-xs text-gray-500">
 							検索結果 {totalMatched} 件
 						</span>
+					)}
+					{showPresetTags && (
+						<PresetSearchTags
+							indexedTalks={indexedTalks}
+							onSelectTag={handleSelectTag}
+						/>
+					)}
+					{!hasActiveQuery && (
+						<DecadeJumpNav
+							groups={groups}
+							onJumpToGroup={handleJumpToGroup}
+						/>
 					)}
 				</div>
 			</div>

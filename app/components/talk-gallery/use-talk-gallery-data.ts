@@ -106,6 +106,7 @@ export function useTalkGalleryData(
 	return {
 		columns,
 		filteredTalks,
+		indexedTalks,
 		sections,
 		searchTokens,
 		...virtualData,

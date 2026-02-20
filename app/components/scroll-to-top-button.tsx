@@ -52,6 +52,7 @@ export default function ScrollToTopButton() {
 				aria-label="一番上へ"
 				className="inline-flex items-center gap-2 rounded-full border border-amber-700/40 bg-amber-600 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-amber-900/20 transition hover:bg-amber-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2"
 				onClick={() => {
+					window.dispatchEvent(new CustomEvent("app:scroll-to-top"));
 					window.scrollTo({
 						top: 0,
 						behavior: prefersReducedMotion ? "auto" : "smooth",
