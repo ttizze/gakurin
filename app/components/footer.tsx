@@ -1,3 +1,5 @@
+import { THERAVADA_ASSOCIATION_URL } from "../lib/site-links";
+
 type Props = {
 	maxWidth?: "4xl" | "7xl";
 };
@@ -15,7 +17,7 @@ export default function Footer({ maxWidth = "7xl" }: Props) {
 					<div>
 						<a
 							className="text-amber-700 hover:text-amber-900 underline transition"
-							href="https://www.j-theravada.net/"
+							href={THERAVADA_ASSOCIATION_URL}
 							rel="noopener noreferrer"
 							target="_blank"
 						>

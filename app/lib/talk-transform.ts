@@ -1,5 +1,9 @@
-import type { TalkForDisplay } from "../page";
 import { formatJapaneseDate } from "./date";
+import {
+	getPrimaryTalkMediaUrl,
+	getTalkTitle,
+	type TalkForDisplay,
+} from "./talk-display";
 import type { Talk } from "./talk-types";
 import { getYouTubeInfo } from "./youtube";
 
@@ -17,8 +21,7 @@ export function transformTalkToDisplay(
 	talk: Talk,
 	index: number,
 ): TalkForDisplay {
-	const rawTitle =
-		talk.title || talk.description || talk.event || "タイトル未設定";
+	const rawTitle = getTalkTitle(talk);
 	const displayTitle = normalizeText(rawTitle);
 
 	const rawSubtitle =
@@ -35,7 +38,7 @@ export function transformTalkToDisplay(
 	const themeSource = (talk.description || talk.event || "").trim();
 	const themeLabel = themeSource || "テーマ未設定";
 
-	const youtubeUrl = talk.youtubeLink || talk.audioLink;
+	const youtubeUrl = getPrimaryTalkMediaUrl(talk);
 	const { youtubeUrl: finalYoutubeUrl, thumbnailUrl } =
 		getYouTubeInfo(youtubeUrl);
 

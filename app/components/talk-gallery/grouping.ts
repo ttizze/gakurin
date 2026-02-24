@@ -1,4 +1,4 @@
-import type { TalkForDisplay } from "../../page";
+import type { TalkForDisplay } from "../../lib/talk-display";
 import type { GroupedSection } from "./types";
 
 export function buildDecadeSections(talks: TalkForDisplay[]): GroupedSection[] {
