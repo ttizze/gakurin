@@ -61,12 +61,12 @@ export default function ForBeginnersSection() {
 			{isOpen && (
 				<div className="text-sm leading-relaxed py-10 text-amber-900 bg-amber-50 sm:text-base">
 					<div className="mx-auto max-w-7xl px-12 sm:px-16">
-							<div className="space-y-6">
-								{BEGINNER_GUIDE_PARAGRAPHS.map((paragraph) => (
-									<p key={paragraph}>{paragraph}</p>
-								))}
-							</div>
+						<div className="space-y-6">
+							{BEGINNER_GUIDE_PARAGRAPHS.map((paragraph) => (
+								<p key={paragraph}>{paragraph}</p>
+							))}
 						</div>
+					</div>
 				</div>
 			)}
 		</section>

@@ -23,9 +23,7 @@ export default function DecadeJumpNav({ groups, onJumpToGroup }: Props) {
 					type="button"
 				>
 					{group.section.label}
-					<span className="ml-0.5 text-gray-400">
-						({group.section.count})
-					</span>
+					<span className="ml-0.5 text-gray-400">({group.section.count})</span>
 				</button>
 			))}
 		</nav>

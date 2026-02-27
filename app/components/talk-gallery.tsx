@@ -162,10 +162,7 @@ export default function TalkGallery({ talks }: Props) {
 						/>
 					)}
 					{!hasActiveQuery && (
-						<DecadeJumpNav
-							groups={groups}
-							onJumpToGroup={handleJumpToGroup}
-						/>
+						<DecadeJumpNav groups={groups} onJumpToGroup={handleJumpToGroup} />
 					)}
 				</div>
 			</div>

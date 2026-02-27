@@ -117,9 +117,7 @@ export default async function TalkDetailPage({ params }: Props) {
 				}
 			: null,
 	].filter(
-		(
-			link,
-		): link is { label: string; href: string; className: string } =>
+		(link): link is { label: string; href: string; className: string } =>
 			link !== null,
 	);
 	const transcript = await getTranscriptByTalkId(talk.id);
@@ -250,6 +248,7 @@ export default async function TalkDetailPage({ params }: Props) {
 
 			{videoJsonLd && (
 				<script
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
 					dangerouslySetInnerHTML={{
 						__html: JSON.stringify(videoJsonLd),
 					}}

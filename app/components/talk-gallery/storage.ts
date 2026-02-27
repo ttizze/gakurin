@@ -2,12 +2,9 @@ import type { StateSnapshot } from "react-virtuoso";
 
 const TALK_GALLERY_STORAGE_PREFIX = "talkGallery";
 
-export const TALK_GALLERY_VIRTUOSO_STATE_KEY =
-	`${TALK_GALLERY_STORAGE_PREFIX}:virtuosoState:v1`;
-export const TALK_GALLERY_RESTORE_PENDING_KEY =
-	`${TALK_GALLERY_STORAGE_PREFIX}:restorePending:v1`;
-export const TALK_GALLERY_SEARCH_QUERY_KEY =
-	`${TALK_GALLERY_STORAGE_PREFIX}:searchQuery:v1`;
+export const TALK_GALLERY_VIRTUOSO_STATE_KEY = `${TALK_GALLERY_STORAGE_PREFIX}:virtuosoState:v1`;
+export const TALK_GALLERY_RESTORE_PENDING_KEY = `${TALK_GALLERY_STORAGE_PREFIX}:restorePending:v1`;
+export const TALK_GALLERY_SEARCH_QUERY_KEY = `${TALK_GALLERY_STORAGE_PREFIX}:searchQuery:v1`;
 
 function readSessionStorage(key: string): string | null {
 	try {

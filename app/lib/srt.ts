@@ -66,7 +66,10 @@ export function parseSrt(content: string): TranscriptCue[] {
 			continue;
 		}
 
-		const text = lines.slice(lineIndex + 1).join("\n").trim();
+		const text = lines
+			.slice(lineIndex + 1)
+			.join("\n")
+			.trim();
 		if (!text) {
 			fallbackIndex += 1;
 			continue;

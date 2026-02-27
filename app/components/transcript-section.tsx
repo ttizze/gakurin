@@ -19,7 +19,10 @@ const MODE_OPTIONS: Array<{ mode: TranscriptMode; label: string }> = [
 ];
 
 function normalizeText(text: string) {
-	return text.replace(/\s*\n\s*/g, " ").replace(/\s{2,}/g, " ").trim();
+	return text
+		.replace(/\s*\n\s*/g, " ")
+		.replace(/\s{2,}/g, " ")
+		.trim();
 }
 
 function buildParagraphs(cues: TranscriptCue[]) {
@@ -74,7 +77,10 @@ function buildCueTimeHref(
 	return `${embedUrlPrefix}start=${startSeconds}&autoplay=1`;
 }
 
-export default function TranscriptSection({ transcript, embedUrlPrefix }: Props) {
+export default function TranscriptSection({
+	transcript,
+	embedUrlPrefix,
+}: Props) {
 	const [mode, setMode] = useState<TranscriptMode>("timeline");
 	const paragraphs = useMemo(() => buildParagraphs(transcript), [transcript]);
 
