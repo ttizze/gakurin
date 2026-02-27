@@ -4,7 +4,7 @@ import SectionHeading from "../../components/section-heading";
 import SimplePageLayout from "../../components/simple-page-layout";
 
 export const metadata: Metadata = {
-	title: "ヴィパッサナー瞑想 | 初期仏教塾",
+	title: "ヴィパッサナー瞑想",
 	description:
 		"ヴィパッサナー（VIPASSANĀ）は、お釈迦さまが、我々に確実に悟りを体験できるように教えられた実践方法（修習，瞑想）です。",
 };

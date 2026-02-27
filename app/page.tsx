@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Footer from "./components/footer";
 import ForBeginnersSection from "./components/for-beginners-section";
 import Header from "./components/header";
@@ -7,21 +6,6 @@ import TalkGallery from "./components/talk-gallery";
 import type { TalkForDisplay } from "./lib/talk-display";
 import { transformTalkToDisplay } from "./lib/talk-transform";
 import { getTalks } from "./lib/talks";
-
-export function generateMetadata(): Metadata {
-	return {
-		title: "初期仏教塾",
-		description: "スマナサーラ長老の珠玉の法話で学ぶ。",
-		openGraph: {
-			title: "初期仏教塾",
-			description: "スマナサーラ長老の珠玉の法話で学ぶ。",
-		},
-		twitter: {
-			title: "初期仏教塾",
-			description: "スマナサーラ長老の珠玉の法話で学ぶ。",
-		},
-	};
-}
 
 export default async function Home() {
 	const talks = await getTalks();

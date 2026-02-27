@@ -3,7 +3,7 @@ import ContentCard from "../../components/content-card";
 import SimplePageLayout from "../../components/simple-page-layout";
 
 export const metadata: Metadata = {
-	title: "初期仏教はお釈迦さまの教え | 初期仏教塾",
+	title: "初期仏教はお釈迦さまの教え",
 	description:
 		"初期仏教とは釈尊ご自身の教えを指します。テーラワーダ仏教とアビダンマの役割を紹介します。",
 };

@@ -3,7 +3,7 @@ import Image from "next/image";
 import SimplePageLayout from "../../components/simple-page-layout";
 
 export const metadata: Metadata = {
-	title: "スマナサーラ長老のプロフィール | 初期仏教塾",
+	title: "スマナサーラ長老のプロフィール",
 	description:
 		"スリランカ上座仏教長老・アルボムッレ・スマナサーラ長老の歩みと活動を紹介します。",
 };

@@ -6,6 +6,7 @@ import ContentCard from "../../components/content-card";
 import Footer from "../../components/footer";
 import TranscriptSection from "../../components/transcript-section";
 import { formatJapaneseDate } from "../../lib/date";
+import { toIsoDuration } from "../../lib/duration";
 import { getPrimaryTalkMediaUrl, getTalkTitle } from "../../lib/talk-display";
 import { getTalkById } from "../../lib/talks";
 import { getTranscriptByTalkId } from "../../lib/transcripts";
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 	if (!talk) {
 		return {
-			title: "トークが見つかりません | 初期仏教塾",
+			title: "トークが見つかりません",
 		};
 	}
 
@@ -31,9 +32,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 		talk.description ||
 		"初期仏教の法話を静かに味わうアーカイブ";
 
+	const youtubeUrl = getPrimaryTalkMediaUrl(talk);
+	const videoId = youtubeUrl ? extractYouTubeVideoId(youtubeUrl) : null;
+	const thumbnailUrl = videoId
+		? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+		: undefined;
+
 	return {
-		title: `${title} | 初期仏教塾`,
+		title,
 		description,
+		openGraph: {
+			title,
+			description,
+			type: "article",
+			...(thumbnailUrl && {
+				images: [{ url: thumbnailUrl, width: 480, height: 360 }],
+			}),
+		},
+		twitter: {
+			card: thumbnailUrl ? "summary_large_image" : "summary",
+			title,
+			description,
+			...(thumbnailUrl && { images: [thumbnailUrl] }),
+		},
 	};
 }
 
@@ -105,6 +126,26 @@ export default async function TalkDetailPage({ params }: Props) {
 	const embedUrlPrefix = talkData.embedUrl
 		? `${talkData.embedUrl}${talkData.embedUrl.includes("?") ? "&" : "?"}`
 		: null;
+
+	const videoJsonLd =
+		videoId && youtubeUrl
+			? {
+					"@context": "https://schema.org",
+					"@type": "VideoObject",
+					name: talkData.title,
+					description:
+						talk.summary ||
+						talk.description ||
+						"初期仏教の法話を静かに味わうアーカイブ",
+					thumbnailUrl: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+					uploadDate: talk.recordedOnDate?.toISOString(),
+					contentUrl: youtubeUrl,
+					embedUrl: talkData.embedUrl,
+					...(talk.duration && {
+						duration: toIsoDuration(talk.duration),
+					}),
+				}
+			: null;
 
 	return (
 		<div className="min-h-screen bg-white text-gray-900 flex flex-col">
@@ -206,6 +247,15 @@ export default async function TalkDetailPage({ params }: Props) {
 			</main>
 
 			<Footer maxWidth="4xl" />
+
+			{videoJsonLd && (
+				<script
+					dangerouslySetInnerHTML={{
+						__html: JSON.stringify(videoJsonLd),
+					}}
+					type="application/ld+json"
+				/>
+			)}
 		</div>
 	);
 }

@@ -11,11 +11,22 @@ const inter = Inter({
 	display: "swap",
 });
 
+const siteUrl = "https://early-buddhism.j-theravada.com";
+
 export const metadata: Metadata = {
-	title: "初期仏教塾",
+	metadataBase: new URL(siteUrl),
+	title: { default: "初期仏教塾", template: "%s | 初期仏教塾" },
 	description: "スマナサーラ長老の珠玉の法話で学ぶ。",
 	icons: {
 		icon: [{ url: "/jtba-mark.png", type: "image/png" }],
+	},
+	openGraph: {
+		siteName: "初期仏教塾",
+		locale: "ja_JP",
+		type: "website",
+	},
+	twitter: {
+		card: "summary",
 	},
 };
 
@@ -37,6 +48,26 @@ export default function RootLayout({
 				<ScrollRestoration />
 				{children}
 				{gaId ? <GoogleAnalytics gaId={gaId} /> : null}
+				<script
+					dangerouslySetInnerHTML={{
+						__html: JSON.stringify([
+							{
+								"@context": "https://schema.org",
+								"@type": "WebSite",
+								name: "初期仏教塾",
+								url: siteUrl,
+							},
+							{
+								"@context": "https://schema.org",
+								"@type": "Organization",
+								name: "初期仏教塾",
+								url: siteUrl,
+								logo: `${siteUrl}/jtba-mark.png`,
+							},
+						]),
+					}}
+					type="application/ld+json"
+				/>
 			</body>
 		</html>
 	);
