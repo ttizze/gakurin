@@ -27,10 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	}
 
 	const title = getTalkTitle(talk);
-	const description =
-		talk.summary ||
-		talk.description ||
-		"初期仏教の法話を静かに味わうアーカイブ";
+	const description = talk.description || "初期仏教の法話を静かに味わうアーカイブ";
 
 	const youtubeUrl = getPrimaryTalkMediaUrl(talk);
 	const videoId = youtubeUrl ? extractYouTubeVideoId(youtubeUrl) : null;
@@ -77,7 +74,6 @@ export default async function TalkDetailPage({ params }: Props) {
 		dvdId: talk.dvdId,
 		title: getTalkTitle(talk),
 		description: talk.description,
-		summary: talk.summary,
 		event: talk.event || "未分類",
 		venue: talk.venue || "—",
 		speaker: talk.speaker || "—",
@@ -132,9 +128,7 @@ export default async function TalkDetailPage({ params }: Props) {
 					"@type": "VideoObject",
 					name: talkData.title,
 					description:
-						talk.summary ||
-						talk.description ||
-						"初期仏教の法話を静かに味わうアーカイブ",
+						talk.description || "初期仏教の法話を静かに味わうアーカイブ",
 					thumbnailUrl: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
 					uploadDate: talk.recordedOnDate?.toISOString(),
 					contentUrl: youtubeUrl,
@@ -192,13 +186,6 @@ export default async function TalkDetailPage({ params }: Props) {
 							<div className="mt-6 pt-6 border-t border-gray-100">
 								<p className="text-sm leading-relaxed text-gray-700">
 									{talkData.description}
-								</p>
-							</div>
-						)}
-						{talkData.summary && (
-							<div className="mt-6 pt-6 border-t border-gray-100">
-								<p className="text-sm leading-relaxed text-gray-700 whitespace-pre-wrap">
-									{talkData.summary}
 								</p>
 							</div>
 						)}

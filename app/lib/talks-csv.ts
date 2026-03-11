@@ -327,8 +327,6 @@ export function parseCSVToTalks(text: string): Talk[] {
 			getValueFromHeaders(cells, ["YouTube", "YouTubeリンク", "youtube"]) ||
 				(cells[12] ? cells[12].trim() : ""),
 		);
-		const summary =
-			getValue(cells, "概要") || (cells[8] ? cells[8].trim() : "");
 
 		const fingerprint = [
 			`dvdId:${dvdIdKey}`,
@@ -344,7 +342,6 @@ export function parseCSVToTalks(text: string): Talk[] {
 			`audioLink:${audioLink ?? ""}`,
 			`attachmentsLink:${attachmentsLink ?? ""}`,
 			`youtubeLink:${youtubeLink ?? ""}`,
-			`summary:${summary}`,
 		]
 			.map(normalizeFingerprintPart)
 			.join("\n");
@@ -391,7 +388,6 @@ export function parseCSVToTalks(text: string): Talk[] {
 			audioLink,
 			attachmentsLink,
 			youtubeLink,
-			summary,
 		};
 
 		talks.push(talk);

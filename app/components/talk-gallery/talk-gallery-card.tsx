@@ -51,11 +51,6 @@ export default function TalkGalleryCard({
 							{highlightMatches(talk.subtitle, searchTokens)}
 						</p>
 					)}
-					{talk.summaryPreview && (
-						<p className="mt-3 text-sm leading-relaxed text-gray-600">
-							{highlightMatches(talk.summaryPreview, searchTokens)}
-						</p>
-					)}
 				</div>
 			</Link>
 

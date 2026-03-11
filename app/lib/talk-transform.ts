@@ -44,9 +44,6 @@ export function transformTalkToDisplay(
 
 	const recordedOnSortValue = talk.recordedOnDate?.getTime() ?? 0;
 	const recordedOnRaw = talk.recordedOn || "日付不明";
-	const summary = talk.summary || "";
-	const summaryPreview =
-		summary.length > 100 ? `${summary.slice(0, 100)}...` : summary;
 
 	return {
 		id: talk.id || `talk-${index}`,
@@ -67,7 +64,5 @@ export function transformTalkToDisplay(
 		recordedOnSortValue,
 		decadeLabel,
 		themeLabel,
-		summary,
-		summaryPreview,
 	};
 }

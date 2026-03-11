@@ -19,8 +19,6 @@ export type TalkForDisplay = {
 	recordedOnSortValue: number;
 	decadeLabel: string;
 	themeLabel: string;
-	summary: string;
-	summaryPreview: string;
 };
 
 export function getTalkTitle(

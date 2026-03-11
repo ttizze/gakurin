@@ -15,5 +15,4 @@ export type Talk = {
 	audioLink: string | null;
 	attachmentsLink: string | null;
 	youtubeLink: string | null;
-	summary: string;
 };
