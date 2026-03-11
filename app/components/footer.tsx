@@ -1,4 +1,4 @@
-import { THERAVADA_ASSOCIATION_URL } from "../lib/site-links";
+import { THERAVADA_ASSOCIATION_URL } from "../utils/site-links";
 
 type Props = {
 	maxWidth?: "4xl" | "7xl";

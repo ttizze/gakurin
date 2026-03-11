@@ -1,34 +1,16 @@
 import type { StateSnapshot } from "react-virtuoso";
+import {
+	parseVirtuosoRestoreSnapshot,
+	readSessionStorage,
+	removeSessionStorage,
+	writeSessionStorage,
+} from "./storage";
 
 const TALK_GALLERY_STORAGE_PREFIX = "talkGallery";
 
 export const TALK_GALLERY_VIRTUOSO_STATE_KEY = `${TALK_GALLERY_STORAGE_PREFIX}:virtuosoState:v1`;
 export const TALK_GALLERY_RESTORE_PENDING_KEY = `${TALK_GALLERY_STORAGE_PREFIX}:restorePending:v1`;
 export const TALK_GALLERY_SEARCH_QUERY_KEY = `${TALK_GALLERY_STORAGE_PREFIX}:searchQuery:v1`;
-
-function readSessionStorage(key: string): string | null {
-	try {
-		return sessionStorage.getItem(key);
-	} catch {
-		return null;
-	}
-}
-
-function writeSessionStorage(key: string, value: string) {
-	try {
-		sessionStorage.setItem(key, value);
-	} catch {
-		// Ignore storage failures.
-	}
-}
-
-function removeSessionStorage(key: string) {
-	try {
-		sessionStorage.removeItem(key);
-	} catch {
-		// Ignore storage failures.
-	}
-}
 
 export function isTalkGalleryRestorePending(): boolean {
 	return readSessionStorage(TALK_GALLERY_RESTORE_PENDING_KEY) === "1";
@@ -60,7 +42,8 @@ export function writeTalkGalleryVirtuosoState(snapshot: StateSnapshot) {
 export function readAndConsumeTalkGalleryRestoreSnapshot():
 	| StateSnapshot
 	| undefined {
-	if (!isTalkGalleryRestorePending()) {
+	const isRestorePending = isTalkGalleryRestorePending();
+	if (!isRestorePending) {
 		return undefined;
 	}
 
@@ -68,13 +51,6 @@ export function readAndConsumeTalkGalleryRestoreSnapshot():
 
 	const raw = readSessionStorage(TALK_GALLERY_VIRTUOSO_STATE_KEY);
 	removeSessionStorage(TALK_GALLERY_VIRTUOSO_STATE_KEY);
-	if (!raw) {
-		return undefined;
-	}
 
-	try {
-		return JSON.parse(raw) as StateSnapshot;
-	} catch {
-		return undefined;
-	}
+	return parseVirtuosoRestoreSnapshot(raw, isRestorePending);
 }

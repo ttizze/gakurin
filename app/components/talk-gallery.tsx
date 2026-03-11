@@ -4,15 +4,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { GroupedVirtuosoHandle } from "react-virtuoso";
 import { GroupedVirtuoso } from "react-virtuoso";
 import type { TalkForDisplay } from "../domain/talk/types";
-import DecadeJumpNav from "./talk-gallery/decade-jump-nav";
-import PresetSearchTags from "./talk-gallery/preset-search-tags";
 import {
 	markTalkGalleryRestorePending,
 	readAndConsumeTalkGalleryRestoreSnapshot,
 	readTalkGallerySearchQuery,
 	writeTalkGallerySearchQuery,
 	writeTalkGalleryVirtuosoState,
-} from "./talk-gallery/storage";
+} from "../infrastructure/browser/talk-gallery-storage";
+import DecadeJumpNav from "./talk-gallery/decade-jump-nav";
+import PresetSearchTags from "./talk-gallery/preset-search-tags";
 import TalkGalleryRow from "./talk-gallery/talk-gallery-row";
 import TalkGallerySectionHeader from "./talk-gallery/talk-gallery-section-header";
 import { useTalkGalleryData } from "./talk-gallery/use-talk-gallery-data";

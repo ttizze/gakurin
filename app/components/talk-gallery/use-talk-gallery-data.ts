@@ -3,10 +3,6 @@ import {
 	buildDecadeSections,
 	buildThemeSections,
 	buildVirtualGalleryData,
-	type GroupedSection,
-	type TalkGalleryGroup,
-	type TalkGalleryVirtualData,
-	type TalkGalleryVirtualRow,
 } from "../../application/talk/grouping";
 import {
 	buildSearchIndex,
@@ -15,7 +11,7 @@ import {
 	type IndexedTalk,
 } from "../../application/talk/search";
 import type { TalkForDisplay } from "../../domain/talk/types";
-import type { ViewMode } from "./types";
+type ViewMode = "date" | "theme";
 
 const MEDIA_QUERY_SM = "(min-width: 640px)";
 const MEDIA_QUERY_LG = "(min-width: 1024px)";

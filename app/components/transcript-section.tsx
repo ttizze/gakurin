@@ -1,8 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { FEEDBACK_FORM_URL } from "../lib/site-links";
-import type { TranscriptCue } from "../lib/srt";
+import {
+	buildCueTimeHref,
+	buildTranscriptParagraphs,
+} from "../application/transcript/presentation";
+import type { TranscriptCue } from "../domain/transcript/types";
+import { FEEDBACK_FORM_URL } from "../utils/site-links";
 
 type Props = {
 	transcript: TranscriptCue[];
@@ -11,53 +15,10 @@ type Props = {
 
 type TranscriptMode = "timeline" | "plain";
 
-const GAP_THRESHOLD_SECONDS = 2.5;
-const MAX_PARAGRAPH_CHARS = 220;
 const MODE_OPTIONS: Array<{ mode: TranscriptMode; label: string }> = [
 	{ mode: "timeline", label: "タイムライン付き" },
 	{ mode: "plain", label: "読みやすく" },
 ];
-
-function normalizeText(text: string) {
-	return text
-		.replace(/\s*\n\s*/g, " ")
-		.replace(/\s{2,}/g, " ")
-		.trim();
-}
-
-function buildParagraphs(cues: TranscriptCue[]) {
-	const paragraphs: string[] = [];
-	let buffer = "";
-	let lastEnd = 0;
-	let hasLastEnd = false;
-
-	for (const cue of cues) {
-		const clean = normalizeText(cue.text);
-		if (!clean) continue;
-
-		const gap = hasLastEnd ? cue.start - lastEnd : 0;
-		const shouldBreak =
-			buffer.length > 0 &&
-			(gap >= GAP_THRESHOLD_SECONDS ||
-				buffer.length + clean.length > MAX_PARAGRAPH_CHARS);
-
-		if (shouldBreak) {
-			paragraphs.push(buffer.trim());
-			buffer = clean;
-		} else {
-			buffer = buffer ? `${buffer} ${clean}` : clean;
-		}
-
-		lastEnd = cue.end;
-		hasLastEnd = true;
-	}
-
-	if (buffer.trim()) {
-		paragraphs.push(buffer.trim());
-	}
-
-	return paragraphs;
-}
 
 function getModeButtonClass(isActive: boolean): string {
 	return `rounded-full px-3 py-1 transition sm:px-4 sm:py-1.5 ${
@@ -67,22 +28,15 @@ function getModeButtonClass(isActive: boolean): string {
 	}`;
 }
 
-function buildCueTimeHref(
-	embedUrlPrefix: string | null | undefined,
-	startSeconds: number,
-): string | null {
-	if (!embedUrlPrefix) {
-		return null;
-	}
-	return `${embedUrlPrefix}start=${startSeconds}&autoplay=1`;
-}
-
 export default function TranscriptSection({
 	transcript,
 	embedUrlPrefix,
 }: Props) {
 	const [mode, setMode] = useState<TranscriptMode>("timeline");
-	const paragraphs = useMemo(() => buildParagraphs(transcript), [transcript]);
+	const paragraphs = useMemo(
+		() => buildTranscriptParagraphs(transcript),
+		[transcript],
+	);
 
 	return (
 		<div className="mt-6 pt-6 border-t border-gray-100">

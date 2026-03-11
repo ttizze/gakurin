@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { parseSrt, type TranscriptCue } from "./srt";
+import { parseSrt } from "../../domain/transcript/parser";
+import type { TranscriptCue } from "../../domain/transcript/types";
 
 const TRANSCRIPTS_DIR = resolve(process.cwd(), "app/transcripts");
 

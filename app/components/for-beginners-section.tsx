@@ -2,7 +2,7 @@
 
 import { ChevronDown, ExternalLink } from "lucide-react";
 import { useEffect, useState } from "react";
-import { THERAVADA_ASSOCIATION_URL } from "../lib/site-links";
+import { THERAVADA_ASSOCIATION_URL } from "../utils/site-links";
 
 const OPEN_FOR_BEGINNERS_EVENT = "openForBeginners";
 const BEGINNER_GUIDE_PARAGRAPHS = [

@@ -1,11 +1,4 @@
-export type TranscriptCue = {
-	index: number;
-	start: number;
-	end: number;
-	startLabel: string;
-	endLabel: string;
-	text: string;
-};
+import type { TranscriptCue } from "./types";
 
 type ParsedTime = {
 	seconds: number;
@@ -24,8 +17,9 @@ function parseTime(raw: string): ParsedTime | null {
 	const minutes = Number(mm);
 	const seconds = Number(ss);
 	const millis = Number(ms);
-	if ([hours, minutes, seconds, millis].some((value) => Number.isNaN(value)))
+	if ([hours, minutes, seconds, millis].some((value) => Number.isNaN(value))) {
 		return null;
+	}
 	const totalSeconds = hours * 3600 + minutes * 60 + seconds + millis / 1000;
 	const label = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 	return { seconds: totalSeconds, label };
@@ -45,12 +39,12 @@ export function parseSrt(content: string): TranscriptCue[] {
 
 		let lineIndex = 0;
 		let cueIndex = fallbackIndex;
-		if (/^\d+$/.test(lines[0])) {
+		if (/^\d+$/.test(lines[0] ?? "")) {
 			cueIndex = Number(lines[0]);
 			lineIndex += 1;
 		}
 
-		const timingLine = lines[lineIndex];
+		const timingLine = lines[lineIndex] ?? "";
 		const timingMatch = timingLine.match(
 			/(\d{2}:\d{2}:\d{2}[,.]\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2}[,.]\d{3})/,
 		);

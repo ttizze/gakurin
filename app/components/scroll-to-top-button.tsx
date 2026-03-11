@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FEEDBACK_FORM_URL } from "../lib/site-links";
+import { FEEDBACK_FORM_URL } from "../utils/site-links";
 
 const SHOW_AFTER_PX = 400;
 
