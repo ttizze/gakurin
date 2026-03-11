@@ -1,4 +1,4 @@
-import type { TalkGalleryGroup } from "./types";
+import type { TalkGalleryGroup } from "../../application/talk/grouping";
 
 type Props = {
 	groups: TalkGalleryGroup[];

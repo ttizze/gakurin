@@ -1,20 +1,27 @@
-import { formatJapaneseDate } from "./date";
-import {
-	getPrimaryTalkMediaUrl,
-	getTalkTitle,
-	type TalkForDisplay,
-} from "./talk-display";
-import type { Talk } from "./talk-types";
-import { getYouTubeInfo } from "./youtube";
+import { formatJapaneseDate } from "../../utils/date";
+import { getYouTubeInfo } from "../../utils/youtube";
+import type { Talk, TalkForDisplay } from "./types";
 
-// 改行文字をスペースに置き換えて連結する
 function normalizeText(text: string): string {
 	return text
-		.replace(/\r\n/g, " ") // Windows改行
-		.replace(/\n/g, " ") // Unix改行
-		.replace(/\r/g, " ") // Mac改行
-		.replace(/\s+/g, " ") // 連続する空白を1つに
+		.replace(/\r\n/g, " ")
+		.replace(/\n/g, " ")
+		.replace(/\r/g, " ")
+		.replace(/\s+/g, " ")
 		.trim();
+}
+
+export function getTalkTitle(
+	talk: Pick<Talk, "title" | "description" | "event">,
+	fallback = "タイトル未設定",
+): string {
+	return talk.title || talk.description || talk.event || fallback;
+}
+
+export function getPrimaryTalkMediaUrl(
+	talk: Pick<Talk, "youtubeLink" | "audioLink">,
+): string | null {
+	return talk.youtubeLink || talk.audioLink || null;
 }
 
 export function transformTalkToDisplay(

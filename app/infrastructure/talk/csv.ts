@@ -1,15 +1,12 @@
 import { createHash } from "node:crypto";
-import { normalizeTalkId } from "./talk-id";
-import type { Talk } from "./talk-types";
+import { normalizeTalkId } from "../../domain/talk/id";
+import type { Talk } from "../../domain/talk/types";
 
 export const SHEET_URL =
 	"https://docs.google.com/spreadsheets/d/1QMyakqH1i-W_bbK3yJl7u_Q_Jb_AoM94W6F8Gg3y3CA/export?format=csv&gid=909287277";
 
 function parseChapterNumber(value: string): string {
-	const normalized = value
-		.replace(/\uFEFF/g, "")
-		.normalize("NFKC")
-		.trim();
+	const normalized = value.replace(/\uFEFF/g, "").normalize("NFKC").trim();
 	if (!normalized) {
 		return "";
 	}
@@ -115,7 +112,6 @@ function hashTalkKey(fingerprint: string): string {
 		.toUpperCase();
 }
 
-// CSVテキストを行に分割（引用符内の改行を考慮）
 function splitCSVLines(text: string): string[] {
 	const lines: string[] = [];
 	let current = "";
@@ -127,11 +123,9 @@ function splitCSVLines(text: string): string[] {
 
 		if (char === '"') {
 			if (insideQuotes && nextChar === '"') {
-				// エスケープされた引用符
 				current += '"';
 				i += 1;
 			} else {
-				// 引用符の開始/終了
 				insideQuotes = !insideQuotes;
 				current += char;
 			}
@@ -142,9 +136,8 @@ function splitCSVLines(text: string): string[] {
 			(char === "\n" || (char === "\r" && nextChar === "\n")) &&
 			!insideQuotes
 		) {
-			// 引用符の外での改行のみ行の区切りとして扱う
 			if (char === "\r" && nextChar === "\n") {
-				i += 1; // \r\nをスキップ
+				i += 1;
 			}
 			const trimmed = current.trim();
 			if (trimmed.length > 0) {
@@ -157,7 +150,6 @@ function splitCSVLines(text: string): string[] {
 		current += char;
 	}
 
-	// 最後の行を追加
 	const trimmed = current.trim();
 	if (trimmed.length > 0) {
 		lines.push(trimmed);
@@ -214,7 +206,6 @@ export function parseCSVToTalks(text: string): Talk[] {
 		}
 
 		const cells = splitCSVLine(line);
-
 		const isPrivate = getValue(cells, "非公開");
 		if (isPrivate === "FALSE") {
 			continue;
@@ -250,8 +241,6 @@ export function parseCSVToTalks(text: string): Talk[] {
 		}
 
 		const cells = splitCSVLine(line);
-
-		// 非公開がFALSEの場合はスキップ
 		const isPrivate = getValue(cells, "非公開");
 		if (isPrivate === "FALSE") {
 			continue;
@@ -265,8 +254,6 @@ export function parseCSVToTalks(text: string): Talk[] {
 			continue;
 		}
 
-		// 収録日1と収録日2がある場合は結合、なければ単一の収録日を使用
-		// ヘッダー名のバリエーション（スペース、全角半角の違いなど）に対応
 		const recordedOn1 = getValueFromHeaders(cells, [
 			"収録日1",
 			"収録日 1",
@@ -368,7 +355,7 @@ export function parseCSVToTalks(text: string): Talk[] {
 				? `${title} ${chapterNumber}`
 				: title;
 
-		const talk: Talk = {
+		talks.push({
 			id: uniqueId,
 			dvdId,
 			folder: getValueFromHeaders(cells, ["Dropboxフォルダー名"]),
@@ -388,9 +375,7 @@ export function parseCSVToTalks(text: string): Talk[] {
 			audioLink,
 			attachmentsLink,
 			youtubeLink,
-		};
-
-		talks.push(talk);
+		});
 	}
 
 	return talks;

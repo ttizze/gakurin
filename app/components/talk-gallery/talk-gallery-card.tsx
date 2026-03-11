@@ -1,7 +1,7 @@
 import { ExternalLink, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import type { TalkForDisplay } from "../../lib/talk-display";
+import type { TalkForDisplay } from "../../domain/talk/types";
 import { highlightMatches } from "./highlight";
 
 type Props = {

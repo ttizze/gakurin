@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { parseCSVToTalks } from "./talks-csv";
+import { parseCSVToTalks } from "./csv";
 
 describe("parseCSVToTalks", () => {
 	test("Talkにsummaryプロパティを含めない", () => {

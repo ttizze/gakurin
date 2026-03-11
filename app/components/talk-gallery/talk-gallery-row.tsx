@@ -1,4 +1,4 @@
-import type { TalkForDisplay } from "../../lib/talk-display";
+import type { TalkForDisplay } from "../../domain/talk/types";
 import TalkGalleryCard from "./talk-gallery-card";
 
 const GRID_CLASS_BY_COLUMNS: Record<number, string> = {

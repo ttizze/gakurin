@@ -1,4 +1,21 @@
-import type { Talk } from "./talk-types";
+export type Talk = {
+	id: string;
+	dvdId: string;
+	folder: string;
+	event: string;
+	venue: string;
+	recordedOn: string;
+	recordedOnDate: Date | null;
+	duration: string;
+	title: string;
+	description: string;
+	speaker: string;
+	language: string;
+	format: string;
+	audioLink: string | null;
+	attachmentsLink: string | null;
+	youtubeLink: string | null;
+};
 
 export type TalkForDisplay = {
 	id: string;
@@ -20,16 +37,3 @@ export type TalkForDisplay = {
 	decadeLabel: string;
 	themeLabel: string;
 };
-
-export function getTalkTitle(
-	talk: Pick<Talk, "title" | "description" | "event">,
-	fallback = "タイトル未設定",
-): string {
-	return talk.title || talk.description || talk.event || fallback;
-}
-
-export function getPrimaryTalkMediaUrl(
-	talk: Pick<Talk, "youtubeLink" | "audioLink">,
-): string | null {
-	return talk.youtubeLink || talk.audioLink || null;
-}

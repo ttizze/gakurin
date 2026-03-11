@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { GroupedVirtuosoHandle } from "react-virtuoso";
 import { GroupedVirtuoso } from "react-virtuoso";
-import type { TalkForDisplay } from "../lib/talk-display";
+import type { TalkForDisplay } from "../domain/talk/types";
 import DecadeJumpNav from "./talk-gallery/decade-jump-nav";
 import PresetSearchTags from "./talk-gallery/preset-search-tags";
 import {

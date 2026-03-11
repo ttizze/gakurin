@@ -1,6 +1,3 @@
-/**
- * "1:42:14" or "42:14" → "PT1H42M14S" (ISO 8601 duration)
- */
 export function toIsoDuration(raw: string): string | null {
 	const parts = raw.split(":").map(Number);
 	if (parts.some(Number.isNaN)) return null;

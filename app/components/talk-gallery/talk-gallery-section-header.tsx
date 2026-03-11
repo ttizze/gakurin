@@ -1,5 +1,5 @@
 import { highlightMatches } from "./highlight";
-import type { GroupedSection } from "./types";
+import type { GroupedSection } from "../../application/talk/grouping";
 
 type Props = {
 	section: GroupedSection;

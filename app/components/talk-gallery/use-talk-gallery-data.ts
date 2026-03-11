@@ -1,28 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
-import type { TalkForDisplay } from "../../lib/talk-display";
 import {
 	buildDecadeSections,
 	buildThemeSections,
-	chunkArray,
-} from "./grouping";
-import { createIndexedTalks, filterTalks, tokenizeSearchQuery } from "./search";
-import type {
-	GroupedSection,
-	IndexedTalk,
-	TalkGalleryGroup,
-	ViewMode,
-} from "./types";
-
-type TalkGalleryVirtualRow = {
-	rowIndex: number;
-	talks: TalkForDisplay[];
-};
-
-type TalkGalleryVirtualData = {
-	groups: TalkGalleryGroup[];
-	groupCounts: number[];
-	flatRows: TalkGalleryVirtualRow[];
-};
+	buildVirtualGalleryData,
+	type GroupedSection,
+	type TalkGalleryGroup,
+	type TalkGalleryVirtualData,
+	type TalkGalleryVirtualRow,
+} from "../../application/talk/grouping";
+import {
+	buildSearchIndex,
+	filterTalksByQuery,
+	tokenizeSearchQuery,
+	type IndexedTalk,
+} from "../../application/talk/search";
+import type { TalkForDisplay } from "../../domain/talk/types";
+import type { ViewMode } from "./types";
 
 const MEDIA_QUERY_SM = "(min-width: 640px)";
 const MEDIA_QUERY_LG = "(min-width: 1024px)";
@@ -61,31 +54,6 @@ function useResponsiveColumns() {
 	return columns;
 }
 
-function buildVirtualData(
-	sections: GroupedSection[],
-	columns: number,
-): TalkGalleryVirtualData {
-	const groups = sections.map((section) => ({
-		section,
-		rows: chunkArray(section.talks, columns).filter((row) => row.length > 0),
-	}));
-
-	const groupCounts: number[] = [];
-	const flatRows: TalkGalleryVirtualRow[] = [];
-
-	groups.forEach((group) => {
-		groupCounts.push(group.rows.length);
-		group.rows.forEach((talksInRow, rowIndex) => {
-			flatRows.push({
-				rowIndex,
-				talks: talksInRow,
-			});
-		});
-	});
-
-	return { groups, groupCounts, flatRows };
-}
-
 export function useTalkGalleryData(
 	talks: TalkForDisplay[],
 	viewMode: ViewMode,
@@ -94,7 +62,7 @@ export function useTalkGalleryData(
 	const columns = useResponsiveColumns();
 
 	const indexedTalks: IndexedTalk[] = useMemo(
-		() => createIndexedTalks(talks),
+		() => buildSearchIndex(talks),
 		[talks],
 	);
 
@@ -104,7 +72,7 @@ export function useTalkGalleryData(
 	);
 
 	const filteredTalks = useMemo(
-		() => filterTalks(indexedTalks, searchTokens),
+		() => filterTalksByQuery(indexedTalks, searchTokens),
 		[indexedTalks, searchTokens],
 	);
 
@@ -119,7 +87,7 @@ export function useTalkGalleryData(
 		if (sections.length === 0) {
 			return { groups: [], groupCounts: [], flatRows: [] };
 		}
-		return buildVirtualData(sections, columns);
+		return buildVirtualGalleryData(sections, columns);
 	}, [columns, sections]);
 
 	return {

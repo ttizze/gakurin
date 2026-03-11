@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getTalks } from "./lib/talks";
+import { getTalks } from "./infrastructure/talk/repository";
 
 const BASE = "https://early-buddhism.j-theravada.com";
 
