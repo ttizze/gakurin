@@ -1,8 +1,8 @@
 import Footer from "./components/footer";
 import ForBeginnersSection from "./components/for-beginners-section";
 import Header from "./components/header";
-import ScrollToTopButton from "./components/scroll-to-top-button";
-import TalkGallery from "./components/talk-gallery";
+import ClientHomeActions from "./components/client-home-actions";
+import DeferredTalkGallery from "./components/deferred-talk-gallery";
 import { buildTalkGalleryTalks } from "./application/talk/gallery";
 import type { TalkForDisplay } from "./domain/talk/types";
 import { getTalks } from "./infrastructure/talk/repository";
@@ -21,12 +21,12 @@ export default async function Home() {
 
 				<div className="mx-auto max-w-7xl">
 					<main className="px-6 py-12 sm:px-8">
-						<TalkGallery talks={talksForDisplay} />
+						<DeferredTalkGallery talks={talksForDisplay} />
 					</main>
 				</div>
 			</div>
 
-			<ScrollToTopButton />
+			<ClientHomeActions />
 			<Footer />
 		</div>
 	);

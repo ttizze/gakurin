@@ -1,8 +1,7 @@
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import NextTopLoader from "nextjs-toploader";
-import ScrollRestoration from "./components/scroll-restoration";
+import ClientPageChrome from "./components/client-page-chrome";
 import "./globals.css";
 
 const inter = Inter({
@@ -39,13 +38,7 @@ export default function RootLayout({
 	return (
 		<html lang="ja">
 			<body className={`${inter.variable} antialiased`}>
-				<NextTopLoader
-					color="#f59e0b"
-					crawl={false}
-					height={3}
-					showSpinner={false}
-				/>
-				<ScrollRestoration />
+				<ClientPageChrome />
 				{children}
 				{gaId ? <GoogleAnalytics gaId={gaId} /> : null}
 				<script
