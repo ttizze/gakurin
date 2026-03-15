@@ -2,43 +2,14 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
-
-type ScrollPositions = Record<string, number>;
-
-const STORAGE_KEY = "scroll:positions:v1";
-
-function readPositions(): ScrollPositions {
-	try {
-		const raw = sessionStorage.getItem(STORAGE_KEY);
-		if (!raw) return {};
-		const parsed = JSON.parse(raw) as unknown;
-		if (!parsed || typeof parsed !== "object") return {};
-		return parsed as ScrollPositions;
-	} catch {
-		return {};
-	}
-}
-
-function writePositions(next: ScrollPositions) {
-	try {
-		sessionStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-	} catch {
-		// Ignore storage failures (private mode, blocked storage, etc).
-	}
-}
-
-function saveScroll(key: string, scrollY: number) {
-	if (!Number.isFinite(scrollY) || scrollY < 0) return;
-	const positions = readPositions();
-	positions[key] = scrollY;
-	writePositions(positions);
-}
-
-function loadScroll(key: string) {
-	const positions = readPositions();
-	const value = positions[key];
-	return Number.isFinite(value) && value >= 0 ? value : null;
-}
+import { shouldRestoreScrollOnRouteChange } from "../application/navigation/scroll-restoration";
+import {
+	isTalkGalleryRestorePending,
+} from "../infrastructure/browser/talk-gallery-storage";
+import {
+	loadScrollPosition,
+	saveScrollPosition,
+} from "../infrastructure/browser/scroll-position-storage";
 
 function attemptRestoreScroll(targetY: number) {
 	let attempts = 0;
@@ -97,7 +68,7 @@ export default function ScrollRestoration() {
 		};
 
 		const onPageHide = () => {
-			saveScroll(currentKeyRef.current, scrollYRef.current);
+			saveScrollPosition(currentKeyRef.current, scrollYRef.current);
 		};
 
 		const onClickCapture = (event: MouseEvent) => {
@@ -127,7 +98,7 @@ export default function ScrollRestoration() {
 			}
 			if (url.origin !== window.location.origin) return;
 
-			saveScroll(currentKeyRef.current, scrollYRef.current);
+			saveScrollPosition(currentKeyRef.current, scrollYRef.current);
 		};
 
 		window.addEventListener("popstate", onPopState);
@@ -155,27 +126,19 @@ export default function ScrollRestoration() {
 		const from = previousPathnameRef.current;
 		const to = pathname;
 
-		const cameFromTalkDetail = Boolean(from?.startsWith("/talks/"));
-		const goingToHome = to === "/";
-
-		const shouldRestore =
-			restoreOnNextRouteRef.current || (cameFromTalkDetail && goingToHome);
+		const shouldRestore = shouldRestoreScrollOnRouteChange({
+			pathname: to,
+			previousPathname: from,
+			restoreOnNextRoute: restoreOnNextRouteRef.current,
+			isTalkGalleryRestorePending: isTalkGalleryRestorePending(),
+		});
 
 		restoreOnNextRouteRef.current = false;
 		previousPathnameRef.current = pathname;
 
 		if (!shouldRestore) return;
 
-		if (pathname === "/") {
-			try {
-				const pending = sessionStorage.getItem("talkGallery:restorePending:v1");
-				if (pending === "1") return;
-			} catch {
-				// Ignore.
-			}
-		}
-
-		const saved = loadScroll(key);
+		const saved = loadScrollPosition(key);
 		if (saved == null) return;
 
 		setTimeout(() => {

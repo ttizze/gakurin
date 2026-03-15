@@ -1,7 +1,7 @@
 import { ExternalLink, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import type { TalkForDisplay } from "../../page";
+import type { TalkForDisplay } from "../../domain/talk/types";
 import { highlightMatches } from "./highlight";
 
 type Props = {
@@ -49,11 +49,6 @@ export default function TalkGalleryCard({
 					{talk.subtitle && (
 						<p className="mt-2 text-sm leading-relaxed text-gray-600">
 							{highlightMatches(talk.subtitle, searchTokens)}
-						</p>
-					)}
-					{talk.summaryPreview && (
-						<p className="mt-3 text-sm leading-relaxed text-gray-600">
-							{highlightMatches(talk.summaryPreview, searchTokens)}
 						</p>
 					)}
 				</div>

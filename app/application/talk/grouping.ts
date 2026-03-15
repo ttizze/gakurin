@@ -1,5 +1,41 @@
-import type { TalkForDisplay } from "../../page";
-import type { GroupedSection } from "./types";
+import type { TalkForDisplay } from "../../domain/talk/types";
+
+export type GroupedSection = {
+	label: string;
+	count: number;
+	sortKey: number;
+	talks: TalkForDisplay[];
+};
+
+export type TalkGalleryGroup = {
+	section: GroupedSection;
+	rows: TalkForDisplay[][];
+};
+
+export type TalkGalleryVirtualRow = {
+	rowIndex: number;
+	talks: TalkForDisplay[];
+};
+
+export type TalkGalleryVirtualData = {
+	groups: TalkGalleryGroup[];
+	groupCounts: number[];
+	flatRows: TalkGalleryVirtualRow[];
+};
+
+function chunkArray<T>(items: T[], chunkSize: number): T[][] {
+	if (chunkSize <= 0) {
+		return [items];
+	}
+
+	const chunks: T[][] = [];
+
+	for (let i = 0; i < items.length; i += chunkSize) {
+		chunks.push(items.slice(i, i + chunkSize));
+	}
+
+	return chunks;
+}
 
 export function buildDecadeSections(talks: TalkForDisplay[]): GroupedSection[] {
 	const map = new Map<string, TalkForDisplay[]>();
@@ -20,7 +56,6 @@ export function buildDecadeSections(talks: TalkForDisplay[]): GroupedSection[] {
 					? talk.recordedOnSortValue
 					: Number.POSITIVE_INFINITY;
 
-			// 「最新」セクションの場合は新しい順（降順）、それ以外は古い順（昇順）
 			const sortedTalks = groupedTalks.slice().sort((a, b) => {
 				if (decadeLabel === "最新") {
 					return getSortValue(b) - getSortValue(a);
@@ -28,7 +63,7 @@ export function buildDecadeSections(talks: TalkForDisplay[]): GroupedSection[] {
 				return getSortValue(a) - getSortValue(b);
 			});
 
-			const earliest = getSortValue(sortedTalks[0]);
+			const earliest = getSortValue(sortedTalks[0] as TalkForDisplay);
 
 			return {
 				label: decadeLabel,
@@ -63,9 +98,9 @@ export function buildThemeSections(talks: TalkForDisplay[]): GroupedSection[] {
 			const priority = themeLabel === "テーマ未設定" ? 1 : 0;
 			return {
 				label: themeLabel,
-				talks: groupedTalks.sort(
-					(a, b) => b.recordedOnSortValue - a.recordedOnSortValue,
-				),
+				talks: groupedTalks
+					.slice()
+					.sort((a, b) => b.recordedOnSortValue - a.recordedOnSortValue),
 				count: groupedTalks.length,
 				sortKey: priority,
 			};
@@ -78,16 +113,27 @@ export function buildThemeSections(talks: TalkForDisplay[]): GroupedSection[] {
 		});
 }
 
-export function chunkArray<T>(items: T[], chunkSize: number): T[][] {
-	if (chunkSize <= 0) {
-		return [items];
-	}
+export function buildVirtualGalleryData(
+	sections: GroupedSection[],
+	columns: number,
+): TalkGalleryVirtualData {
+	const groups = sections.map((section) => ({
+		section,
+		rows: chunkArray(section.talks, columns).filter((row) => row.length > 0),
+	}));
 
-	const chunks: T[][] = [];
+	const groupCounts: number[] = [];
+	const flatRows: TalkGalleryVirtualRow[] = [];
 
-	for (let i = 0; i < items.length; i += chunkSize) {
-		chunks.push(items.slice(i, i + chunkSize));
-	}
+	groups.forEach((group) => {
+		groupCounts.push(group.rows.length);
+		group.rows.forEach((talksInRow, rowIndex) => {
+			flatRows.push({
+				rowIndex,
+				talks: talksInRow,
+			});
+		});
+	});
 
-	return chunks;
+	return { groups, groupCounts, flatRows };
 }

@@ -1,0 +1,39 @@
+export type Talk = {
+	id: string;
+	dvdId: string;
+	folder: string;
+	event: string;
+	venue: string;
+	recordedOn: string;
+	recordedOnDate: Date | null;
+	duration: string;
+	title: string;
+	description: string;
+	speaker: string;
+	language: string;
+	format: string;
+	audioLink: string | null;
+	attachmentsLink: string | null;
+	youtubeLink: string | null;
+};
+
+export type TalkForDisplay = {
+	id: string;
+	dvdId: string;
+	event: string;
+	title: string;
+	subtitle: string;
+	venue: string;
+	speaker: string;
+	duration: string;
+	language: string;
+	audioLink: string | null;
+	attachmentsLink: string | null;
+	youtubeUrl: string | null;
+	thumbnailUrl: string | null;
+	recordedOnRaw: string;
+	recordedOnFormatted: string;
+	recordedOnSortValue: number;
+	decadeLabel: string;
+	themeLabel: string;
+};

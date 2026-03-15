@@ -1,5 +1,9 @@
-import type { TalkForDisplay } from "../../page";
-import type { IndexedTalk } from "./types";
+import type { TalkForDisplay } from "../../domain/talk/types";
+
+export type IndexedTalk = {
+	data: TalkForDisplay;
+	searchText: string;
+};
 
 function normalizeForSearch(value: string): string {
 	return value.normalize("NFKC").toLowerCase().replace(/\s+/g, " ").trim();
@@ -19,14 +23,21 @@ function buildSearchText(talk: TalkForDisplay): string {
 			talk.recordedOnRaw,
 			talk.decadeLabel,
 			talk.themeLabel,
-			talk.summary,
 		]
 			.filter(Boolean)
 			.join(" "),
 	);
 }
 
-export function createIndexedTalks(talks: TalkForDisplay[]): IndexedTalk[] {
+function fuzzyMatch(source: string, query: string): boolean {
+	if (!query) {
+		return true;
+	}
+
+	return source.includes(query);
+}
+
+export function buildSearchIndex(talks: TalkForDisplay[]): IndexedTalk[] {
 	return talks.map((talk) => ({
 		data: talk,
 		searchText: buildSearchText(talk),
@@ -46,15 +57,10 @@ export function tokenizeSearchQuery(query: string): string[] {
 	return normalized.split(" ").filter(Boolean);
 }
 
-function fuzzyMatch(source: string, query: string): boolean {
-	if (!query) {
-		return true;
-	}
-
-	return source.includes(query);
-}
-
-export function filterTalks(indexedTalks: IndexedTalk[], tokens: string[]) {
+export function filterTalksByQuery(
+	indexedTalks: IndexedTalk[],
+	tokens: string[],
+): TalkForDisplay[] {
 	if (tokens.length === 0) {
 		return indexedTalks.map((item) => item.data);
 	}

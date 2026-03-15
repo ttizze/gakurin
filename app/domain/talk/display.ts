@@ -1,24 +1,34 @@
-import type { TalkForDisplay } from "../page";
-import { formatJapaneseDate } from "./date";
-import type { Talk } from "./talk-types";
-import { getYouTubeInfo } from "./youtube";
+import { formatJapaneseDate } from "../../utils/date";
+import { getYouTubeInfo } from "../../utils/youtube";
+import type { Talk, TalkForDisplay } from "./types";
 
-// 改行文字をスペースに置き換えて連結する
 function normalizeText(text: string): string {
 	return text
-		.replace(/\r\n/g, " ") // Windows改行
-		.replace(/\n/g, " ") // Unix改行
-		.replace(/\r/g, " ") // Mac改行
-		.replace(/\s+/g, " ") // 連続する空白を1つに
+		.replace(/\r\n/g, " ")
+		.replace(/\n/g, " ")
+		.replace(/\r/g, " ")
+		.replace(/\s+/g, " ")
 		.trim();
+}
+
+export function getTalkTitle(
+	talk: Pick<Talk, "title" | "description" | "event">,
+	fallback = "タイトル未設定",
+): string {
+	return talk.title || talk.description || talk.event || fallback;
+}
+
+export function getPrimaryTalkMediaUrl(
+	talk: Pick<Talk, "youtubeLink" | "audioLink">,
+): string | null {
+	return talk.youtubeLink || talk.audioLink || null;
 }
 
 export function transformTalkToDisplay(
 	talk: Talk,
 	index: number,
 ): TalkForDisplay {
-	const rawTitle =
-		talk.title || talk.description || talk.event || "タイトル未設定";
+	const rawTitle = getTalkTitle(talk);
 	const displayTitle = normalizeText(rawTitle);
 
 	const rawSubtitle =
@@ -35,15 +45,12 @@ export function transformTalkToDisplay(
 	const themeSource = (talk.description || talk.event || "").trim();
 	const themeLabel = themeSource || "テーマ未設定";
 
-	const youtubeUrl = talk.youtubeLink || talk.audioLink;
+	const youtubeUrl = getPrimaryTalkMediaUrl(talk);
 	const { youtubeUrl: finalYoutubeUrl, thumbnailUrl } =
 		getYouTubeInfo(youtubeUrl);
 
 	const recordedOnSortValue = talk.recordedOnDate?.getTime() ?? 0;
 	const recordedOnRaw = talk.recordedOn || "日付不明";
-	const summary = talk.summary || "";
-	const summaryPreview =
-		summary.length > 100 ? `${summary.slice(0, 100)}...` : summary;
 
 	return {
 		id: talk.id || `talk-${index}`,
@@ -64,7 +71,5 @@ export function transformTalkToDisplay(
 		recordedOnSortValue,
 		decadeLabel,
 		themeLabel,
-		summary,
-		summaryPreview,
 	};
 }
