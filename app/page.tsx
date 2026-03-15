@@ -1,8 +1,9 @@
 import Footer from "./components/footer";
 import ForBeginnersSection from "./components/for-beginners-section";
-import Header from "./components/header";
 import ClientHomeActions from "./components/client-home-actions";
 import DeferredTalkGallery from "./components/deferred-talk-gallery";
+import Header from "./_components/header";
+import Hero from "./_components/hero";
 import { buildTalkGalleryTalks } from "./application/talk/gallery";
 import type { TalkForDisplay } from "./domain/talk/types";
 import { getTalks } from "./infrastructure/talk/repository";
@@ -15,6 +16,7 @@ export default async function Home() {
 		<div className="min-h-screen flex flex-col">
 			<div className="flex-1">
 				<Header />
+				<Hero />
 				<div id="for-beginners">
 					<ForBeginnersSection />
 				</div>
