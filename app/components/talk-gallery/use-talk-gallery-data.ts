@@ -7,10 +7,11 @@ import {
 import {
 	buildSearchIndex,
 	filterTalksByQuery,
-	tokenizeSearchQuery,
 	type IndexedTalk,
+	tokenizeSearchQuery,
 } from "../../application/talk/search";
 import type { TalkForDisplay } from "../../domain/talk/types";
+
 type ViewMode = "date" | "theme";
 
 const MEDIA_QUERY_SM = "(min-width: 640px)";

@@ -9,8 +9,8 @@ import BackToGalleryLink from "../../components/back-to-gallery-link";
 import ContentCard from "../../components/content-card";
 import Footer from "../../components/footer";
 import TranscriptSection from "../../components/transcript-section";
-import { getTranscriptByTalkId } from "../../infrastructure/transcript/repository";
 import { getTalkById } from "../../infrastructure/talk/repository";
+import { getTranscriptByTalkId } from "../../infrastructure/transcript/repository";
 
 type Props = {
 	params: Promise<{ id: string }>;

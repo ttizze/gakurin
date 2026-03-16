@@ -6,7 +6,10 @@ export const SHEET_URL =
 	"https://docs.google.com/spreadsheets/d/1QMyakqH1i-W_bbK3yJl7u_Q_Jb_AoM94W6F8Gg3y3CA/export?format=csv&gid=909287277";
 
 function parseChapterNumber(value: string): string {
-	const normalized = value.replace(/\uFEFF/g, "").normalize("NFKC").trim();
+	const normalized = value
+		.replace(/\uFEFF/g, "")
+		.normalize("NFKC")
+		.trim();
 	if (!normalized) {
 		return "";
 	}

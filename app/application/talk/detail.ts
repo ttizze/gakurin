@@ -1,11 +1,11 @@
-import { formatJapaneseDate } from "../../utils/date";
-import { toIsoDuration } from "../../utils/duration";
-import { extractYouTubeVideoId } from "../../utils/youtube";
 import {
 	getPrimaryTalkMediaUrl,
 	getTalkTitle,
 } from "../../domain/talk/display";
 import type { Talk } from "../../domain/talk/types";
+import { formatJapaneseDate } from "../../utils/date";
+import { toIsoDuration } from "../../utils/duration";
+import { extractYouTubeVideoId } from "../../utils/youtube";
 
 export type TalkDetailRow = {
 	label: string;
@@ -44,19 +44,17 @@ export type TalkDetailPageData = {
 	detailRows: TalkDetailRow[];
 	resourceLinks: TalkResourceLink[];
 	embedUrlPrefix: string | null;
-	videoJsonLd:
-		| {
-				"@context": string;
-				"@type": string;
-				name: string;
-				description: string;
-				thumbnailUrl: string;
-				uploadDate?: string;
-				contentUrl: string;
-				embedUrl: string;
-				duration?: string | null;
-		  }
-		| null;
+	videoJsonLd: {
+		"@context": string;
+		"@type": string;
+		name: string;
+		description: string;
+		thumbnailUrl: string;
+		uploadDate?: string;
+		contentUrl: string;
+		embedUrl: string;
+		duration?: string | null;
+	} | null;
 };
 
 const AUDIO_LINK_CLASS_NAME =

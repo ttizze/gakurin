@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import {
-	tokenizeSearchQuery,
 	type IndexedTalk,
+	tokenizeSearchQuery,
 } from "../../application/talk/search";
 
 const PRESET_TAGS = [

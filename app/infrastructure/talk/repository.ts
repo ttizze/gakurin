@@ -1,7 +1,7 @@
 import { cache } from "react";
-import talksJson from "../../generated/talks.json";
 import { normalizeTalkId } from "../../domain/talk/id";
 import type { Talk } from "../../domain/talk/types";
+import talksJson from "../../generated/talks.json";
 
 type SerializedTalk = Omit<Talk, "recordedOnDate"> & {
 	recordedOnDate: string | null;

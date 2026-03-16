@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const heroImageUrl =
 	"https://gotami.j-theravada.com/wp-content/uploads/2024/05/cover01-smp.webp";
 
@@ -27,10 +29,18 @@ export default function Hero() {
 							<span className="block">現代のことばで</span>
 						</h1>
 						<p className="mt-4 text-sm leading-relaxed text-zinc-100 sm:text-base">
-							日本で誤解されてきた仏教を
+							日本に正しく伝わってこなかった仏教を
 							<br />
 							ヴィパッサナー瞑想と法話で実践的に学ぶ
 						</p>
+						<div className="mt-6 flex justify-end">
+							<Link
+								className="inline-flex items-center rounded-full bg-amber-700 px-5 py-2 text-sm font-medium text-white transition hover:bg-amber-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/70 focus-visible:ring-offset-2"
+								href="/talks"
+							>
+								法話を聴く
+							</Link>
+						</div>
 					</div>
 				</div>
 			</div>

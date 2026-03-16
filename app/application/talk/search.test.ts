@@ -1,12 +1,11 @@
 import { describe, expect, test } from "bun:test";
-import type { TalkForDisplay } from "../../domain/talk/types";
+import type { Talk, TalkForDisplay } from "../../domain/talk/types";
+import { buildTalkGalleryTalks } from "./gallery";
 import {
 	buildSearchIndex,
 	filterTalksByQuery,
 	tokenizeSearchQuery,
 } from "./search";
-import { buildTalkGalleryTalks } from "./gallery";
-import type { Talk } from "../../domain/talk/types";
 
 function createDisplayTalk(
 	overrides: Partial<TalkForDisplay> = {},
@@ -69,7 +68,10 @@ describe("talk search helpers", () => {
 		];
 
 		const indexedTalks = buildSearchIndex(talks);
-		const result = filterTalksByQuery(indexedTalks, tokenizeSearchQuery("病気 東京"));
+		const result = filterTalksByQuery(
+			indexedTalks,
+			tokenizeSearchQuery("病気 東京"),
+		);
 
 		expect(result).toHaveLength(1);
 		expect(result[0]?.id).toBe("TALK-1");

@@ -1,9 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import {
-	buildTalkDetailPageData,
-	buildTalkMetadata,
-} from "./detail";
 import type { Talk } from "../../domain/talk/types";
+import { buildTalkDetailPageData, buildTalkMetadata } from "./detail";
 
 function createTalk(overrides: Partial<Talk> = {}): Talk {
 	return {
