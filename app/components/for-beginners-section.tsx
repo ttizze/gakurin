@@ -1,5 +1,4 @@
-import { ChevronDown, ExternalLink } from "lucide-react";
-import { THERAVADA_ASSOCIATION_URL } from "../utils/site-links";
+import { ChevronDown } from "lucide-react";
 
 const BEGINNER_GUIDE_PARAGRAPHS = [
 	"「仏教」と聞くと「宗教でしょ？」と感じる方もいらっしゃるかもしれません。しかし、2500年以上前にお釈迦様が説かれた教えは、「自分で確かめる」「権威ある人から言われたことでも盲信しない」という、いわゆる宗教とはほど遠い、理性的で現代的な教えです。",
@@ -14,16 +13,7 @@ export default function ForBeginnersSection() {
 			<details className="group">
 				<summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
 					<div className="mx-auto max-w-7xl px-6 py-3 sm:px-8">
-						<div className="flex flex-col items-center gap-4">
-							<a
-								className="inline-flex items-center gap-1 text-xs whitespace-nowrap text-amber-900 underline transition hover:text-amber-700"
-								href={THERAVADA_ASSOCIATION_URL}
-								rel="noopener noreferrer"
-								target="_blank"
-							>
-								日本テーラワーダ仏教協会
-								<ExternalLink className="h-3 w-3" />
-							</a>
+						<div className="flex flex-col items-center gap-2">
 							<div className="flex items-center justify-center gap-2 text-center">
 								<h2 className="text-amber-900">初めての方へ</h2>
 								<div className="flex h-6 w-6 items-center justify-center rounded-full bg-amber-700">

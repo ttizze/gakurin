@@ -6,7 +6,6 @@ import SumanasaraProfile from "./_components/sumanasara-profile";
 import { buildTalkGalleryTalks } from "./application/talk/gallery";
 import ClientHomeActions from "./components/client-home-actions";
 import Footer from "./components/footer";
-import ForBeginnersSection from "./components/for-beginners-section";
 import type { TalkForDisplay } from "./domain/talk/types";
 import { getTalks } from "./infrastructure/talk/repository";
 
@@ -26,10 +25,6 @@ export default async function Home() {
 					<main className="px-6 py-12 sm:px-8">
 						<RecommendedTalks talks={talksForDisplay} />
 					</main>
-				</div>
-
-				<div id="for-beginners">
-					<ForBeginnersSection />
 				</div>
 			</div>
 

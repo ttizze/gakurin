@@ -18,9 +18,6 @@ export default function RecommendedTalks({ talks }: Props) {
 		<section aria-labelledby="recommended-talks-heading" className="space-y-5">
 			<div className="flex items-end justify-between gap-4">
 				<div>
-					<p className="text-xs font-semibold tracking-[0.1em] text-amber-700">
-						法話コンテンツ
-					</p>
 					<h2
 						className="mt-1 text-2xl font-semibold tracking-tight text-gray-900 sm:text-3xl"
 						id="recommended-talks-heading"
