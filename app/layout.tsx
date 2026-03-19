@@ -1,12 +1,19 @@
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Noto_Serif_JP } from "next/font/google";
 import ClientPageChrome from "./components/client-page-chrome";
 import "./globals.css";
 
 const inter = Inter({
 	variable: "--font-inter",
 	subsets: ["latin"],
+	display: "swap",
+});
+
+const notoSerifJP = Noto_Serif_JP({
+	variable: "--font-serif-jp",
+	subsets: ["latin"],
+	weight: ["400", "700"],
 	display: "swap",
 });
 
@@ -37,7 +44,7 @@ export default function RootLayout({
 	const gaId = process.env.NEXT_PUBLIC_GA_ID;
 	return (
 		<html lang="ja">
-			<body className={`${inter.variable} antialiased`}>
+			<body className={`${inter.variable} ${notoSerifJP.variable} antialiased`}>
 				<ClientPageChrome />
 				{children}
 				{gaId ? <GoogleAnalytics gaId={gaId} /> : null}
